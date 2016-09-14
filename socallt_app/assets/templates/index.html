@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>SOCALLT Members</title>
+	<link rel="stylesheet" href="{{ url_for('static',filename='css/spectre.min.css') }}"/>
+	<link rel="stylesheet" href="{{ url_for('static',filename='css/font-awesome-4.6.3/css/font-awesome.min.css') }}"/>
+	<link rel='stylesheet' href="{{ url_for('static',filename='css/styles.css') }}"/>
+	<script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s=" crossorigin="anonymous"></script>
+	<script type="text/javascript" src="{{ url_for('static',filename='js/script.js') }}"></script>
+</head>
+<body class='container'>
+	<div class='columns'>
+		<div class='column col-1'></div>
+		<div class='column col-6'>
+			<div id='register-form'>
+				<form action='/register' method='POST'>
+					{% with messages = get_flashed_messages(category_filter=['regisErr']) %}
+						{% for message in messages %}
+							<p class='error'>{{ message }}</p>
+						{% endfor %}
+					{% endwith %}
+
+					<!-- registration page 1 -->
+					<h3>Register</h3>
+					<div class='form-content' id='page1'>
+						<h5>User Information</h5>
+						<div class='form-group'>
+							<label class='form-label' for='first_name'>First Name:</label>
+							<input class='form-input' type="text" id="first_name" name="first_name" value="{{ session['first_name'] }}">
+						</div>
+						<div class='form-group'>
+							<label class='form-label' for='last_name'>Last Name:</label>
+							<input class='form-input' type="text" name="last_name" id="last_name" value="{{ session['last_name'] }}">
+						</div>
+						<div class='form-group'>
+							<label class='form-label' for='email'>Email:</label>
+							<input class='form-input' type="text" name="email" id="email" value="{{ session['email'] }}">
+						</div>
+						<div class='form-group'>
+							<label class='form-label' for='password'>Password:</label>
+							<input class='form-input' type="password" name="password" id='password'>
+						</div>
+						<div class='form-group'>
+							<label class='form-label' for='confirm_password'>Confirm Password:</label>
+							<input class='form-input' type="password" name="confirm_password" id='confirm-password'>
+						</div>
+						<div class='btn-group'>
+							<button class='btn primary' type='button'>Continue<i class="fa fa-arrow-circle-right" aria-hidden="false"></i></button>
+						</div>
+					</div>
+
+					<!-- registration page 2 -->
+					<div class='form-content' id='page2'>
+						<h5>Contact Information</h5>
+						<div class='form-group'>
+							<label class='form-label' for='street1'>Address 1:</label>
+							<input class='form-input' type="text" name="inst-street1" value="{{ session['street1'] }}">
+						</div>
+						<div class='form-group'>
+							<label class='form-label' for='street2'>Address 2:</label>
+							<input class='form-input' type="text" name="inst-street2" value="{{ session['street2'] }}">
+						</div>
+						<div class='form-group'>
+							<label class='form-label' for='city'>City:</label>
+							<input class='form-input' type="text" name="city" value="{{ session['city'] }}">
+						</div>
+						<div class='form-group'>
+							<label class='form-label' for='state'>State:</label>
+							<select class='form-select' name='state'>
+								{% for state in states %}
+									<option value="{{ state['id'] }}">{{ state['abbrev'] }}</option>
+								{% endfor %}
+							</select>
+						</div>
+						<div class='form-group'>
+							<label class='form-label' for='zip'>Zip:</label>
+							<input class='form-input' type="text" name="zip" value="{{ session['zip'] }}">
+						</div>
+						<h5>Institution Information</h5>
+						<div class='form-group'>
+							<p>Select your institution:</p>
+							<select class='form-select' name='institution' id='institution'>
+							{% for instution in institutions %}
+								<option value="{{ institution['id']}}">{{ institution['name'] }}</option>
+							{% endfor %}
+								<option value='other' id='other'>Other</option>
+							</select>
+						</div>
+						<div id='inst-info'>
+							<div class='form-group'>
+								<label class='form-label' for='inst-name'>Name:</label>
+								<input class='form-input' type="text" name="inst-name" value="{{ session['inst-name'] }}">
+							</div>
+							<div class='form-group'>
+								<label class='form-label' for='inst-state'>State:</label>
+								<select class='form-select' name='inst-state'>
+									{% for state in states %}
+										<option value="{{ state['id'] }}">{{ state['abbrev'] }}</option>
+									{% endfor %}
+								</select>
+							</div>
+						</div>
+						<div class='btn-group btn-group-block'>
+							<button class='btn' type='button'><i class="fa fa-arrow-circle-left" aria-hidden="false"></i> Previous</button>
+							<button class='btn primary continue' type='button'>Continue<i class="fa fa-arrow-circle-right" aria-hidden="false"></i></button>
+						</div>
+					</div>
+
+					<!-- registration page 3 -->
+					<div id='page3' class='form-content'>
+						<h5>Conference Information</h5>
+						<div class='form-group'>
+							<label class="form-switch">
+	           					<input type="checkbox" />
+	            				<i class="form-icon"></i>&nbsp;&nbsp;&nbsp;&nbsp;Vegan Meals at Conferences
+	        				</label>
+						</div>
+						<div class='form-group'>
+							<label class='form-label' for='pay'>Payment Options:</label>
+							<select class='form-select' name='pay'>
+								<option></option>
+								<option value='check-PO'>Check, Purchase Order</option>
+								<option value='credit-debit'>Credit/Debit Card</option>
+							</select>
+							<p>*The next screen will provide you with more payment information</p>
+						</div>
+						<div class='container'>
+							<div class='columns'>
+								<div class='form-group column col-3'>
+									<label class='form-label' for='regis-type'>Registration Type:</label>
+									<select class='form-select' name='regis-type'>
+										<option></option>
+										<option value='student'>Student</option>
+										<option value='professional'>Professional</option>
+										<option value='vendor'>Vendor/Exhibitor/Industry Rep.</option>
+									</select>
+								</div>
+								<div class='form-group column col-6'>
+									<label class='form-label' for='regis-len'>Registration Type:</label>
+									<select class='form-select' name='regis-len'>
+										<option></option>
+										<option value='friday'>Friday Only</option>
+										<option value='saturday'>Saturday Only</option>
+										<option value='vendor'>Entire Conference</option>
+									</select>
+								</div>
+
+							</div>
+						</div>
+						<div class='btn-group btn-group-block'>
+							<button class='btn' type='button'><i class="fa fa-arrow-circle-left" aria-hidden="false"></i> Previous</button>
+							<button type='submit' class='btn btn-primary'>Register</button>
+						</div>
+					</div>
+				</form>
+			</div>
+
+		<!-- Login Form -->
+			<div class='column col-6' id='login-form'>
+				<form action='/login' method='POST'>
+					{% with messages = get_flashed_messages(category_filter=['loginErr']) %}
+						{% for message in messages %}
+							<p class='error'>{{ message }}</p>
+						{% endfor %}
+					{% endwith %}
+					<h3>Login</h3>
+					<div class='form-group'>
+						<label class='form-label' for='email'>Email:</label> 
+						<input class='form-input' type="text" name="email" value="{{ session['email'] }}">
+					</div>
+					<div class='form-group'>
+						<label class='form-label' for='password'>Password:</label>
+						<input class='form-input' type="password" name="password">
+					</div>
+					<button type='submit' class='btn btn-primary'>Login</button>
+				</form>
+			</div>
+		</div>
+		<div class='column col-1'></div>
+		<div class='column col-3'>
+			<div id='show-register'>
+				<h4>Never been to a SOCALLT conference or new to our online system?</h4>
+				<button class='btn btn-sm btn-link' data-id='register'>Register</button>
+			</div>
+			<div id='show-login'>
+				<h4>Already a member and logged in before?</h4>
+				<button class='btn btn-sm btn-link' data-id='login'>Login</button>
+			</div>
+			<div id='prices'>
+				<h6>Prices</h6>
+				<ul>
+					<li><b>Student: 1 Day - $20; Conference - $35</b></li>
+					<li><b>Professional: 1 Day - $25; Conference - $50</b></li>
+					<li><b>Vendor/Exhibitor/Industry Rep: 1 Day - $25; Conference - $50</b></li>
+				</ul>
+			</div>
+		</div>
+		<div class='column col-1'></div>
+	</div>
+</body>
+</html>

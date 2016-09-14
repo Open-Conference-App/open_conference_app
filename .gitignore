@@ -1,0 +1,4 @@
+*.pyc
+Models.py
+socallt_app/config/sensitive.py
+venv/

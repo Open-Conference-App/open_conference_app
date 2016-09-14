@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>SOCALLT {{ year }} Registration</title>
+	<link rel="stylesheet" href="dist/spectre.min.css"/>
+	<link rel='stylesheet' href="url_for('static', 'css/styles.css')"/>
+	<script   src="https://code.jquery.com/jquery-2.2.4.min.js"   integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="   crossorigin="anonymous"></script>
+	<script type="text/javascript" src="url_for('static','js/script.js'"></script>
+</head>
+	<body>
+		<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
+			<input type="hidden" name="cmd" value="_s-xclick">
+			<input type="hidden" name="hosted_button_id" value="DCNSP4CHPWKS6">
+		<table>
+			<tr>
+				<td>
+					<input type="hidden" name="on0" value="Full Conference Registration">Full Conference Registration
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<select name="os0">
+						<option value="Regular">Regular $50.00 USD</option>
+						<option value="Student">Student $30.00 USD</option>
+						<option value="Exhibitor">Exhibitor $50.00 USD</option>
+					</select>
+				</td>
+			</tr>
+		</table>
+		<input type="hidden" name="currency_code" value="USD">
+		<input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_paynow_SM.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
+		<img alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1">
+		</form>
+	</body>
+</html>
+
+
+
+
+
+

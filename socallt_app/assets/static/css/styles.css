@@ -1,0 +1,19 @@
+#login-form, #show-register, #prices, #page2, #page3 {
+	display: none;
+}
+
+.form-content div *{
+	margin-left: 5%;
+}
+
+#inst-info {
+	display: none;
+}
+
+ul {
+	list-style-type: none;
+}
+/*SOCALLT Green #39b237*/
+
+
+
