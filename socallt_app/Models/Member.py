@@ -1,6 +1,8 @@
 from flask import Flask
 import imp, re, hashlib, binascii, os, datetime
 from socallt_app import app, db
+from Conference import member_conferences
+import Institution
 
 class Member(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
@@ -10,22 +12,26 @@ class Member(db.Model):
 	password = db.Column(db.String(255))
 	pw_salt = db.Column(db.String(255))
 	officer = db.Column(db.Boolean)
+	member_type = db.Column(db.String)
 	active = db.Column(db.Boolean)
+	institution_id = db.relationship(db.Integer, db.ForeignKey('institution.id'))
+	conferences = db.relationship('Conference', secondary=member_conferences, backref=db.backref('members', lazy='dynamic'))
 	created_at = db.Column(db.DateTime())
 	updated_at = db.Column(db.DateTime())
 
 
-	def __init__(self, first_name, last_name, email, password, pw_salt, officer):
-		self.first_name = first_name
-		self.last_name = last_name
-		self.email = email
-		self.password = password
-		self.pw_salt = pw_salt
+	def __init__(self, member_data):
+		self.first_name = member_data['first_name']
+		self.last_name = member_data['last_name']
+		self.email = member_data['email']
+		self.password = member_data['password']
+		self.pw_salt = member_data['pw_salt']
 		self.created_at = datetime.now()
-		self.upated_at = datetime.now()
-		if officer self.officer = True
+		self.updated_at = datetime.now()
+		if 'officer' in member_data self.officer = True
 		else self.officer = False
 		self.active = False
+		self.institution_id = member_data['institution_id']
 
 	def __repr__(self):
 		return '<Member %r>' % self.email

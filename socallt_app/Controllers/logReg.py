@@ -4,7 +4,9 @@ from flask import session, flash
 from flask.ext.session import Session
 from flask_sqlalchemy import SQLAlchemy
 sens = Sens()
-from socallt_app.Models.User import User
+from socallt_app.Models.Member import Member
+from socallt_app.Models.State import State
+
 from socallt_app import app, db
 
 EMAIL_KEY = re.compile(r'^[a-zA-Z0-9\.\+_-]@[a-zA-Z0-9\._-]+\.[a-zA-Z]*$')
