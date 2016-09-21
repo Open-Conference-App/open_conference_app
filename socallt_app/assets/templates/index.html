@@ -10,6 +10,11 @@
 </head>
 <body class='container'>
 	<div class='columns'>
+		<div class='column col-12'>
+			<h1>SOCALLT {%= conference['year'] %} Registration</h1>
+		</div>
+	</div>
+	<div class='columns'>
 		<div class='column col-1'></div>
 		<div class='column col-6'>
 			<div id='register-form'>
@@ -34,7 +39,7 @@
 						</div>
 						<div class='form-group'>
 							<label class='form-label' for='email'>Email:</label>
-							<input class='form-input' type="text" name="email" id="email" value="{{ session['email'] }}">
+							<input class='form-input' type="email" name="email" id="email">
 						</div>
 						<div class='form-group'>
 							<label class='form-label' for='password'>Password:</label>
@@ -45,7 +50,7 @@
 							<input class='form-input' type="password" name="confirm_password" id='confirm-password'>
 						</div>
 						<div class='btn-group'>
-							<button class='btn primary' type='button'>Continue<i class="fa fa-arrow-circle-right" aria-hidden="false"></i></button>
+							<button class='btn primary continue' type='button'>Continue<i class="fa fa-arrow-circle-right" aria-hidden="false"></i></button>
 						</div>
 					</div>
 
@@ -54,15 +59,15 @@
 						<h5>Contact Information</h5>
 						<div class='form-group'>
 							<label class='form-label' for='street1'>Address 1:</label>
-							<input class='form-input' type="text" name="inst-street1" value="{{ session['street1'] }}">
+							<input class='form-input' type="text" name="street1" id="street1" value="{{ session['street1'] }}">
 						</div>
 						<div class='form-group'>
 							<label class='form-label' for='street2'>Address 2:</label>
-							<input class='form-input' type="text" name="inst-street2" value="{{ session['street2'] }}">
+							<input class='form-input' type="text" name="street2" id="street2" value="{{ session['street2'] }}">
 						</div>
 						<div class='form-group'>
 							<label class='form-label' for='city'>City:</label>
-							<input class='form-input' type="text" name="city" value="{{ session['city'] }}">
+							<input class='form-input' type="text" name="city" id="city" value="{{ session['city'] }}">
 						</div>
 						<div class='form-group'>
 							<label class='form-label' for='state'>State:</label>
@@ -74,7 +79,7 @@
 						</div>
 						<div class='form-group'>
 							<label class='form-label' for='zip'>Zip:</label>
-							<input class='form-input' type="text" name="zip" value="{{ session['zip'] }}">
+							<input class='form-input' type="text" name="zip" id="zip" value="{{ session['zip'] }}">
 						</div>
 						<h5>Institution Information</h5>
 						<div class='form-group'>
@@ -84,6 +89,7 @@
 								<option value="{{ institution['id']}}">{{ institution['name'] }}</option>
 							{% endfor %}
 								<option value='other' id='other'>Other</option>
+								<option value='other' id='other1'>Other</option>
 							</select>
 						</div>
 						<div id='inst-info'>
@@ -104,6 +110,7 @@
 							<button class='btn' type='button'><i class="fa fa-arrow-circle-left" aria-hidden="false"></i> Previous</button>
 							<button class='btn primary continue' type='button'>Continue<i class="fa fa-arrow-circle-right" aria-hidden="false"></i></button>
 						</div>
+						<br>
 					</div>
 
 					<!-- registration page 3 -->
@@ -135,8 +142,9 @@
 										<option value='vendor'>Vendor/Exhibitor/Industry Rep.</option>
 									</select>
 								</div>
-								<div class='form-group column col-6'>
-									<label class='form-label' for='regis-len'>Registration Type:</label>
+								<div class='column col-1'></div>
+								<div class='form-group column col-3'>
+									<label class='form-label' for='regis-len'>Days:</label>
 									<select class='form-select' name='regis-len'>
 										<option></option>
 										<option value='friday'>Friday Only</option>
@@ -149,7 +157,7 @@
 						</div>
 						<div class='btn-group btn-group-block'>
 							<button class='btn' type='button'><i class="fa fa-arrow-circle-left" aria-hidden="false"></i> Previous</button>
-							<button type='submit' class='btn btn-primary'>Register</button>
+							<button type='button' id='register' class='btn btn-primary continue'>Register</button>
 						</div>
 					</div>
 				</form>
@@ -172,7 +180,7 @@
 						<label class='form-label' for='password'>Password:</label>
 						<input class='form-input' type="password" name="password">
 					</div>
-					<button type='submit' class='btn btn-primary'>Login</button>
+					<button class='btn btn-primary' id='login'>Login</button>
 				</form>
 			</div>
 		</div>

@@ -5,7 +5,8 @@ from socallt_app import app, db
 class Institution(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
 	name = db.Column(db.String(255), unique=True)
-	contact = db.Column(db.PickleType) ## requires a pickled Python Object
+	contact_name = db.Column(db.String(255))
+	address_id = db.relationship(db.Integer, db.ForeignKey('address.id'))
 	members = db.relationship('Member', backref='institution', lazy='dynamic')
 	created_at = db.Column(db.DateTime())
 	updated_at = db.Column(db.DateTime())

@@ -5,12 +5,10 @@ from flask.ext.session import Session
 from flask_sqlalchemy import SQLAlchemy
 sens = Sens()
 from socallt_app.Models.Member import Member
-from socallt_app.Models.State import State
-
 from socallt_app import app, db
 
 EMAIL_KEY = re.compile(r'^[a-zA-Z0-9\.\+_-]@[a-zA-Z0-9\._-]+\.[a-zA-Z]*$')
-def register(fields):
+def create(fields):
 	is_valid = True
 	for k, v in fields.items():
 		print v
@@ -33,10 +31,16 @@ def register(fields):
 		fields['pw_salt'] = binascii.hexlify(os.urandom(16))
 		fields['password'] = hashlib.sha256(fields['password'] + fields['pw_salt']).hexdigest()
 		user_data = {
-			'username': fields['username'],
+			'first_name': fields['first_name'],
+			'last_name': fields['last_name'],
 			'email': fields['email'],
 			'password': fields['password'],
-			'pw_salt': fields['pw_salt']
+			'pw_salt': fields['pw_salt'],
+			'street1': fields['street1'],
+			'street2': fields['street2'],
+			'city': fields['city'],
+			'state': fields['state'],
+			'zip': fields['zip']
 		}
 		user = User(**user_data)
 		db.session.add(user)
