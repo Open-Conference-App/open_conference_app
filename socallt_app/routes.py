@@ -2,22 +2,23 @@
 from socallt_app import app
 from flask import Flask, session, Session, url_for, request, render_template, redirect, flash
 from socallt_app.Models.Member import Member
-from socallt_app.Models.Conferences import Conferences
+import socallt_app.Controllers.Conferences
+Conferences = socallt_app.Controllers.Conferences
 from socallt_app.Models.State import State
 
-@app.route('conferences/<conference_year>')
+@app.route('/conferences/<conference_year>')
 def show_conference(conference_year):
 	##what if an id is given that isn't valid?
-	if not isinstance(conference_year, (int, long)):
-		conference_year = Conferences.get_next_conference()
-	conference_year = Conferences.get_conference_by_year(conference_year)
-	return render_template('index.html', conference=conference)
+	# if not isinstance(conference_year, (int, long)):
+	# 	conference_year = Conferences.get_next_conference()
+	# conference_year = Conferences.get_conference_by_year(conference_year)
+	return render_template('index.html', conference={'id':1})
 
-@app.route('conferences/<conference_id>/register')
+@app.route('/conferences/<conference_id>/register')
 def new_attendee(conference_id):
 	return render_template('register.html')
 
-@app.route('session/create', methods=['POST'])
+@app.route('/session/create', methods=['POST'])
 def login():
 	form_data = {
 		'email': request.form['email'],
@@ -54,12 +55,12 @@ def create():
 			form_data['inst-name'] = request.form['inst-name']
 			form_data['inst-state'] = request.form['inst-state']
 			inst = Institutions.create(form_data)
-	if result == True:
+	if result:
 		return redirect('/dashboard')
 	else:
 		return redirect('/')
 
-@app.route('members/dashboard')
+@app.route('/members/dashboard')
 def load_dashboard():
 	if '_id' in session:
 		return render_template('dashboard.html')

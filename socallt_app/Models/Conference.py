@@ -33,7 +33,7 @@ class Conference(db.Model):
 			'full': conference_data['full_prof_cost'],
 			'day': conference_data['day_prof_cost']
 		}
-		
+
 		stud_cost = {
 			'full': conference_data['full_stud_cost'],
 			'day': conference_data['day_stud_cost']

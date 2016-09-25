@@ -15,7 +15,7 @@ class Member(db.Model):
 	member_type = db.Column(db.String(12))
 	active = db.Column(db.Boolean)
 	institution_id = db.relationship(db.Integer, db.ForeignKey('institution.id'))
-	conferences = db.relationship('Conference', secondary=member_conferences, backref=db.backref('members', lazy='dynamic'))
+	conferences = db.relationship('Conference', secondary=member_conferences, backref=db.backref('conf_members', lazy='dynamic'))
 	created_at = db.Column(db.DateTime())
 	updated_at = db.Column(db.DateTime())
 

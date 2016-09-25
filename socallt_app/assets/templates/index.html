@@ -6,14 +6,15 @@
 	<link rel="stylesheet" href="{{ url_for('static',filename='css/font-awesome-4.6.3/css/font-awesome.min.css') }}"/>
 	<link rel='stylesheet' href="{{ url_for('static',filename='css/styles.css') }}"/>
 	<script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s=" crossorigin="anonymous"></script>
+	<script type="text/javascript" src="{{ url_for('static',filename='js/validations.js') }}"></script>
 	<script type="text/javascript" src="{{ url_for('static',filename='js/script.js') }}"></script>
 </head>
 <body class='container'>
-	<div class='columns'>
+<!-- 	<div class='columns'>
 		<div class='column col-12'>
-			<h1>SOCALLT {%= conference['year'] %} Registration</h1>
+			<h1>SOCALLT  Registration</h1>
 		</div>
-	</div>
+	</div> -->
 	<div class='columns'>
 		<div class='column col-1'></div>
 		<div class='column col-6'>
@@ -26,6 +27,7 @@
 					{% endwith %}
 
 					<!-- registration page 1 -->
+					<input type='hidden' id='conference' value="{{ conference['id'] }}">
 					<h3>Register</h3>
 					<div class='form-content' id='page1'>
 						<h5>User Information</h5>
@@ -85,11 +87,11 @@
 						<div class='form-group'>
 							<p>Select your institution:</p>
 							<select class='form-select' name='institution' id='institution'>
+								<option value='' id='other1'></option>
 							{% for instution in institutions %}
 								<option value="{{ institution['id']}}">{{ institution['name'] }}</option>
 							{% endfor %}
 								<option value='other' id='other'>Other</option>
-								<option value='other' id='other1'>Other</option>
 							</select>
 						</div>
 						<div id='inst-info'>
@@ -116,10 +118,32 @@
 					<!-- registration page 3 -->
 					<div id='page3' class='form-content'>
 						<h5>Conference Information</h5>
+					    <div class="form-group">
+					        <label class="form-label">Lunch Options</label>
+					        <label class="form-radio">
+					            <input type="radio" name="lunch" checked/>
+					            <i class="form-icon"></i> 
+					            Regular
+					        </label>
+					        <label class="form-radio">
+					            <input type="radio" name="lunch" />
+					            <i class="form-icon"></i> 
+					            Vegan
+					        </label>
+					        <label class="form-radio">
+					            <input type="radio" name="lunch"/>
+					            <i class="form-icon"></i> Vegetarian
+					        </label>
+					        <label class="form-radio">
+					            <input type="radio" name="lunch"/>
+					            <i class="form-icon"></i> No lunch
+					        </label>
+					    </div>
 						<div class='form-group'>
 							<label class="form-switch">
-	           					<input type="checkbox" />
-	            				<i class="form-icon"></i>&nbsp;&nbsp;&nbsp;&nbsp;Vegan Meals at Conferences
+	           					<input type="checkbox" id='gluten'/>
+	            				<i class="form-icon"></i>&nbsp;&nbsp;&nbsp;&nbsp;
+	            				Gluten Free
 	        				</label>
 						</div>
 						<div class='form-group'>
@@ -197,9 +221,9 @@
 			<div id='prices'>
 				<h6>Prices</h6>
 				<ul>
-					<li><b>Student: 1 Day - $20; Conference - $35</b></li>
-					<li><b>Professional: 1 Day - $25; Conference - $50</b></li>
-					<li><b>Vendor/Exhibitor/Industry Rep: 1 Day - $25; Conference - $50</b></li>
+					<li><b>Student: 1 Day - $20; Conference - $40</b></li>
+					<li><b>Professional: 1 Day - $35; Conference - $70</b></li>
+					<li><b>Vendor/Exhibitor/Industry Rep: 1 Day - $35; Conference - $70</b></li>
 				</ul>
 			</div>
 		</div>
