@@ -5,7 +5,6 @@ function validate(page, valiArr){
 		var name = '#' + valiArr[i]['fieldName'];
 		valiArr[i]['valid'] = valiArr[i]['validation'](name) ? true : false;
 		if(valiArr[i]['valid']){
-			console.log(valiArr[i]['fieldName']);
 			$(name).removeClass('is-danger');
 		} else {
 			$(name).addClass('is-danger'); 

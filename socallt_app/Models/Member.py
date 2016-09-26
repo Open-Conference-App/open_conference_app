@@ -3,6 +3,11 @@ import imp, re, hashlib, binascii, os, datetime
 from socallt_app import app, db
 from Conference import member_conferences
 
+member_presentations = db.Table('member_presentations', 
+	db.Column('presenter_id', db.Integer, db.ForeignKey('member.id')), 
+	db.Column('presentation_id', db.Integer, db.ForeignKey('presentation.id'))
+)
+
 class Member(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
 	first_name = db.Column(db.String(255))

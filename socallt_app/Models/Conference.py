@@ -12,11 +12,16 @@ vendor_conferences = db.Table('vendor_conferences',
 	db.Column('conference_id', db.Integer, db.ForeignKey('conference.id'))
 )
 
+presenter_conferences = db.Table('presenter_conferences', 
+	db.Column('presenter_id', db.Integer, db.ForeignKey('member.id')), 
+	db.Column('conference_id', db.Integer, db.ForeignKey('conference.id'))
+)
+
 class Conference(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
 	year = db.Column(db.String(4), unique=True)
 	institution_id = db.Column(db.Integer, db.ForeignKey('member.id'))
-	members = db.relationship('Member', secondary=member_conferences, backref=db.backref('conferences', lazy='dynamic'))
+	members = db.relationship('Member', secondary=member_conferences, backref=db.backref('members', lazy='dynamic'))
 	vendors = db.relationship('Vendor', secondary=vendor_conferences, backref=db.backref('vendors', lazy='dynamic'))
 	prof_cost = db.Column(db.PickleType)
 	stud_cost = db.Column(db.PickleType)

@@ -36,7 +36,6 @@ $(document).ready(function(){
 				if(!nextPage){
 					
 				} else {
-					console.log(pageId);
 					$('#'+pageId).hide();
 					$('#'+nextPage).fadeToggle();
 				}
