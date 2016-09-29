@@ -1,6 +1,9 @@
 from flask import Flask
 import imp, re, hashlib, binascii, os, datetime
 from socallt_app import app, db
+from socallt_app.config import sensitive
+from apiclient.discovery import build
+sens = sensitive.Sens()
 
 member_conferences = db.Table('member_conferences', 
 	db.Column('member_id', db.Integer, db.ForeignKey('member.id')), 
@@ -27,6 +30,7 @@ class Conference(db.Model):
 	stud_cost = db.Column(db.PickleType)
 	vend_cost = db.Column(db.Integer)
 	date = db.Column(db.DateTime)
+	folder_id = db.Column(db.String(255))
 	created_at = db.Column(db.DateTime)
 	updated_at = db.Column(db.DateTime)
 
@@ -48,5 +52,12 @@ class Conference(db.Model):
 		self.stud_cost = pickle.dumps(stud_cost)
 		self.vend_cost = conference_data['vend_cost']
 		self.date = conference_data['date']
+		
+		folder_metadata = {
+			'name': conference_data['year'],
+			'mimeType': 'application/vnd.google-apps.folder',
+
+
+		}
 		self.created_at = datetime.now()
 		self.updated_at = datetime.now()

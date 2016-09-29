@@ -11,15 +11,15 @@
 	<script type="text/javascript" src="{{ url_for('static',filename='js/script.js') }}"></script>
 </head>
 <body class='container'>
-<!-- 	<div class='columns'>
+	<div class='columns'>
 		<div class='column col-12'>
 			<h1>SOCALLT  Registration</h1>
 		</div>
-	</div> -->
+	</div>
 	<div class='columns'>
 		<div class='column col-1'></div>
 		<div class='column col-6'>
-			<div id='register-form'>
+			<div id='register-form' data-id='cool'>
 				<form action='/register' method='POST'>
 					{% with messages = get_flashed_messages(category_filter=['regisErr']) %}
 						{% for message in messages %}

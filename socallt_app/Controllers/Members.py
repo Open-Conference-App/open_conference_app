@@ -6,8 +6,8 @@ from flask_sqlalchemy import SQLAlchemy
 sens = Sens()
 from socallt_app.Models.Member import Member
 from socallt_app import app, db
-
 EMAIL_KEY = re.compile(r'^[a-zA-Z0-9\.\+_-]@[a-zA-Z0-9\._-]+\.[a-zA-Z]*$')
+
 def create(fields):
 	is_valid = True
 	for k, v in fields.items():
@@ -61,6 +61,7 @@ def login(user_data):
 		session['_id'] = user.id
 		session['username'] = user.username
 	return is_valid
+
 
 
 	
