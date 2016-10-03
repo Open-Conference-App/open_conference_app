@@ -1,10 +1,9 @@
 # from config import Members
 from socallt_app import app
 from flask import Flask, session, Session, url_for, request, render_template, redirect, flash
-from socallt_app.Models.Member import Member
-import socallt_app.Controllers.Conferences
-Conferences = socallt_app.Controllers.Conferences
-from socallt_app.Models.State import State
+from socallt_app.Models import Address, Conference, Institution, Member, Presentation, State, Vendor
+from socallt_app.Controllers import Conferences, Addresses, Institutions, Members, Presentations, States, Vendors
+
 
 @app.route('/conferences/<conference_year>')
 def show_conference(conference_year):

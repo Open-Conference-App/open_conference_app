@@ -21,8 +21,8 @@ def update(inst_data):
 	inst = Institution.query.get(inst_data['id'])
 	return inst
 
-/institutions #get
-/institutions/<inst_id> #get
-/institutions/new #get
-/institutions/<inst_id>/delete #get
-/institutions/<inst_id> #put/patch
+#/institutions #get
+#/institutions/<inst_id> #get
+#/institutions/new #get
+#/institutions/<inst_id>/delete #get
+#/institutions/<inst_id> #put/patch

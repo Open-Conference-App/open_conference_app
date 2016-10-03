@@ -1,12 +1,8 @@
 from flask import Flask
 import imp, re, hashlib, binascii, os, datetime
 from socallt_app import app, db
-from Conference import member_conferences
-
-member_presentations = db.Table('member_presentations', 
-	db.Column('presenter_id', db.Integer, db.ForeignKey('member.id')), 
-	db.Column('presentation_id', db.Integer, db.ForeignKey('presentation.id'))
-)
+from socallt_app.Models.Conference import member_conferences
+from  socallt_app.Models.Presentation import member_presentations
 
 class Member(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
@@ -20,6 +16,7 @@ class Member(db.Model):
 	member_type = db.Column(db.String(12))
 	active = db.Column(db.Boolean)
 	institution_id = db.relationship(db.Integer, db.ForeignKey('institution.id'))
+	presentations = db.relationship('Presentation', secondary=member_presentations, back_populates='presenters')
 	conferences = db.relationship('Conference', secondary=member_conferences, backref=db.backref('conf_members', lazy='dynamic'))
 	created_at = db.Column(db.DateTime())
 	updated_at = db.Column(db.DateTime())
