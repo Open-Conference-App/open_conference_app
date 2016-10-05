@@ -1,16 +1,39 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Notes with AJAX</title>
-	<link rel="stylesheet" href="dist/spectre.min.css"/>
-	<link rel='stylesheet' href="url_for('static', 'css/styles.css')"/>
+	<title>SOCALLT My Account</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/spectre.min.css')}}"/>
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css')}}"/>
 	<script   src="https://code.jquery.com/jquery-2.2.4.min.js"   integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="   crossorigin="anonymous"></script>
-	<script type="text/javascript" src="url_for('static','js/script.js'"></script>
+	<script type="text/javascript" src="{{url_for('static', filename='js/script.js')}}"></script>
 </head>
-<body class='container'>
-	<div class='columns'>
+<body>
+
+	<div id="container" class="container-fluid">
+		<div class="row header">
+			<div class="col-xs-12">
+				<img class="logo" src="{{ url_for('static', filename='images/socallt2015.png')}}" width="100px">
+				<h1 class="welcome">Welcome! <p class="login">You are Logged in as: <i>{{ name }} aslkdjfapsdfa</i></p></h1>
+			</div>
+		</div>
+		<div class="row">
+			<ul class="nav">
+				<li>Presentations</li>
+				<li>Conferences</li>
+				<li>Account</li>
+			</ul>
+		</div>
+	</div>
+	<div id="content">
+		
+	</div>
+
+	<!-- <div class='columns'>
 		You are logged in as {{ session['username'] }}
-		<form class='col-3' action='/conferences' method='POST'>
+
+
+		<form class='col-3' class="form-control" action='/conferences' method='POST'>
 			<div class='form-group'>
 				<label for='username'>Username:</label>
 				<input type="text" name="username" value="{{ session['name'] }}">
@@ -27,8 +50,8 @@
 				<label for='confirm_password'>Confirm Password:</label>
 				<input type="password" name="confirm_password">
 			</div>
-			<button type='submit' class='btn btn-primary'>Register</button>
+			<button class="btn btn-sm" type='submit' class='btn btn-primary'>Register</button>
 		</form>
-	</div>
+	</div> -->
 </body>
 </html>

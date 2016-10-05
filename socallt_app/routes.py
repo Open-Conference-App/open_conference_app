@@ -6,6 +6,10 @@ import socallt_app.Controllers.Conferences
 Conferences = socallt_app.Controllers.Conferences
 from socallt_app.Models.State import State
 
+@app.route('/')
+def hello():
+	return render_template('dashboard.html')
+
 @app.route('/conferences/<conference_year>')
 def show_conference(conference_year):
 	##what if an id is given that isn't valid?
