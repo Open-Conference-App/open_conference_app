@@ -1,7 +1,7 @@
 from flask import Flask
 import imp, re, hashlib, binascii, os, datetime
-from socallt_app import app, db
-from socallt_app.config import sensitive
+from OCAPP import app, db
+from OCAPP.config import sensitive
 from apiclient.discovery import build
 sens = sensitive.Sens()
 

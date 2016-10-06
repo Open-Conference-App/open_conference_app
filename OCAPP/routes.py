@@ -1,9 +1,12 @@
 # from config import Members
-from socallt_app import app
-from flask import Flask, session, Session, url_for, request, render_template, redirect, flash
-from socallt_app.Models import Address, Conference, Institution, Member, Presentation, State, Vendor
-from socallt_app.Controllers import Conferences, Addresses, Institutions, Members, Presentations, States, Vendors
-
+from OCAPP.config.sensitive import Sens
+sens = Sens()
+from OCAPP import app
+from flask import Flask, session, url_for, request, render_template, redirect, flash
+from OCAPP.Models import Address, Conference, Institution, Member, Presentation, State, Vendor
+from OCAPP.Controllers import Conferences, Addresses, Institutions, Members, Presentations, States, Vendors, Sessions
+import stripe
+stripe.api_key = sens.stripe_secret_key
 
 @app.route('/conferences/<conference_year>')
 def show_conference(conference_year):
@@ -23,15 +26,23 @@ def login():
 		'email': request.form['email'],
 		'password': request.form['password']
 	}
-	logged_in = logReg.login(form_data)
-
+	logged_in = Sessions.create(form_data)
 	if logged_in:
 		return redirect('/dashboard')
 	else:
 		flash('The username and/or password you supplied do not match our records.', 'loginErr')
 		return redirect('/')
 
-
+@app.route('/members/pay', methods=['POST'])
+def pay():
+	if '_id' not in session:
+		return redirect('/')
+	elif 'server_token'
+		payment_data = {
+			'token': request.form['token'],
+			
+		}
+		return
 @app.route('/members/create', methods=['POST'])
 def create():
 	form_data = {

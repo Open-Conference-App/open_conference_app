@@ -1,8 +1,8 @@
 from flask import Flask
 import imp, re, hashlib, binascii, os, datetime
-from socallt_app import app, db
-from socallt_app.Models.Conference import member_conferences
-from  socallt_app.Models.Presentation import member_presentations
+from OCAPP import app, db
+from OCAPP.Models.Conference import member_conferences
+from  OCAPP.Models.Presentation import member_presentations
 
 class Member(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
@@ -37,5 +37,6 @@ class Member(db.Model):
 
 	def __repr__(self):
 		return '<Member %r>' % self.email
+
 
 

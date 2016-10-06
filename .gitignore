@@ -1,6 +1,6 @@
 *.pyc
 Models.py
-socallt_app/config/sensitive.py
+OCAPP/config/sensitive.py
 venv/
-socallt_app/config/OCAPP-be1e971c19fb.json
+OCAPP/config/OCAPP-be1e971c19fb.json
 

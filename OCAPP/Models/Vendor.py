@@ -1,7 +1,7 @@
 from flask import Flask
 import imp, re, hashlib, binascii, os, datetime
-from socallt_app import app, db
-from conferences import vendor_conferences
+from OCAPP import app, db
+from OCAPP.Models.Conference import vendor_conferences
 
 class Vendor(db.Model):
 	id = db.Column(db.Integer, primary_key=True)

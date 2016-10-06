@@ -1,9 +1,8 @@
 from flask import Flask
 import imp, re, hashlib, binascii, os, datetime
-from socallt_app import app, db
-from socallt_app.config import sensitive
-from socallt_app.Models.Member import member_presentations
-from socallt_app.Models.Conference import Conference
+from OCAPP import app, db
+from OCAPP.config import sensitive
+from OCAPP.Models.Conference import Conference
 from apiclient.discovery import build
 from apiclient.http import MediaFileUpload
 from oauth2client.service_account import ServiceAccountCredentials

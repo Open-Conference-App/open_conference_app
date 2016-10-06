@@ -1,6 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy
-from socallt_app.Models.Institution import Institution
-from socallt_app import app, db
+from OCAPP.Models.Institution import Institution
+from OCAPP import app, db
 
 def index():
 	return Institution.query.all()

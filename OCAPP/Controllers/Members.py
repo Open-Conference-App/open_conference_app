@@ -1,11 +1,11 @@
 import binascii, os, re, hashlib
-from sensitive import Sens
+from OCAPP.config.sensitive import Sens
 from flask import session, flash
 from flask.ext.session import Session
 from flask_sqlalchemy import SQLAlchemy
 sens = Sens()
-from socallt_app.Models.Member import Member
-from socallt_app import app, db
+from OCAPP.Models.Member import Member
+from OCAPP import app, db
 EMAIL_KEY = re.compile(r'^[a-zA-Z0-9\.\+_-]@[a-zA-Z0-9\._-]+\.[a-zA-Z]*$')
 
 def create(fields):
@@ -19,7 +19,7 @@ def create(fields):
 		is_valid = False
 		flash("Email address is not formatted correctly.", 'regisErr')
 	else:
-		if User.query.filter_by(email=fields['email']).first():
+		if Member.query.filter_by(email=fields['email']).first():
 			flash("The email address you entered is already in our system.", 'regisErr')
 			is_valid = False
 	if fields['password'] != fields['confirm_password']:
@@ -49,18 +49,44 @@ def create(fields):
 		session['username'] = user.username
 	return True
 
-def login(user_data):
-	print user_data['email']
-	user = User.query.filter_by(email=user_data['email']).first()
-	is_valid=True
-	if not user:
-		return False
-	if user.password != hashlib.sha256(user_data['password'] + user.pw_salt).hexdigest():
-		is_valid = False
-	if is_valid:
-		session['_id'] = user.id
-		session['username'] = user.username
-	return is_valid
+def activate(id)	
+	member = Member.query.get(id)
+	if member:
+		active = True
+	else:
+		active = False
+	member = Member.query.get(id)
+	member.active = active
+	db.session.commit()
+	return member.active
+
+def deactivate(id):
+	member = Member.query.get(id)
+	if member:
+		active = False
+	else:
+		active = True
+	member = Member.query.get(id)
+	member.active = active
+	db.session.commit()
+	return member.active
+
+def toggle_officer(member_id, make_officer):
+	member = Member.query.get(member_id)
+	member.officer = True if make_officer else False
+	db.session.commit()
+	return member_id
+
+def update(member_data):
+	##assumes to have had all other table data removed before receipt
+	member = Member.query.get(member_data)
+	for k,v in member_data:
+		if member[k] != v:
+			member[k] = v
+	return member
+
+def index():
+	return Member.query.all()
 
 
 
