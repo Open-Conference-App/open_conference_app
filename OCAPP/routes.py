@@ -8,6 +8,10 @@ from OCAPP.Controllers import Conferences, Addresses, Institutions, Members, Pre
 import stripe
 stripe.api_key = sens.stripe_secret_key
 
+@app.route('/')
+def hello():
+	return render_template('dashboard.html')
+
 @app.route('/conferences/<conference_year>')
 def show_conference(conference_year):
 	##what if an id is given that isn't valid?
