@@ -5,6 +5,10 @@ from socallt_app.Models import Address, Conference, Institution, Member, Present
 from socallt_app.Controllers import Conferences, Addresses, Institutions, Members, Presentations, States, Vendors
 
 
+@app.route('/')
+def hello():
+	return render_template('dashboard.html')
+
 @app.route('/conferences/<conference_year>')
 def show_conference(conference_year):
 	##what if an id is given that isn't valid?
