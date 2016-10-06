@@ -49,7 +49,7 @@ def create(fields):
 		session['username'] = user.username
 	return True
 
-def activate(id)	
+def activate(id):	
 	member = Member.query.get(id)
 	if member:
 		active = True

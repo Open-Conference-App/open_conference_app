@@ -41,7 +41,7 @@ def login():
 def pay():
 	if '_id' not in session:
 		return redirect('/')
-	elif 'server_token'
+	elif 'server_token' in request.form:
 		payment_data = {
 			'token': request.form['token'],
 			
