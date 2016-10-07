@@ -8,47 +8,84 @@ from OCAPP.Controllers import Conferences, Addresses, Institutions, Members, Pre
 import stripe
 stripe.api_key = sens.stripe_secret_key
 
-@app.route('/')
-def hello():
-	return render_template('dashboard.html')
+#create a new conference(to be done through admin dashboard only)
+@app.route('/conferences', methods=['POST'])
+def create_conference():
+	return redirect('/') #need to replace redirect with admin dashboard url
 
-@app.route('/conferences/<conference_year>')
-def show_conference(conference_year):
-	##what if an id is given that isn't valid?
-	# if not isinstance(conference_year, (int, long)):
-	# 	conference_year = Conferences.get_next_conference()
-	# conference_year = Conferences.get_conference_by_year(conference_year)
-	return render_template('index.html', conference={'id':1})
+#handle all RESTful routes to '/conference/<conference_id'
+@app.route('/conferences/<conference_id>', methods=['GET','DELETE','PUT'])
+def handle_conference(conference_id):
+	#show next conference registration page, even if using a past conference idnumber or a non-int type
+	if request.method == 'GET':
+		new_conference_id = Conferences.get_next()
+		#if the parameter in uri is not a number or not the latest id, go to the latest
+		if not isinstance(conference_id, (int, long)) or conference_id != new_conference_id:
+			return redirect('/conferences/',new_conference_id)
+		else:
+			return render_template('index.html', conference={'id':conference_id}, csrf_token=sens.get_csrf_token())
 
-@app.route('/conferences/<conference_id>/register')
-def new_attendee(conference_id):
-	return render_template('register.html')
+	#delete a conference(to be done through admin dashboard only as an ajax call)
+	if request.method == 'DELETE':
+		Conferences.delete(conference_id)
+		return redirect('/')
 
-@app.route('/session/create', methods=['POST'])
+	#update conference information(to be done through admin dashboard only as an ajax call)
+	if request.method =='PUT':
+
+#pay for conference attendance/membership fees(which are one and the same, user must already exist)
+@app.route('/conferences/<conference_id>/members/<member_id>', methods=['POST'])
+def pay(conference_id, member_id):
+	if '_id' not in session or 'csrf_token' not in request.form:
+		return redirect('/')
+	elif request.form['csrf_token'] != session['csrf_token']
+		payment_data = {
+			'token': request.form['token'],
+			
+		}
+		return	
+
+@app.route('/sessions/create', methods=['POST'])
 def login():
 	form_data = {
 		'email': request.form['email'],
 		'password': request.form['password']
 	}
-	logged_in = Sessions.create(form_data)
+	member = Members.get_by_email(form_data['email'])
+	if member:
+		logged_in = Sessions.create(member)
 	if logged_in:
 		return redirect('/dashboard')
 	else:
-		flash('The username and/or password you supplied do not match our records.', 'loginErr')
+		flash('The email address and/or password you supplied do not match our records.', 'loginErr')
 		return redirect('/')
 
-@app.route('/members/pay', methods=['POST'])
-def pay():
-	if '_id' not in session:
+
+
+#creates new user in db (should be utilized if it is a new member only)
+@app.route('/members/<member_id>', methods=['GET','POST','PUT', 'DELETE'])
+def handle_members(member_id):
+	#show member info
+	if request.method == 'GET':
+		if not isinstance(conference_id, (int, long)):
+			conference_id = Conferences.get_next()
+		return render_template('index.html', conference={'id':conference_id})
+
+	#create a new member(when users regsiter for the next conference)
+	if request.method =='POST':
+		if not 'csrf_token' in session:
+			return redirect('/conferences')
+		#what's the route for adming dashboard??
 		return redirect('/')
-	elif 'server_token' in request.form:
-		payment_data = {
-			'token': request.form['token'],
-			
-		}
-		return
-@app.route('/members/create', methods=['POST'])
-def create():
+
+	#delete a conference(to be done through admin dashboard only)
+	if request.method == 'DELETE':
+		return redirect('/')
+
+	#update conference information(to be done through admin dashboard only)
+	if request.method =='PUT':
+
+
 	form_data = {
 		'first_name': request.form['first_name'],
 		'last_name': request.form['last_name'],
@@ -77,6 +114,7 @@ def create():
 @app.route('/members/dashboard')
 def load_dashboard():
 	if '_id' in session:
+		session['csrf_token'] = csrf_token
 		return render_template('dashboard.html')
 	else:
 		return redirect('/')

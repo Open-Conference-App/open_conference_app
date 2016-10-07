@@ -29,11 +29,19 @@ def create(fields):
 		return True
 	return False
 
-def get_conference_by_id(id):
+def get_by_id(id):
 	conference = Conference.query.get(id)
 	if not conference:
 		conference = get_next_conference()
 	return conference
 
-def get_next_conference():
+def get_next():
 	return Conference.query.order_by(desc(Conference.year)).first().id
+
+def destroy(id):
+	conference = Conference.query.get(id)
+	if conference:
+		db.session.delete(conference)
+		db.session.commit()
+	return conference
+

@@ -2,8 +2,8 @@ from flask import session, flash
 from OCAPP.Models.Member import Member
 from OCAPP import app, db
 
-def create(post_info):
-	member = Member.query.filter_by(email=post_info['email']).first()
+def create(id):
+	member = Member.query.get(id)
 	is_valid = True
 	if not user:
 		return False
@@ -15,4 +15,5 @@ def create(post_info):
 	return is_valid
 
 def delete():
+	session.clear()
 	return

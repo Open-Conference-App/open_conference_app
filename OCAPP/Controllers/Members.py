@@ -1,7 +1,6 @@
 import binascii, os, re, hashlib
 from OCAPP.config.sensitive import Sens
 from flask import session, flash
-from flask.ext.session import Session
 from flask_sqlalchemy import SQLAlchemy
 sens = Sens()
 from OCAPP.Models.Member import Member
@@ -87,6 +86,9 @@ def update(member_data):
 
 def index():
 	return Member.query.all()
+
+def get_by_email(email_add):
+	return Member.query.filter_by(email=email_add).first()
 
 
 
