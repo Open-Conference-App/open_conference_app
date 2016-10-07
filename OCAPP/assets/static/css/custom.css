@@ -1,12 +1,17 @@
 *{
+	padding: 0;
+	margin: 0;
 	font-family: Open Sans, Helvetica, Arial;
-	font-size: 1.25em;
+	font-size: 1em;
+}
+#container{
+	font-size: 1.8em;
 }
 .header{
 	background-color: #fff;
 }
 .welcome{
-	font-size: 1.7em;
+	font-size: 1.65em;
 	margin:0;
 	padding: 16px 0 0;
 	display: inline-block;
@@ -14,7 +19,7 @@
 .login{
 	margin: 0;
 	padding: 0 0 0 10px;
-	font-size: .25em;
+	font-size: .27em;
 }
 .logo{
 	margin: 18px 0 0;
@@ -22,33 +27,88 @@
 	display: inline-block;
 	border:1px solid silver;
 }
-.nav{
+.nav>ul{
 	background-color: #000;
 	padding: 0 3% 0;
 	width: 100%;
-	text-align: right;
+	text-align: center;
 	margin: 0;
 }
-.nav li{
+.nav>ul >li {
 	color: #dedfe0;
-	font-size: .6em;
+	font-size: .5em;
 	display: inline-block;
 	text-align: right;
 	margin: 0;
+	text-align: center;
 }
 .nav li:hover{
 	color: #47935a;
 }
-
+.sub_conferences{
+	float: center;
+	display: none;
+	padding: 0;
+	margin: 0;
+	z-index: 1;
+	position: absolute;
+	background-color: #000;
+	list-style-type: none;
+	left:-10%;
+}
+.sub_conferences > li{
+	font-size: .9em;
+	padding: 5px 0;
+	color: #fff;
+	margin: 0 30px;
+}
+.sub_account{
+	float: center;
+	display: none;
+	padding: 0;
+	margin: 0;
+	z-index: 1;
+	position: absolute;
+	background-color: #000;
+	list-style-type: none;
+	left:-10%;
+}
+.sub_account > li{
+	font-size: .9em;
+	padding: 5px 0;
+	color: #fff;
+	margin: 0 30px;
+}
+#content{
+	padding: 0 10px;
+	}
+#content h3{
+	text-align: center;
+}
+.presentations_info, .account_info{
+	display: none;
+}
+.presentation_new{
+	margin: 50px 0 0 60px;
+}
+textarea{
+	margin-bottom: 30px;
+}
 @media (min-width: 500px){
 	.header{
 		padding: 16px 20px 0; 
-		font-size: 1.7em;
+		font-size: 1.6em;
 	}
 	.login{
 		font-size: .2em;
 	}
-	
+	.nav >ul{
+		text-align: right;
+	}
+	.nav >ul>li{
+		padding: 0 10px;
+		font-size: .6em;
+	}
 }
 
 @media (min-width: 768px){
@@ -71,21 +131,22 @@
 	.logo{
 		width: 140px;
 	}
-	.nav{
+	.nav >ul{
 		box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.7), 0 6px 20px 0 rgba(0, 0, 0, 0.4);
-		border-left: 1px solid #000;
-		border-right: 1px solid #000;
 	}
-	.nav li{
-		padding-right: 20px;
+	#content h3{
+		font-size: 2.5em;
 	}
 }
 
 @media (min-width: 1200px){
-	.nav{
+	.header{
+		font-size: 1.9em;
+	}
+	.nav >ul{
 		padding: 0 60px 0 0;
 	}	
-	.nav li{
-		padding-right: 65px;
+	.nav>ul>li{
+		padding: 0 37px;
 	}
 }
