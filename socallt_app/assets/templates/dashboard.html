@@ -6,7 +6,7 @@
 	<link rel="stylesheet" href="{{ url_for('static', filename='css/spectre.min.css')}}"/>
 	<link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css')}}"/>
 	<script   src="https://code.jquery.com/jquery-2.2.4.min.js"   integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="   crossorigin="anonymous"></script>
-	<script type="text/javascript" src="{{url_for('static', filename='js/script.js')}}"></script>
+	<script type="text/javascript" src="{{url_for('static', filename='js/dashboard.js')}}"></script>
 </head>
 <body>
 
@@ -18,14 +18,64 @@
 			</div>
 		</div>
 		<div class="row">
-			<ul class="nav">
-				<li>Presentations</li>
-				<li>Conferences</li>
-				<li>Account</li>
+			<div class="nav">
+			<ul class="">
+				<li class="presentations">Presentations</li>
+				<li class="conferences">Conferences
+				<span class="col-xs-12">
+					<ul class="sub_conferences">
+						<li class="first">2017 Conference</li>
+						<li>other conferences</li>
+						<li>other conferences</li>
+					</ul>
+					</span>
+				</li>
+				<li class="account">Account
+				<span class="col-xs-12">
+					<ul class="sub_account">
+						<li class="edit">Edit</li>
+						<li class="payment">Pay</li>
+						<li class="logout">Logout</li>
+					</ul>
+					</span>
+				</li></li>
 			</ul>
+			</div>
 		</div>
 	</div>
-	<div id="content">
+	<div id="content" class="row">
+		<div class="col-xs-12 col-md-12 home">
+			<h3>2017 Conference</h3>
+			<p>The 2017 Conference will be held on the campus of the University of Colorado Boulder and will be hosted by ALTEC, the Anderson Language Technology Center. Details forthcoming!</p>
+		</div>
+
+
+		<div class="col-xs-12 account_info">
+
+		</div>
+
+
+		<div class="col-xs-12 presentations_info">
+			<h3>Please add your presentation</h3>
+			<div class="col-xs-6 presentation_new">
+				<form>
+					<label for="title">Title:</label></br>
+						<input class="col-xs-8" type="text" name="title"></br></br></br>
+					<label class="des" for="description">Description:</label>
+						<textarea  class="col-xs-12"></textarea></br></br></br>
+						<input type="file" name="description">
+				</form>
+			</div>
+			<div class="col-xs-4">
+				<h6>Presentations already uploaded</h6>
+				<ul>
+					<li>name</li>
+					<li>name</li>
+					<li>name</li>
+					<li>name</li>
+				</ul>
+			</div>
+		</div
 		
 	</div>
 
