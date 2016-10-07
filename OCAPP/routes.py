@@ -7,7 +7,7 @@ from OCAPP.Controllers import Conferences, Addresses, Institutions, Members, Pre
 import stripe
 stripe.api_key = sens.stripe_secret_key
 
-#create a new conference(to be done through admin dashboard only)
+#create a new conference(to be done through admin dashboard only via ajax call)
 @app.route('/conferences', methods=['POST'])
 def create_conference():
 	return redirect('/') #need to replace redirect with admin dashboard url
@@ -17,12 +17,13 @@ def create_conference():
 def handle_conference(conference_id):
 	#show next conference registration page, even if using a past conference idnumber or a non-int type
 	if request.method == 'GET':
-		new_conference_id = Conferences.get_next()
+		new_conference = Conferences.get_next()
 		#if the parameter in uri is not a number or not the latest id, go to the latest
-		if not isinstance(conference_id, (int, long)) or conference_id != new_conference_id:
-			return redirect('/conferences/',new_conference_id)
+		if not isinstance(conference_id, (int, long)) or conference_id != new_conference.id:
+			return redirect('/conferences/',new_conference.id)
 		else:
-			return render_template('index.html', conference={'id':conference_id}, csrf_token=sens.get_csrf_token())
+			session['csrf_token'] = sens.gen_csrf_token()
+			return render_template('index.html', conference={'id':conference_id, 'year': new_conference.id})
 
 	#delete a conference(to be done through admin dashboard only as an ajax call)
 	if request.method == 'DELETE':
@@ -35,13 +36,13 @@ def handle_conference(conference_id):
 
 #pay for conference attendance/membership fees(which are one and the same, user must already exist)
 @app.route('/conferences/<conference_id>/members/<member_id>', methods=['POST'])
-def pay(conference_id, member_id):
+def register_and_pay(conference_id, member_id):
 	if '_id' not in session or 'csrf_token' not in request.form:
-		return redirect('/')
+		return json.dumps({})
 	elif request.form['csrf_token'] != session['csrf_token']:
 		payment_data = {
 			'token': request.form['token']
-			#need to link data to data-types in form
+			#need to link data to data found in form
 		}
 		return	
 
@@ -60,6 +61,17 @@ def login():
 		flash('The email address and/or password you supplied do not match our records.', 'loginErr')
 		return redirect('/')
 
+
+#create a new member(when users regsiter for the next conference)
+@app.route('/members')	
+	if not 'csrf_token' in session:
+		return redirect('/conferences')
+	#what's the route for adming dashboard??
+	return redirect('/')
+
+
+
+
 #creates new user in db (should be utilized if it is a new member only)
 @app.route('/members/<member_id>', methods=['GET','POST','PUT', 'DELETE'])
 def handle_members(member_id):
@@ -68,13 +80,6 @@ def handle_members(member_id):
 		if not isinstance(conference_id, (int, long)):
 			conference_id = Conferences.get_next()
 		return render_template('index.html', conference={'id':conference_id})
-
-	#create a new member(when users regsiter for the next conference)
-	if request.method =='POST':
-		if not 'csrf_token' in session:
-			return redirect('/conferences')
-		#what's the route for adming dashboard??
-		return redirect('/')
 
 	#delete a conference(to be done through admin dashboard only)
 	if request.method == 'DELETE':

@@ -24,19 +24,16 @@ def create(fields):
 	if fields['vend_cost'] < 0:
 		is_valid = False
 		flash('Vendor conference prices must be positive.', 'conf_create_err')
-
-	if is_valid:
-		return True
-	return False
+	return is_valid
 
 def get_by_id(id):
 	conference = Conference.query.get(id)
 	if not conference:
-		conference = get_next_conference()
+		conference = get_next()
 	return conference
 
 def get_next():
-	return Conference.query.order_by(desc(Conference.year)).first().id
+	return Conference.query.order_by(desc(Conference.year)).first()
 
 def destroy(id):
 	conference = Conference.query.get(id)

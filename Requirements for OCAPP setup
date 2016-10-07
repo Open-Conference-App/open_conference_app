@@ -1,5 +1,5 @@
 Requirements for OCAPP setup
 	-Google Account
-	-PayPal/Stripe Account
-	-Python, MySQL, SQLAlchemy, Flask, JQuery
+	-Stripe Account
+	-Python, MySQL, SQLAlchemy, Flask, JQuery, Flask-API, markdown(necessary?), Bootstrap, unittest 
 	-
