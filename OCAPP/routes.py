@@ -1,4 +1,3 @@
-# from config import Members
 from OCAPP.config.sensitive import Sens
 sens = Sens()
 from OCAPP import app
@@ -27,25 +26,26 @@ def handle_conference(conference_id):
 
 	#delete a conference(to be done through admin dashboard only as an ajax call)
 	if request.method == 'DELETE':
-		Conferences.delete(conference_id)
-		return redirect('/')
-
+		return json.dumps({'result': Conferences.destroy(conference_id)})
 	#update conference information(to be done through admin dashboard only as an ajax call)
 	if request.method =='PUT':
+		conference = Conferences.get_by_id(conference_id)
+		changed_conference = Conference.update(conference, request.form['conference'])
+		return json.dumps({'conference':changed_conference})
 
 #pay for conference attendance/membership fees(which are one and the same, user must already exist)
 @app.route('/conferences/<conference_id>/members/<member_id>', methods=['POST'])
 def pay(conference_id, member_id):
 	if '_id' not in session or 'csrf_token' not in request.form:
 		return redirect('/')
-	elif request.form['csrf_token'] != session['csrf_token']
+	elif request.form['csrf_token'] != session['csrf_token']:
 		payment_data = {
-			'token': request.form['token'],
-			
+			'token': request.form['token']
+			#need to link data to data-types in form
 		}
 		return	
 
-@app.route('/sessions/create', methods=['POST'])
+@app.route('/sessions/', methods=['POST'])
 def login():
 	form_data = {
 		'email': request.form['email'],
@@ -59,8 +59,6 @@ def login():
 	else:
 		flash('The email address and/or password you supplied do not match our records.', 'loginErr')
 		return redirect('/')
-
-
 
 #creates new user in db (should be utilized if it is a new member only)
 @app.route('/members/<member_id>', methods=['GET','POST','PUT', 'DELETE'])
@@ -84,22 +82,20 @@ def handle_members(member_id):
 
 	#update conference information(to be done through admin dashboard only)
 	if request.method =='PUT':
+		form_data = {
+			'first_name': request.form['first_name'],
+			'last_name': request.form['last_name'],
+			'email':request.form['email'],
+			'password': request.form['password'],
+			'confirm_password': request.form['confirm_password'],
+			'street1': request.form['street1'],
+			'street2': request.form['street2'],
+			'city': request.form['city'],
+			'state': request.form['state'],
+			'zip': request.form['zip']
+		}
 
-
-	form_data = {
-		'first_name': request.form['first_name'],
-		'last_name': request.form['last_name'],
-		'email':request.form['email'],
-		'password': request.form['password'],
-		'confirm_password': request.form['confirm_password'],
-		'street1': request.form['street1'],
-		'street2': request.form['street2'],
-		'city': request.form['city'],
-		'state': request.form['state'],
-		'zip': request.form['zip']
-	}
-
-	result = Members.create(form_data)
+		result = Members.create(form_data)
 	if result:
 		form_data = {}
 		if 'inst-name' in request.form:
@@ -114,12 +110,7 @@ def handle_members(member_id):
 @app.route('/members/dashboard')
 def load_dashboard():
 	if '_id' in session:
-		session['csrf_token'] = csrf_token
+		session['csrf_token'] = sens.gen_csrf_token()
 		return render_template('dashboard.html')
 	else:
 		return redirect('/')
-
-
-
-# @app.route('/<conference_id>/')
-# def show_conference()

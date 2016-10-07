@@ -45,3 +45,9 @@ def destroy(id):
 		db.session.commit()
 	return conference
 
+def update(conference, up_conf):
+	for key in conference.keys():
+		if conference[key] != up_conf[key]:
+			conference[key] = up_conf[key]
+	return conference
+
