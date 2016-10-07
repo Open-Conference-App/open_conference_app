@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
 	<title>SOCALLT My Account</title>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
@@ -8,8 +9,8 @@
 	<script   src="https://code.jquery.com/jquery-2.2.4.min.js"   integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="   crossorigin="anonymous"></script>
 	<script type="text/javascript" src="{{url_for('static', filename='js/dashboard.js')}}"></script>
 </head>
-<body>
 
+<body>
 	<div id="container" class="container-fluid">
 		<div class="row header">
 			<div class="col-xs-12">
@@ -17,6 +18,7 @@
 				<h1 class="welcome">Welcome! <p class="login">You are Logged in as: <i>{{ name }} aslkdjfapsdfa</i></p></h1>
 			</div>
 		</div>
+
 		<div class="row">
 			<div class="nav">
 			<ul class="">
@@ -25,16 +27,16 @@
 				<span class="col-xs-12">
 					<ul class="sub_conferences">
 						<li class="first">2017 Conference</li>
-						<li>other conferences</li>
-						<li>other conferences</li>
+						<li>//other conferences{{ con }}</li>
+						<li>//other conferences{{ con }}</li>
 					</ul>
 					</span>
 				</li>
 				<li class="account">Account
 				<span class="col-xs-12">
 					<ul class="sub_account">
-						<li class="edit">Edit</li>
-						<li class="payment">Pay</li>
+						<li class="edit">Edit Profile</li>
+						<li class="payment">Membership</li>
 						<li class="logout">Logout</li>
 					</ul>
 					</span>
@@ -42,7 +44,9 @@
 			</ul>
 			</div>
 		</div>
+
 	</div>
+
 	<div id="content" class="row">
 		<div class="col-xs-12 col-md-12 home">
 			<h3>2017 Conference</h3>
@@ -58,24 +62,25 @@
 		<div class="col-xs-12 presentations_info">
 			<h3>Please add your presentation</h3>
 			<div class="col-xs-6 presentation_new">
-				<form>
+				<form class="form">
 					<label for="title">Title:</label></br>
 						<input class="col-xs-8" type="text" name="title"></br></br></br>
 					<label class="des" for="description">Description:</label>
-						<textarea  class="col-xs-12"></textarea></br></br></br>
-						<input type="file" name="description">
+						<textarea  class="col-xs-12" name="description"></textarea></br></br></br>
+						<input type="file" name="file" class="test">
+						<input type="submit" name="submit" id="submit_pres">
 				</form>
 			</div>
 			<div class="col-xs-4">
 				<h6>Presentations already uploaded</h6>
 				<ul>
-					<li>name</li>
-					<li>name</li>
-					<li>name</li>
-					<li>name</li>
+					<li>//name</li>
+					<li>//name</li>
+					<li>//name</li>
+					<li>//name</li>
 				</ul>
 			</div>
-		</div
+		</div>
 		
 	</div>
 
