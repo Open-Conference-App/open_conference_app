@@ -1,6 +1,6 @@
 from flask import session, flash
 from OCAPP.Models.Member import Member
-from OCAPP import app, db
+from OCAPP import app
 
 def create(cred):
 	member = Member.query.get(cred['id'])

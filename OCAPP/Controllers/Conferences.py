@@ -1,7 +1,7 @@
 import time
 from flask import flash
 from OCAPP.Models.Conference import Conference
-from OCAPP import app, db
+from OCAPP import app
 
 def create(fields):
 	is_valid = True

@@ -1,29 +1,42 @@
 from flask import Flask
-import imp, re, hashlib, binascii, os, datetime
-from OCAPP import app, db
+from sqlalchemy import Column, ForeignKey, Table
+from sqlalchemy.orm import relationship, backref
+from sqlalchemy.dialects.mysql import INTEGER, VARCHAR, DATETIME, BOOLEAN, TEXT
+from OCAPP import app
+
+
 from OCAPP.config import sensitive
+sens = sensitive.Sens()
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy import create_engine
+Base = declarative_base()
+engine = create_engine(sens.db_path)
+
 from OCAPP.Models.Conference import Conference
 from apiclient.discovery import build
 from apiclient.http import MediaFileUpload
 from oauth2client.service_account import ServiceAccountCredentials
-sens = sensitive.Sens()
+
 scopes = ['https://www.googleapis.com/auth/drive']
 credentials = ServiceAccountCredentials.from_json_keyfile_name(sens.google_drive_key, scopes=scopes)
 drive = build('drive', 'v3', credentials=credentials)
 
-member_presentations = db.Table('member_presentations', 
-	db.Column('presenter_id', db.Integer, db.ForeignKey('member.id')), 
-	db.Column('presentation_id', db.Integer, db.ForeignKey('presentation.id'))
+member_presentations = Table('member_presentations', Base.metadata,
+	Column('presenter_id', INTEGER(11), ForeignKey('members.id')), 
+	Column('presentation_id', INTEGER(11), ForeignKey('presentations.id'))
 )
 
-class Presentation(db.Model):
-	id = db.Column(db.Integer, primary_key=True)
-	title = db.Column(db.String(255), unique=True)
-	summary = db.Column(db.Text())
-	files_url = db.Column(db.Text()) ##trying to utilize Google Drive for file upload
-	approved = db.Column(db.Boolean)
-	presenters = db.relationship('Member', secondary=member_presentations, back_populates='presentations')
-	conference_id = db.relationship(db.Integer, db.ForeignKey('conference.id'))
+class Presentation(Base):
+	__tablename__ = 'presentations'
+	id = Column(INTEGER(11), primary_key=True)
+	title = Column(VARCHAR(255), unique=True)
+	summary = Column(TEXT())
+	files_url = Column(TEXT()) ##trying to utilize Google Drive for file upload
+	approved = Column(BOOLEAN())
+	presenters = relationship('Member', secondary=member_presentations, back_populates='presentations')
+	conference_id = Column(INTEGER(11), ForeignKey('conferences.id'))
+	created_at = Column(DATETIME())
+	updated_at = Column(DATETIME())
 
 	def __init__(self, present_info):
 		self.title = present_info['title']
@@ -67,5 +80,6 @@ class Presentation(db.Model):
 			}
 			drive.files.create(body=file_data, media_body=file['file'])
 		self.files_url = drive.files(fileId=present_folder['files'][0]['id'])['webViewLink']
+
 
 

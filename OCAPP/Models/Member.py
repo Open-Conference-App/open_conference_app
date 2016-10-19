@@ -1,25 +1,37 @@
 from flask import Flask
-import imp, re, hashlib, binascii, os, datetime
-from OCAPP import app, db
-from OCAPP.Models.Conference import member_conferences
-from  OCAPP.Models.Presentation import member_presentations
+from sqlalchemy import Column, ForeignKey, Table
+from sqlalchemy.orm import relationship, backref
+from sqlalchemy.dialects.mysql import INTEGER, VARCHAR, DATETIME, BOOLEAN
+from OCAPP import app
 
-class Member(db.Model):
-	id = db.Column(db.Integer, primary_key=True)
-	first_name = db.Column(db.String(255))
-	last_name = db.Column(db.String(255))
-	address_id = db.relationship(db.Integer, db.ForeignKey('address.id'))
-	email = db.Column(db.String(255), unique=True)
-	password = db.Column(db.String(255))
-	pw_salt = db.Column(db.String(255))
-	officer = db.Column(db.Boolean)
-	member_type = db.Column(db.String(12))
-	active = db.Column(db.Boolean)
-	institution_id = db.relationship(db.Integer, db.ForeignKey('institution.id'))
-	presentations = db.relationship('Presentation', secondary=member_presentations, back_populates='presenters')
-	conferences = db.relationship('Conference', secondary=member_conferences, backref=db.backref('conf_members', lazy='dynamic'))
-	created_at = db.Column(db.DateTime())
-	updated_at = db.Column(db.DateTime())
+from OCAPP.config import sensitive
+sens = sensitive.Sens()
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy import create_engine
+Base = declarative_base()
+engine = create_engine(sens.db_path)
+# Base.metadata.create_all(engine)
+
+from OCAPP.Models.Conference import member_conferences
+from OCAPP.Models.Presentation import member_presentations
+
+class Member(Base):
+	__tablename__ = 'members'
+	id = Column(INTEGER(11), primary_key=True)
+	first_name = Column(VARCHAR(255))
+	last_name = Column(VARCHAR(255))
+	address_id = Column(INTEGER(11), ForeignKey('addresses.id'))
+	email = Column(VARCHAR(255), unique=True)
+	password = Column(VARCHAR(255))
+	pw_salt = Column(VARCHAR(255))
+	officer = Column(BOOLEAN())
+	member_type = Column(VARCHAR(12))
+	active = Column(BOOLEAN())
+	institution_id = Column(INTEGER(11), ForeignKey('institutions.id'))
+	presentations = relationship('Presentation', secondary=member_presentations, back_populates='presenters')
+	conferences = relationship('Conference', secondary=member_conferences, backref=backref('conf_members', lazy='dynamic'))
+	created_at = Column(DATETIME())
+	updated_at = Column(DATETIME())
 
 
 	def __init__(self, member_data):
@@ -36,7 +48,7 @@ class Member(db.Model):
 		self.institution_id = member_data['institution_id']
 
 	def __repr__(self):
-		return '<Member %r>' % self.email
+		return '<Member(id=%r,email=%r>' % (self.id, self.email)
 
 
 

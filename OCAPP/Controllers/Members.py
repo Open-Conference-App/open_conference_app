@@ -4,7 +4,7 @@ from flask import session, flash
 from flask_sqlalchemy import SQLAlchemy
 sens = Sens()
 from OCAPP.Models.Member import Member
-from OCAPP import app, db
+from OCAPP import app
 EMAIL_KEY = re.compile(r'^[a-zA-Z0-9\.\+_-]@[a-zA-Z0-9\._-]+\.[a-zA-Z]*$')
 
 def create(fields):

@@ -1,6 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy
 from OCAPP.Models.Institution import Institution
-from OCAPP import app, db
+from OCAPP import app
 
 def index():
 	return Institution.query.all()
@@ -10,8 +10,8 @@ def show(inst_id):
 
 def create(inst_data):
 	inst = Institution(**inst_data)
-	db.session.add(inst)
-	db.session.commit()
+	# db.session.add(inst)
+	# db.session.commit()
 
 def delete(inst_id):
 	return ''

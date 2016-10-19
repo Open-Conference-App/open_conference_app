@@ -63,7 +63,8 @@ def login():
 
 
 #create a new member(when users regsiter for the next conference)
-@app.route('/members')	
+@app.route('/members', methods=['POST'])	
+def create_memb():
 	if not 'csrf_token' in session:
 		return redirect('/conferences')
 	#what's the route for adming dashboard??
@@ -73,7 +74,7 @@ def login():
 
 
 #creates new user in db (should be utilized if it is a new member only)
-@app.route('/members/<member_id>', methods=['GET','POST','PUT', 'DELETE'])
+@app.route('/members/<member_id>', methods=['GET','PUT', 'DELETE'])
 def handle_members(member_id):
 	#show member info
 	if request.method == 'GET':
@@ -119,3 +120,8 @@ def load_dashboard():
 		return render_template('dashboard.html')
 	else:
 		return redirect('/')
+
+
+def example():
+	users = query('Select * From users')
+	return render_template('index.html', users=users)
