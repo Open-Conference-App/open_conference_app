@@ -1,32 +1,30 @@
 from flask import Flask
 from sqlalchemy import Column, ForeignKey, Table
 from sqlalchemy.orm import relationship, backref
+from sqlalchemy.sql import func
 from sqlalchemy.dialects.mysql import INTEGER, VARCHAR, DATETIME
-from OCAPP import app
-
+from OCAPP import app, db
+import datetime
 from OCAPP.config import sensitive
 sens = sensitive.Sens()
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import create_engine
-Base = declarative_base()
 engine = create_engine(sens.db_path)
 
-class Institution(Base):
+class Institution(db.Base):
 	__tablename__ = 'institutions'
 	id = Column(INTEGER(11), primary_key=True)
 	name = Column(VARCHAR(255), unique=True)
-	contact_name = Column(VARCHAR(255))
+	host_id = Column(INTEGER(11), ForeignKey('members.id'))
+	host = relationship('Member', back_populates='host', uselist=False, foreign_keys=[host_id])
 	address_id = Column(INTEGER(11), ForeignKey('addresses.id'))
-	members = relationship('Member', backref='institution', lazy='dynamic')
-	created_at = Column(DATETIME())
-	updated_at = Column(DATETIME())
+	address = relationship('Address')
+	faculty_members = relationship('Member', back_populates='institution')
+	created_at = Column(DATETIME(), default=func.utc_timestamp(), onupdate=func.utc_timestamp())
+	updated_at = Column(DATETIME(), default=func.utc_timestamp(), onupdate=func.utc_timestamp())
 
 	def __repr__(self):
 		return "<Institution(name=%s)>" % self.name
 
 	def __init__(self, inst_data):
 		self.name = inst_data['name']
-		self.contact_name = inst_data['contact_name']
-		self.created_at = datetime.now()
-		self.updated_at = datetime.now()
-
