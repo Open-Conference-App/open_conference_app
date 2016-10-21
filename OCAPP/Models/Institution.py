@@ -15,8 +15,8 @@ class Institution(db.Base):
 	__tablename__ = 'institutions'
 	id = Column(INTEGER(11), primary_key=True)
 	name = Column(VARCHAR(255), unique=True)
-	host_id = Column(INTEGER(11), ForeignKey('members.id'))
-	host = relationship('Member', back_populates='host', uselist=False, foreign_keys=[host_id])
+	# host_id = Column(INTEGER(11), ForeignKey('members.id'))
+	# host = relationship('Member', back_populates='host', uselist=False, foreign_keys=[host_id])
 	address_id = Column(INTEGER(11), ForeignKey('addresses.id'))
 	address = relationship('Address')
 	faculty_members = relationship('Member', back_populates='institution')

@@ -4,7 +4,6 @@ Requirements for OCAPP setup
 	-Python:
 		-SQLAlchemy
 		-Flask
-		-Flask-SQLAlchemy 
 		-Flask-API
 		-markdown(needed?)
 		-unittest

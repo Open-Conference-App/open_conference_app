@@ -3,7 +3,7 @@ import imp, re, hashlib, binascii, os, datetime
 from sqlalchemy import Column, ForeignKey, Table
 from sqlalchemy.orm import relationship, backref
 from sqlalchemy.sql import func
-from sqlalchemy.dialects.mysql import INTEGER, VARCHAR, DATETIME
+from sqlalchemy.dialects.mysql import INTEGER, VARCHAR, DATETIME, BOOLEAN
 from OCAPP import app, db
 from apiclient.discovery import build
 
@@ -13,16 +13,23 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import create_engine
 engine = create_engine(sens.db_path)
 
-member_conferences = Table('member_conferences', db.Base.metadata,
-	Column('member_id', INTEGER(11), ForeignKey('members.id')), 
-	Column('conference_id', INTEGER(11), ForeignKey('conferences.id'))
-)
+#join table for members<>conferences
+class MemberConferences(db.Base):
+	__tablename__ = 'member_conferences'
+	member_id = Column('member_id', INTEGER(11), ForeignKey('members.id'), primary_key=True)
+	conference_id = Column('conference_id', INTEGER(11), ForeignKey('conferences.id'), primary_key=True)
+	food_pref = Column(VARCHAR(255))
+	gluten_free = Column(BOOLEAN())
+	member = relationship('Member', back_populates='conferences')
+	conference = relationship('Conference', back_populates='members')
 
+#join table for vendors
 vendor_conferences = Table('vendor_conferences', db.Base.metadata,
 	Column('vendor_id', INTEGER(11), ForeignKey('vendors.id')),
 	Column('conference_id', INTEGER(11), ForeignKey('conferences.id'))
 )
 
+#join table for presenters
 presenter_conferences = Table('presenter_conferences', db.Base.metadata,
 	Column('presenter_id', INTEGER(11), ForeignKey('members.id')), 
 	Column('conference_id', INTEGER(11), ForeignKey('conferences.id'))
@@ -33,8 +40,10 @@ class Conference(db.Base):
 	id = Column(INTEGER(11), primary_key=True)
 	year = Column(VARCHAR(4), unique=True)
 	institution_id = Column(INTEGER(11), ForeignKey('institutions.id'))
-	members = relationship('Member', secondary=member_conferences, backref=backref('member_conferences', lazy='dynamic'))
+	members = relationship('MemberConferences', back_populates='conference')
 	vendors = relationship('Vendor', secondary=vendor_conferences, backref=backref('vendor_conferences', lazy='dynamic'))
+	host_id = Column(INTEGER(11), ForeignKey('members.id'))
+	host = relationship('Member')
 	presentations = relationship('Presentation', back_populates='conference')
 	prof_cost = Column(INTEGER(3))
 	stud_cost = Column(INTEGER(3))

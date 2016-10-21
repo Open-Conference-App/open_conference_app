@@ -12,36 +12,19 @@ class SQLEZ:
 		self.Base = declarative_base()
 		self.engine = create_engine(sens.db_path)
 		Session = sessionmaker(bind=self.engine)
-		self.session = Session()
-
-	# def get_all(self, Class):
-	# 	returnable = {
-	# 		'rows': []
-	# 		'errors'
-	# 	}
-
-	# 	try:
-	# 		rows = []
-	# 		for row in self.session.query(Class).all()
-	# 			rows.appen(row)
-	# 		return rows if len(rows) > 1 else None
-	# 	except NameError as ne:
-
-	# 	except 
-
-
+		self.session = Session() 
 
 db = SQLEZ()
+from OCAPP.Models.Valids import Valids
+valids = Valids()
 
-
-from OCAPP.Models import State, Address, Institution, Conference, Member, Presentation, Vendor
-db.Base.metadata.create_all(db.engine)
-
+# from OCAPP.Models import State, Address, Institution, Conference, Member, Presentation, Vendor
+# db.Base.metadata.create_all(db.engine)
 from OCAPP.Models.State import State
 from OCAPP.Models.Address import Address
 from OCAPP.Models.Institution import Institution
 from OCAPP.Models.Member import Member
-from OCAPP.Models.Conference import Conference 
+from OCAPP.Models.Conference import Conference, MemberConferences
 from OCAPP.Models.Presentation import Presentation
 from OCAPP.Models.Vendor import Vendor
 

@@ -121,7 +121,3 @@ def load_dashboard():
 	else:
 		return redirect('/')
 
-
-def example():
-	users = query('Select * From users')
-	return render_template('index.html', users=users)
