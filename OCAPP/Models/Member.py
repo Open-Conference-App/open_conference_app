@@ -1,85 +1,98 @@
-from flask import Flask
-from sqlalchemy import Column, ForeignKey, Table
-from sqlalchemy.orm import relationship, backref, validates
-from sqlalchemy.sql import func
-from sqlalchemy.dialects.mysql import INTEGER, VARCHAR, DATETIME, BOOLEAN
+import binascii, os, re, hashlib
+from OCAPP.config.sensitive import Sens
+from flask import session, flash
+from flask_sqlalchemy import SQLAlchemy
+sens = Sens()
+from OCAPP.Schema.Member import Member
 from OCAPP import app, db
-from OCAPP.config import sensitive
-sens = sensitive.Sens()
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import create_engine
-engine = create_engine(sens.db_path)
+EMAIL_KEY = re.compile(r'^[a-zA-Z0-9\.\+_-]@[a-zA-Z0-9\._-]+\.[a-zA-Z]*$')
 
-# from OCAPP.Models.Conference import member_conferences
-from OCAPP.Models.Presentation import member_presentations
+def create(fields):
+	is_valid = True
+	for k, v in fields.items():
+		print v
+		if not v:
+			flash('All fields are required.', 'regisErr')
+			return False
+	if EMAIL_KEY.match(fields['email']) != None:
+		is_valid = False
+		flash("Email address is not formatted correctly.", 'regisErr')
+	else:
+		if Member.query.filter_by(email=fields['email']).first():
+			flash("The email address you entered is already in our system.", 'regisErr')
+			is_valid = False
+	if fields['password'] != fields['confirm_password']:
+		flash("Passwords do not match",'regisErr')
+		is_valid=False
+	if not is_valid:
+		return False
+	else:
+		fields['pw_salt'] = binascii.hexlify(os.urandom(16))
+		fields['password'] = hashlib.sha256(fields['password'] + fields['pw_salt']).hexdigest()
+		user_data = {
+			'first_name': fields['first_name'],
+			'last_name': fields['last_name'],
+			'email': fields['email'],
+			'password': fields['password'],
+			'pw_salt': fields['pw_salt'],
+			'street1': fields['street1'],
+			'street2': fields['street2'],
+			'city': fields['city'],
+			'state': fields['state'],
+			'zip': fields['zip']
+		}
+		user = User(**user_data)
+		db.session.add(user)
+		db.session.commit()
+		session['_id'] = user.id
+		session['username'] = user.username
+	return True
 
-class Member(db.Base):
-	__tablename__ = 'members'
-	id = Column(INTEGER(11), primary_key=True)
-	first_name = Column(VARCHAR(255))
-	last_name = Column(VARCHAR(255))
-	address_id = Column(INTEGER(11), ForeignKey('addresses.id'))
-	address = relationship('Address')
-	email = Column(VARCHAR(255), unique=True)
-	password = Column(VARCHAR(255))
-	pw_salt = Column(VARCHAR(255))
-	officer = Column(BOOLEAN())
-	member_type = Column(VARCHAR(20))
-	active = Column(BOOLEAN())
-	institution_id = Column(INTEGER(11), ForeignKey('institutions.id'))
-	institution = relationship('Institution', back_populates='faculty_members')
-	host = relationship('Conference', uselist=False, back_populates='host')
-	presentations = relationship('Presentation', secondary=member_presentations, back_populates='presenters')
-	conferences = relationship('MemberConferences', back_populates='member')
-	created_at = Column(DATETIME(), default=func.utc_timestamp(), onupdate=func.utc_timestamp())
-	updated_at = Column(DATETIME(), default=func.utc_timestamp(), onupdate=func.utc_timestamp())
+def activate(id):	
+	member = Member.query.get(id)
+	if member:
+		active = True
+	else:
+		active = False
+	member = Member.query.get(id)
+	member.active = active
+	db.session.commit()
+	return member.active
 
-	def __init__(self, member_data):
-		self.first_name = member_data['first_name']
-		self.last_name = member_data['last_name']
-		self.address_id = member_data['address_id']
-		self.email = member_data['email']
-		self.pw_salt = member_data['salt']
-		self.password = member_data['hash']
-		self.officer = True if 'officer' in member_data else False
-		self.active = False
-		self.institution_id = member_data['institution_id']
+def deactivate(id):
+	member = Member.query.get(id)
+	if member:
+		active = False
+	else:
+		active = True
+	member = Member.query.get(id)
+	member.active = active
+	db.session.commit()
+	return member.active
 
-	def __repr__(self):
-		return '<Member(id=%r,email=%r>' % (self.id, self.email)
+def toggle_officer(member_id, make_officer):
+	member = Member.query.get(member_id)
+	member.officer = True if make_officer else False
+	db.session.commit()
+	return member_id
 
-	#runs all validations and consolidates errors to send back to controller
-	@staticmethod
-	def validate(member_data):
-		validations = {'all_valid': False, 'errors': [], 'validated_data': {}}
-		all_valid = True
-		blanks_info = valids.check_blanks(member_data)
-		if not blanks_info['all_valid']:
-			print 'problem with blanks'
-			all_valid = False
-			for error in blanks_info['errors']:
-				validations['errors'].append(error)
-		email_info = valids.check_email(member_data['email'])
-		if not email_info['all_valid']:
-			print email_info
-			all_valid = False
-			for error in email_info['errors']:
-				validations['errors'].append(error)
+def update(member_data):
+	##assumes to have had all other table data removed before receipt
+	member = Member.query.get(member_data)
+	for k,v in member_data:
+		if member[k] != v:
+			member[k] = v
+	return member
 
-		if all_valid:
-			#validates and processes pw, returns salt and hash
-			pw_info = valids.process_password(member_data['password'])
-			if not pw_info['all_valid']:
-				print 'problem with password'
-				all_valid = False
-				for error in pw_info['errors']:
-					validations['errors'].append(error)
-			else:
-				member_data['salt'] = pw_info['salt']
-				member_data['hash'] = pw_info['hash']
+def index():
+	return Member.query.all()
 
-		validations['all_valid'] = all_valid
-		validations['validated_data'] = member_data
-		return validations
-from OCAPP.Models.Valids import Valids
-valids = Valids()
+def get_by_email(email_add):
+	return Member.query.filter_by(email=email_add).first()
+
+def get_by_id(id):
+	return db.session.query(Member).filter_by(id=id).first()
+
+
+
+	

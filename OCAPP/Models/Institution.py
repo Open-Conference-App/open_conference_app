@@ -1,30 +1,28 @@
-from flask import Flask
-from sqlalchemy import Column, ForeignKey, Table
-from sqlalchemy.orm import relationship, backref
-from sqlalchemy.sql import func
-from sqlalchemy.dialects.mysql import INTEGER, VARCHAR, DATETIME
-from OCAPP import app, db
-import datetime
-from OCAPP.config import sensitive
-sens = sensitive.Sens()
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import create_engine
-engine = create_engine(sens.db_path)
+from flask_sqlalchemy import SQLAlchemy
+from OCAPP.Schema.Institution import Institution
+from OCAPP import app
 
-class Institution(db.Base):
-	__tablename__ = 'institutions'
-	id = Column(INTEGER(11), primary_key=True)
-	name = Column(VARCHAR(255), unique=True)
-	# host_id = Column(INTEGER(11), ForeignKey('members.id'))
-	# host = relationship('Member', back_populates='host', uselist=False, foreign_keys=[host_id])
-	address_id = Column(INTEGER(11), ForeignKey('addresses.id'))
-	address = relationship('Address')
-	faculty_members = relationship('Member', back_populates='institution')
-	created_at = Column(DATETIME(), default=func.utc_timestamp(), onupdate=func.utc_timestamp())
-	updated_at = Column(DATETIME(), default=func.utc_timestamp(), onupdate=func.utc_timestamp())
+def index():
+	return Institution.query.all()
 
-	def __repr__(self):
-		return "<Institution(name=%s)>" % self.name
+def show(inst_id):
+	return Institution.query.get(inst_id)
 
-	def __init__(self, inst_data):
-		self.name = inst_data['name']
+def create(inst_data):
+	inst = Institution(**inst_data)
+	# db.session.add(inst)
+	# db.session.commit()
+
+def delete(inst_id):
+	return ''
+
+
+def update(inst_data):
+	inst = Institution.query.get(inst_data['id'])
+	return inst
+
+#/institutions #get
+#/institutions/<inst_id> #get
+#/institutions/new #get
+#/institutions/<inst_id>/delete #get
+#/institutions/<inst_id> #put/patch

@@ -2,10 +2,11 @@ from OCAPP.config.sensitive import Sens
 sens = Sens()
 from OCAPP import app
 from flask import Flask, session, url_for, request, render_template, redirect, flash
-from OCAPP.Models import Address, Conference, Institution, Member, Presentation, State, Vendor
+# from OCAPP.Models import Address, Conference, Institution, Member, Presentation, State, Vendor
 from OCAPP.Controllers import Conferences, Addresses, Institutions, Members, Presentations, States, Vendors, Sessions
 import stripe
 stripe.api_key = sens.stripe_secret_key
+
 
 #create a new conference(to be done through admin dashboard only via ajax call)
 @app.route('/conferences', methods=['POST'])
@@ -78,10 +79,9 @@ def create_memb():
 def handle_members(member_id):
 	#show member info
 	if request.method == 'GET':
-		if not isinstance(conference_id, (int, long)):
-			conference_id = Conferences.get_next()
-		return render_template('index.html', conference={'id':conference_id})
-
+		if not isinstance(member_id, (int, long)):
+			member = Members.get_by_id(member_id)
+		return render_template('dashboard-test.html', name=member.first_name)
 	#delete a conference(to be done through admin dashboard only)
 	if request.method == 'DELETE':
 		return redirect('/')

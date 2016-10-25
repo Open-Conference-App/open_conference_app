@@ -12,9 +12,11 @@ sens = sensitive.Sens()
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import create_engine
 engine = create_engine(sens.db_path)
+from OCAPP.Models.BaseChanges import BaseChanges
+
 
 #join table for members<>conferences
-class MemberConferences(db.Base):
+class MemberConferences(BaseChanges, db.Base):
 	__tablename__ = 'member_conferences'
 	member_id = Column('member_id', INTEGER(11), ForeignKey('members.id'), primary_key=True)
 	conference_id = Column('conference_id', INTEGER(11), ForeignKey('conferences.id'), primary_key=True)
@@ -35,7 +37,7 @@ presenter_conferences = Table('presenter_conferences', db.Base.metadata,
 	Column('conference_id', INTEGER(11), ForeignKey('conferences.id'))
 )
 
-class Conference(db.Base):
+class Conference(BaseChanges, db.Base):
 	__tablename__ = 'conferences'
 	id = Column(INTEGER(11), primary_key=True)
 	year = Column(VARCHAR(4), unique=True)
@@ -64,12 +66,12 @@ class Conference(db.Base):
 		self.vend_cost = conference_data['vend_cost']
 		self.date = conference_data['date'] #need to pass date object, but first I need format of date object coming from client-side
 		
-		folder_metadata = {
-			'name': conference_data['year'],
-			'mimeType': 'application/vnd.google-apps.folder',
+		# folder_metadata = {
+		# 	'name': conference_data['year'],
+		# 	'mimeType': 'application/vnd.google-apps.folder',
 
 
-		}
+		# }
 		self.created_at = datetime.datetime.now()
 		self.updated_at = datetime.datetime.now()
 
