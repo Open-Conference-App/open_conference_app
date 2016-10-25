@@ -2,10 +2,11 @@ from OCAPP.config.sensitive import Sens
 sens = Sens()
 from OCAPP import app
 from flask import Flask, session, url_for, request, render_template, redirect, flash
-from OCAPP.Models import Address, Conference, Institution, Member, Presentation, State, Vendor
+# from OCAPP.Models import Address, Conference, Institution, Member, Presentation, State, Vendor
 from OCAPP.Controllers import Conferences, Addresses, Institutions, Members, Presentations, States, Vendors, Sessions
 import stripe
 stripe.api_key = sens.stripe_secret_key
+
 
 #create a new conference(to be done through admin dashboard only via ajax call)
 @app.route('/conferences', methods=['POST'])
@@ -63,7 +64,8 @@ def login():
 
 
 #create a new member(when users regsiter for the next conference)
-@app.route('/members')	
+@app.route('/members', methods=['POST'])	
+def create_memb():
 	if not 'csrf_token' in session:
 		return redirect('/conferences')
 	#what's the route for adming dashboard??
@@ -73,14 +75,13 @@ def login():
 
 
 #creates new user in db (should be utilized if it is a new member only)
-@app.route('/members/<member_id>', methods=['GET','POST','PUT', 'DELETE'])
+@app.route('/members/<member_id>', methods=['GET','PUT', 'DELETE'])
 def handle_members(member_id):
 	#show member info
 	if request.method == 'GET':
-		if not isinstance(conference_id, (int, long)):
-			conference_id = Conferences.get_next()
-		return render_template('index.html', conference={'id':conference_id})
-
+		if not isinstance(member_id, (int, long)):
+			member = Members.get_by_id(member_id)
+		return render_template('dashboard-test.html', name=member.first_name)
 	#delete a conference(to be done through admin dashboard only)
 	if request.method == 'DELETE':
 		return redirect('/')
@@ -119,3 +120,4 @@ def load_dashboard():
 		return render_template('dashboard.html')
 	else:
 		return redirect('/')
+

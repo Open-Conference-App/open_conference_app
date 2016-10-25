@@ -1,18 +1,28 @@
-from flask import Flask
-import imp, re, hashlib, binascii, os, datetime
-from OCAPP import app, db
+from flask_sqlalchemy import SQLAlchemy
+from OCAPP.Schema.Institution import Institution
+from OCAPP import app
 
-class Institution(db.Model):
-	id = db.Column(db.Integer, primary_key=True)
-	name = db.Column(db.String(255), unique=True)
-	contact_name = db.Column(db.String(255))
-	address_id = db.relationship(db.Integer, db.ForeignKey('address.id'))
-	members = db.relationship('Member', backref='institution', lazy='dynamic')
-	created_at = db.Column(db.DateTime())
-	updated_at = db.Column(db.DateTime())
+def index():
+	return Institution.query.all()
 
-	def __init__(self, inst_data):
-		self.name = inst_data['name']
-		self.contact = inst_data['contact']
-		self.created_at = datetime.now()
-		self.updated_at = datetime.now()
+def show(inst_id):
+	return Institution.query.get(inst_id)
+
+def create(inst_data):
+	inst = Institution(**inst_data)
+	# db.session.add(inst)
+	# db.session.commit()
+
+def delete(inst_id):
+	return ''
+
+
+def update(inst_data):
+	inst = Institution.query.get(inst_data['id'])
+	return inst
+
+#/institutions #get
+#/institutions/<inst_id> #get
+#/institutions/new #get
+#/institutions/<inst_id>/delete #get
+#/institutions/<inst_id> #put/patch
