@@ -45,7 +45,7 @@
 .nav li:hover{
 	color: #47935a;
 }
-.sub_conferences{
+.sub_conferences, .sub_account{
 	float: center;
 	display: none;
 	padding: 0;
@@ -56,28 +56,30 @@
 	list-style-type: none;
 	left:-10%;
 }
-.sub_conferences > li{
+.sub_conferences>li, .sub_account > li{
 	font-size: .9em;
 	padding: 5px 0;
 	color: #fff;
 	margin: 0 30px;
 }
-.sub_account{
-	float: center;
-	display: none;
-	padding: 0;
+.nav_profile{
+	/*text-align: center;*/
 	margin: 0;
-	z-index: 1;
-	position: absolute;
-	background-color: #000;
-	list-style-type: none;
-	left:-10%;
+	margin-bottom: 40px;
 }
-.sub_account > li{
-	font-size: .9em;
-	padding: 5px 0;
-	color: #fff;
-	margin: 0 30px;
+.nav_profile> li{
+	display: inline-block;
+	text-align: center;
+	text-decoration: underline; 
+}
+.nav_profile >li:first-child{
+	text-align: right;
+}
+.nav_profile >li:last-child{
+	text-align: left;
+}
+.membership{
+	display: none;
 }
 #content{
 	padding: 0 10px;
@@ -93,6 +95,9 @@
 }
 textarea{
 	margin-bottom: 30px;
+}
+.edit_profile{
+	/*margin: 40px;*/
 }
 @media (min-width: 500px){
 	.header{
