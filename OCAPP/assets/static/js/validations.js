@@ -3,10 +3,14 @@ function validate(page, valiArr){
 	//loop through validations for fields and apply classes if false
 	for (var i=0; i<valiArr.length; i++){
 		var name = '#' + valiArr[i]['fieldName'];
-		valiArr[i]['valid'] = valiArr[i]['validation'](name) ? true : false;
+		console.log(name)
+		valiArr[i]['valid'] = valiArr[i]['validation'](name);
+		// console.log('11111' + valiArr[i]['valid'])
 		if(valiArr[i]['valid']){
 			$(name).removeClass('is-danger');
+			continue;
 		} else {
+			console.log('There was a problem with...' + name)
 			$(name).addClass('is-danger'); 
 			valid = false;
 		}
@@ -22,7 +26,8 @@ function checkLen(field, len, operator){
 	} else if(operator == '='){
 		return $(field).val().length == len ? true : false;
 	} else {
-		return 'Operator must be >, <, or =.'
+		console.log('Operator must be >, <, or =.');
+		return false;
 	}
 };
 
@@ -40,7 +45,7 @@ var page1_valids = [{
 		'fieldName': 'email',
 		'validation': function(fieldname){
 			var email_patt = new RegExp($(fieldname).pattern);
-			console.log(email_patt.test($(fieldname).val()))
+			// console.log(email_patt.test($(fieldname).val()))
 			return email_patt.test($(fieldname).val()) && $(fieldname).val();
 		},
 		'message': 'Email is not formatted correctly.'
@@ -74,7 +79,7 @@ var page2_valids = [{
 	},
 	{
 		'fieldName': 'state',
-		'validation': (fieldname) => $(fieldname).val() ? true : false,
+		'validation': (fieldname) => $(fieldname).val() > -1 ? true : false,
 		'message': ''
 	},
 	{
@@ -84,7 +89,7 @@ var page2_valids = [{
 	},
 	{
 		'fieldName': 'instution',
-		'validation': (fieldname) => $(fieldname).val(),
+		'validation': (fieldname) => $(fieldname).val() ? true : false,
 		'message': ''
 	}];
 

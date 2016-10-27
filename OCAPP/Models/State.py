@@ -1,11 +1,4 @@
-from flask import Flask
-import imp, re, hashlib, binascii, os, datetime
-from OCAPP import app, db
-
-class State(db.Model):
-	id = db.Column(db.Integer, primary_key=True)
-	abbrev = db.Column(db.String(2))
-
-
-	def __init__(self, abbrev):
-		self.abbrev = abbrev
+from OCAPP.Schema.State import State
+from OCAPP import db
+def index():
+	return db.query(State).all()
