@@ -4,7 +4,7 @@ from sqlalchemy.orm import relationship, backref
 from sqlalchemy.dialects.mysql import INTEGER, VARCHAR, DATETIME, BOOLEAN
 from sqlalchemy.sql import func
 from OCAPP import app, db
-from OCAPP.Models.Conference import vendor_conferences
+from OCAPP.Schema.Conference import vendor_conferences
 from OCAPP.Models.BaseChanges import BaseChanges
 
 class Vendor(BaseChanges, db.Base):

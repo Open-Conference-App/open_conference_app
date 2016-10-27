@@ -1,6 +1,15 @@
+from OCAPP import app
+from OCAPP.config.sensitive import Sens
+sens = Sens()
+import stripe
+stripe.api_key = sens.stripe_secret_key
+from OCAPP.Models import Conference, State
+
+
 #create a new conference(to be done through admin dashboard only via ajax call)
 @app.route('/conferences', methods=['POST'])
 def create_conference():
+
 	return redirect('/') #need to replace redirect with admin dashboard url
 
 #handle all RESTful routes to '/conference/<conference_id'
@@ -27,7 +36,7 @@ def handle_conference(conference_id):
 
 #pay for conference attendance/membership fees(which are one and the same, user must already exist)
 @app.route('/conferences/<conference_id>/members/<member_id>', methods=['POST'])
-def register_and_pay(conference_id, member_id):
+def pay(conference_id, member_id):
 	if '_id' not in session or 'csrf_token' not in request.form:
 		return json.dumps({})
 	elif request.form['csrf_token'] != session['csrf_token']:

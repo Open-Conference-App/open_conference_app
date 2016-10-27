@@ -1,9 +1,9 @@
 from flask_sqlalchemy import SQLAlchemy
 from OCAPP.Schema.Institution import Institution
-from OCAPP import app
+from OCAPP import app, db
 
 def index():
-	return Institution.query.all()
+	return db.query(Institution).all()
 
 def show(inst_id):
 	return Institution.query.get(inst_id)

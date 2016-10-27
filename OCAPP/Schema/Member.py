@@ -13,7 +13,7 @@ from OCAPP.Models.BaseChanges import BaseChanges
 
 
 # from OCAPP.Models.Conference import member_conferences
-from OCAPP.Models.Presentation import member_presentations
+from OCAPP.Schema.Presentation import member_presentations
 
 class Member(BaseChanges,db.Base):
 	__tablename__ = 'members'
@@ -21,7 +21,7 @@ class Member(BaseChanges,db.Base):
 	first_name = Column(VARCHAR(255))
 	last_name = Column(VARCHAR(255))
 	address_id = Column(INTEGER(11), ForeignKey('addresses.id'))
-	address = relationship('Address')
+	# address = relationship('Member')
 	email = Column(VARCHAR(255), unique=True)
 	password = Column(VARCHAR(255))
 	pw_salt = Column(VARCHAR(255))

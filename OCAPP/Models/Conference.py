@@ -1,7 +1,7 @@
 import time
 from flask import flash
 from OCAPP.Schema.Conference import Conference
-from OCAPP import app
+from OCAPP import app, db
 
 def create(fields):
 	is_valid = True
@@ -33,7 +33,7 @@ def get_by_id(id):
 	return conference
 
 def get_next():
-	return Conference.query.order_by(desc(Conference.year)).first()
+	return db.query(Conference).order_by(Conference.year.desc()).first()
 
 def destroy(id):
 	conference = Conference.query.get(id)

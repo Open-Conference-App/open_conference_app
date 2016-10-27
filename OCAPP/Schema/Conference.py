@@ -14,7 +14,6 @@ from sqlalchemy import create_engine
 engine = create_engine(sens.db_path)
 from OCAPP.Models.BaseChanges import BaseChanges
 
-
 #join table for members<>conferences
 class MemberConferences(BaseChanges, db.Base):
 	__tablename__ = 'member_conferences'

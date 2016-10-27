@@ -7,8 +7,8 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import create_engine
 valid_funcs = {
-	'Conference': ['check_blanks','process_dates']
-	'Member': ['check_blanks','check_email','process_password'],
+	'Conference': ['check_blanks','process_dates'],
+	'Member': ['check_blanks','check_email','process_password']
 }
 
 class SQLEZ:
@@ -57,21 +57,22 @@ class SQLEZ:
 	def validate(self, cl, data, funcs):
 		return BaseChanges.validate(cl, data, funcs)
 
-
-
 db = SQLEZ()
 from OCAPP.Models.BaseChanges import BaseChanges
 db.BaseChanges = BaseChanges()
+from OCAPP.Models import Address, Vendor, Conference, Institution, Member, Presentation, State, Vendor
+
+from OCAPP import routes
 # from OCAPP.Models import State, Address, Institution, Conference, Member, Presentation, Vendor
 # db.Base.metadata.create_all(db.engine)
-from OCAPP.Models.State import State
-from OCAPP.Models.Address import Address
-from OCAPP.Models.Institution import Institution
-from OCAPP.Models.Member import Member
-from OCAPP.Models.Conference import Conference, MemberConferences
-from OCAPP.Models.Presentation import Presentation
-from OCAPP.Models.Vendor import Vendor
-from OCAPP import routes
+# from OCAPP.Models.State import State
+# from OCAPP.Models.Address import Address
+# from OCAPP.Models.Institution import Institution
+# from OCAPP.Models.Member import Member
+# from OCAPP.Models.Conference import Conference, MemberConferences
+# from OCAPP.Models.Presentation import Presentation
+# from OCAPP.Models.Vendor import Vendor
+
 
 
 
