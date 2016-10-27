@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html>
-
 <head>
 	<title>SOCALLT My Account</title>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
@@ -12,13 +11,16 @@
 <!-- session['admin'] (stored as boolean value) should give access to restricted areas-->
 <body>
 	<div id="container" class="container-fluid">
+<!-- container begins -->
+<!-- header begins -->
 		<div class="row header">
 			<div class="col-xs-12">
 				<img class="logo" src="{{ url_for('static', filename='images/socallt2015.png')}}" width="100px">
 				<h1 class="welcome">Welcome! <p class="login">You are Logged in as: <i>{{ name }}</i></p></h1>
 			</div>
 		</div>
-
+<!-- header ends -->
+<!-- nav begins -->
 		<div class="row">
 			<div class="nav">
 			<ul class="">
@@ -26,7 +28,7 @@
 				<li class="conferences">Conferences
 				<span class="col-xs-12">
 					<ul class="sub_conferences">
-						<li class="first">2017 Conference</li>
+						<li class="current_conference">2017 Conference</li>
 						<li>//other conferences{{ con }}</li>
 						<li>//other conferences{{ con }}</li>
 					</ul>
@@ -44,21 +46,179 @@
 			</ul>
 			</div>
 		</div>
-
+<!-- nav ends -->
 	</div>
-
+<!-- container ends -->
+<!-- content begins -->
+<!-- conference(home) div begins -->
 	<div id="content" class="row">
 		<div class="col-xs-12 col-md-12 home">
 			<h3>2017 Conference</h3>
 			<p>The 2017 Conference will be held on the campus of the University of Colorado Boulder and will be hosted by ALTEC, the Anderson Language Technology Center. Details forthcoming!</p>
 		</div>
-
-
+<!-- conference div ends -->
+<!-- account div begins -->
 		<div class="col-xs-12 account_info">
-
+			<div class="edit_profile">
+				<ul class="col-xs-12 nav_profile">
+					<li class="col-xs-4 contact">Contact</li>
+					<li class="col-xs-4 institution">Institution</li>
+					<li class="col-xs-4 conference">Conference</li>
+				</ul>
+			<!-- contact_info begins -->
+				<div class="contact_info">
+					<form class="" action='/conferences' method='POST'>
+						<div class='form-group'>
+							<label for='username'>Username:</label>
+							<input type="text" name="username" value="{{ session['name'] }}">
+						</div>
+						<div class='form-group'>
+							<label for='email'>Email:</label>
+							<input type="text" name="email" value="{{ session['email'] }}">
+						</div>
+						<div class='form-group'>
+							<label for='password'>Password:</label>
+							<input type="password" name="password">
+						</div>
+						<div class='form-group'>
+							<label for='confirm_password'>Confirm Password:</label>
+							<input type="password" name="confirm_password">
+						</div>
+						<button class="btn btn-sm" type='submit' class='btn btn-primary'>Update</button>
+					</form>	
+	
+					<h5>Contact Information</h5>
+						<div class='form-group'>
+							<label class='form-label' for='street1'>Address 1:</label>
+							<input class='form-input' type="text" name="street1" id="street1" value="{{ session['street1'] }}">
+						</div>
+						<div class='form-group'>
+							<label class='form-label' for='street2'>Address 2:</label>
+							<input class='form-input' type="text" name="street2" id="street2" value="{{ session['street2'] }}">
+						</div>
+						<div class='form-group'>
+							<label class='form-label' for='city'>City:</label>
+							<input class='form-input' type="text" name="city" id="city" value="{{ session['city'] }}">
+						</div>
+						<div class='form-group'>
+							<label class='form-label' for='state'>State:</label>
+							<select class='form-select' name='state'>
+								{% for state in states %}
+									<option value="{{ state['id'] }}">{{ state['abbrev'] }}</option>
+								{% endfor %}
+							</select>
+						</div>
+						<div class='form-group'>
+							<label class='form-label' for='zip'>Zip:</label>
+							<input class='form-input' type="text" name="zip" id="zip" value="{{ session['zip'] }}">
+						</div>	
+						<button class="btn btn-sm" type='submit' class='btn btn-primary'>Update</button>
+				</div>
+			</div>
+			<!-- contact_info ends -->
+			<!-- institution_info begins -->
+				<div class="institution_info">
+					<h5>Institution Information</h5>
+					<form>
+						<div class='form-group'>
+							<p>Select your institution:</p>
+							<select class='form-select' name='institution' id='institution'>
+								<option value='' id='other1'></option>
+							{% for instution in institutions %}
+								<option value="{{ institution['id']}}">{{ institution['name'] }}</option>
+							{% endfor %}
+								<option value='other' id='other'>Other</option>
+							</select>
+						</div>
+						<div id='inst-info'>
+							<div class='form-group'>
+								<label class='form-label' for='inst-name'>Name:</label>
+								<input class='form-input' type="text" name="inst-name" value="{{ session['inst-name'] }}">
+							</div>
+							<div class='form-group'>
+								<label class='form-label' for='inst-state'>State:</label>
+								<select class='form-select' name='inst-state'>
+									{% for state in states %}
+										<option value="{{ state['id'] }}">{{ state['abbrev'] }}</option>
+									{% endfor %}
+								</select>
+							</div>
+						</div>
+						<br>
+					</form>	
+				</div>
+			<!-- institution_info end -->
+			<!-- conference_info begins -->
+				<div class="conference_info">
+					<h5>Conference Information</h5>
+					<form>
+					    <div class="form-group">
+					        <label class="form-label">Lunch Options</label>
+					        <label class="form-radio">
+					            <input type="radio" name="lunch" checked/>
+					            <i class="form-icon"></i> 
+					            Regular
+					        </label>
+					        <label class="form-radio">
+					            <input type="radio" name="lunch" />
+					            <i class="form-icon"></i> 
+					            Vegan
+					        </label>
+					        <label class="form-radio">
+					            <input type="radio" name="lunch"/>
+					            <i class="form-icon"></i> Vegetarian
+					        </label>
+					        <label class="form-radio">
+					            <input type="radio" name="lunch"/>
+					            <i class="form-icon"></i> No lunch
+					        </label>
+					    </div>
+						<div class='form-group'>
+							<label class="form-switch">
+	           					<input type="checkbox" id='gluten'/>
+	            				<i class="form-icon"></i>&nbsp;&nbsp;&nbsp;&nbsp;
+	            				Gluten Free
+	        				</label>
+						</div>
+						<div class='form-group column col-3'>
+							<label class='form-label' for='regis-type'>Registration Type:</label>
+							<select class='form-select' name='regis-type'>
+								<option></option>
+								<option value='student'>Student</option>
+								<option value='professional'>Professional</option>
+								<option value='vendor'>Vendor/Exhibitor/Industry Rep.</option>
+							</select>
+						</div>
+						<div class='column col-1'></div>
+						<div class='form-group column col-3'>
+							<label class='form-label' for='regis-len'>Days:</label>
+							<select class='form-select' name='regis-len'>
+								<option></option>
+								<option value='friday'>Friday Only</option>
+								<option value='saturday'>Saturday Only</option>
+								<option value='vendor'>Entire Conference</option>
+							</select>
+						</div>
+					</form>	
+			<!-- conference_info ends -->
+				</div>
+			<!-- membership begins -->
+				<div class="membership">
+					<div class='form-group'>
+						<label class='form-label' for='pay'>Payment Options:</label>
+						<select class='form-select' name='pay'>
+							<option></option>
+							<option value='check-PO'>Check, Purchase Order</option>
+							<option value='credit-debit'>Credit/Debit Card</option>
+						</select>
+						<p>*The next screen will provide you with more payment information</p>
+					</div>
+			</div>
+		<!-- membership ends -->	
 		</div>
-
-
+	<!-- account_info end -->
+<!-- account div ends -->
+<!-- presentation div begins -->
 		<div class="col-xs-12 presentations_info">
 			<h3>Please add your presentation</h3>
 			<div class="col-xs-6 presentation_new">
@@ -80,11 +240,13 @@
 					<li>//name</li>
 				</ul>
 			</div>
+<!-- presentation div ends -->
 		</div>
-		
+<!-- content ends -->
 	</div>
 
-	<!-- <div class='columns'>
+
+<!-- <div class='columns'>
 		You are logged in as {{ session['username'] }}
 
 
