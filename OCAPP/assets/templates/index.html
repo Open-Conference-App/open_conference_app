@@ -28,7 +28,7 @@
 					{% endwith %}
 
 					<!-- registration page 1 -->
-					<input type='hidden' id='conference' value="{{ conference['id'] }}">
+					<input type='hidden' id='conference' value="{{ data['conference']['id'] }}">
 					<h3>Register</h3>
 					<div class='form-content' id='page1'>
 						<h5>User Information</h5>
@@ -75,7 +75,7 @@
 						<div class='form-group'>
 							<label class='form-label' for='state'>State:</label>
 							<select class='form-select' name='state'>
-								{% for state in states %}
+								{% for state in data['states'] %}
 									<option value="{{ state['id'] }}">{{ state['abbrev'] }}</option>
 								{% endfor %}
 							</select>
@@ -89,7 +89,7 @@
 							<p>Select your institution:</p>
 							<select class='form-select' name='institution' id='institution'>
 								<option value='' id='other1'></option>
-							{% for instution in institutions %}
+							{% for institution in data['institutions'] %}
 								<option value="{{ institution['id']}}">{{ institution['name'] }}</option>
 							{% endfor %}
 								<option value='other' id='other'>Other</option>
@@ -103,7 +103,7 @@
 							<div class='form-group'>
 								<label class='form-label' for='inst-state'>State:</label>
 								<select class='form-select' name='inst-state'>
-									{% for state in states %}
+									{% for state in data['states'] %}
 										<option value="{{ state['id'] }}">{{ state['abbrev'] }}</option>
 									{% endfor %}
 								</select>
@@ -124,7 +124,7 @@
 					        <label class="form-radio">
 					            <input type="radio" name="lunch" checked/>
 					            <i class="form-icon"></i> 
-					            Regular
+					            Regular(${conference})
 					        </label>
 					        <label class="form-radio">
 					            <input type="radio" name="lunch" />

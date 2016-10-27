@@ -1,63 +1,50 @@
-from flask import Flask
-import imp, re, hashlib, binascii, os, datetime
+import time
+from flask import flash
+from OCAPP.Schema.Conference import Conference
 from OCAPP import app, db
-from OCAPP.config import sensitive
-from apiclient.discovery import build
-sens = sensitive.Sens()
 
-member_conferences = db.Table('member_conferences', 
-	db.Column('member_id', db.Integer, db.ForeignKey('member.id')), 
-	db.Column('conference_id', db.Integer, db.ForeignKey('conference.id'))
-)
+def create(fields):
+	is_valid = True
+	for k, v in fields.items():
+		if not v:
+			flash('All fields are required', 'conf_create_err')
+			return False
+	if len(fields['year']) != 4:
+		is_valid = False
+		flash('Year should be formatted 20XX', 'conf_create_err')
+	if time.strptime(fields['date']) >= time.time():
+		is_valid = False
+		flash('Conference date must be in the future.', 'conf_create_err')
+	if fields['full_prof_cost'] < 0 or fields['day_prof_cost'] < 0:
+		is_valid = False
+		flash('Professional conference prices must be positive.', 'conf_create_err')		
+	if fields['full_stud_cost'] < 0 or fields['day_stud_cost'] < 0:
+		is_valid = False
+		flash('Professional conference prices must be positive.', 'conf_create_err')
+	if fields['vend_cost'] < 0:
+		is_valid = False
+		flash('Vendor conference prices must be positive.', 'conf_create_err')
+	return is_valid
 
-vendor_conferences = db.Table('vendor_conferences',
-	db.Column('vendor_id', db.Integer, db.ForeignKey('vendor.id')),
-	db.Column('conference_id', db.Integer, db.ForeignKey('conference.id'))
-)
+def get_by_id(id):
+	conference = Conference.query.get(id)
+	if not conference:
+		conference = get_next()
+	return conference
 
-presenter_conferences = db.Table('presenter_conferences', 
-	db.Column('presenter_id', db.Integer, db.ForeignKey('member.id')), 
-	db.Column('conference_id', db.Integer, db.ForeignKey('conference.id'))
-)
+def get_next():
+	return db.query(Conference).order_by(Conference.year.desc()).first()
 
-class Conference(db.Model):
-	id = db.Column(db.Integer, primary_key=True)
-	year = db.Column(db.String(4), unique=True)
-	institution_id = db.Column(db.Integer, db.ForeignKey('member.id'))
-	members = db.relationship('Member', secondary=member_conferences, backref=db.backref('members', lazy='dynamic'))
-	vendors = db.relationship('Vendor', secondary=vendor_conferences, backref=db.backref('vendors', lazy='dynamic'))
-	prof_cost = db.Column(db.PickleType)
-	stud_cost = db.Column(db.PickleType)
-	vend_cost = db.Column(db.Integer)
-	date = db.Column(db.DateTime)
-	folder_id = db.Column(db.String(255))
-	created_at = db.Column(db.DateTime)
-	updated_at = db.Column(db.DateTime)
+def destroy(id):
+	conference = Conference.query.get(id)
+	if conference:
+		db.session.delete(conference)
+		db.session.commit()
+	return conference
 
-	def __init__(self, conference_data):
-		self.institution_id = conference_data['institution_id']
-		self.year = conference_data['year']
-		
-		prof_cost = {
-			'full': conference_data['full_prof_cost'],
-			'day': conference_data['day_prof_cost']
-		}
+def update(conference, up_conf):
+	for key in conference.keys():
+		if conference[key] != up_conf[key]:
+			conference[key] = up_conf[key]
+	return conference
 
-		stud_cost = {
-			'full': conference_data['full_stud_cost'],
-			'day': conference_data['day_stud_cost']
-		}
-
-		self.prof_cost = pickle.dumps(prof_cost)
-		self.stud_cost = pickle.dumps(stud_cost)
-		self.vend_cost = conference_data['vend_cost']
-		self.date = conference_data['date']
-		
-		folder_metadata = {
-			'name': conference_data['year'],
-			'mimeType': 'application/vnd.google-apps.folder',
-
-
-		}
-		self.created_at = datetime.now()
-		self.updated_at = datetime.now()

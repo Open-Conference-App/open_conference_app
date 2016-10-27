@@ -24,11 +24,12 @@ $(document).ready(function(){
 	$(document).on('click', '.continue', function(){
 		//run validations based on page div id and validations
 			var pageId = $(this).parent().parent().attr('id')
+			console.log(pageId)
 			var validObj = validate(pageId, window[pageId + '_valids']);
 			
 			//send member object to server if all validations were successful
+			console.log(validObj.allValid)
 			if(validObj.allValid) {
-				console.log(pageId + ' : ' + 'valid')
 				for(var i = 0; i < validObj.validations.length; i++){
 					member[validObj.validations[i]['fieldName']] = $('#'+validObj.validations[i]['fieldName']).val();
 				}
@@ -43,7 +44,10 @@ $(document).ready(function(){
 			// 		$.ajax({
 			// 			method: 'POST',
 			// 			url: '/members/create',
-			// 			data: member
+			// 			data: member,
+						//success: function(){
+
+						//}
 			// 		})
 			// 	}
 			// //if some validations were unsuccessful, extract messages and display them
@@ -55,6 +59,7 @@ $(document).ready(function(){
 			// 	}
 			// }
 		}
+		return false;
 	});
 
 });
