@@ -1,42 +1,98 @@
-from flask import Flask
-import imp, re, hashlib, binascii, os, datetime
+import binascii, os, re, hashlib
+from OCAPP.config.sensitive import Sens
+from flask import session, flash
+from flask_sqlalchemy import SQLAlchemy
+sens = Sens()
+from OCAPP.Schema.Member import Member
 from OCAPP import app, db
-from OCAPP.Models.Conference import member_conferences
-from  OCAPP.Models.Presentation import member_presentations
+EMAIL_KEY = re.compile(r'^[a-zA-Z0-9\.\+_-]@[a-zA-Z0-9\._-]+\.[a-zA-Z]*$')
 
-class Member(db.Model):
-	id = db.Column(db.Integer, primary_key=True)
-	first_name = db.Column(db.String(255))
-	last_name = db.Column(db.String(255))
-	address_id = db.relationship(db.Integer, db.ForeignKey('address.id'))
-	email = db.Column(db.String(255), unique=True)
-	password = db.Column(db.String(255))
-	pw_salt = db.Column(db.String(255))
-	officer = db.Column(db.Boolean)
-	member_type = db.Column(db.String(12))
-	active = db.Column(db.Boolean)
-	institution_id = db.relationship(db.Integer, db.ForeignKey('institution.id'))
-	presentations = db.relationship('Presentation', secondary=member_presentations, back_populates='presenters')
-	conferences = db.relationship('Conference', secondary=member_conferences, backref=db.backref('conf_members', lazy='dynamic'))
-	created_at = db.Column(db.DateTime())
-	updated_at = db.Column(db.DateTime())
+def create(fields):
+	is_valid = True
+	for k, v in fields.items():
+		print v
+		if not v:
+			flash('All fields are required.', 'regisErr')
+			return False
+	if EMAIL_KEY.match(fields['email']) != None:
+		is_valid = False
+		flash("Email address is not formatted correctly.", 'regisErr')
+	else:
+		if Member.query.filter_by(email=fields['email']).first():
+			flash("The email address you entered is already in our system.", 'regisErr')
+			is_valid = False
+	if fields['password'] != fields['confirm_password']:
+		flash("Passwords do not match",'regisErr')
+		is_valid=False
+	if not is_valid:
+		return False
+	else:
+		fields['pw_salt'] = binascii.hexlify(os.urandom(16))
+		fields['password'] = hashlib.sha256(fields['password'] + fields['pw_salt']).hexdigest()
+		user_data = {
+			'first_name': fields['first_name'],
+			'last_name': fields['last_name'],
+			'email': fields['email'],
+			'password': fields['password'],
+			'pw_salt': fields['pw_salt'],
+			'street1': fields['street1'],
+			'street2': fields['street2'],
+			'city': fields['city'],
+			'state': fields['state'],
+			'zip': fields['zip']
+		}
+		user = User(**user_data)
+		db.session.add(user)
+		db.session.commit()
+		session['_id'] = user.id
+		session['username'] = user.username
+	return True
+
+def activate(id):	
+	member = Member.query.get(id)
+	if member:
+		active = True
+	else:
+		active = False
+	member = Member.query.get(id)
+	member.active = active
+	db.session.commit()
+	return member.active
+
+def deactivate(id):
+	member = Member.query.get(id)
+	if member:
+		active = False
+	else:
+		active = True
+	member = Member.query.get(id)
+	member.active = active
+	db.session.commit()
+	return member.active
+
+def toggle_officer(member_id, make_officer):
+	member = Member.query.get(member_id)
+	member.officer = True if make_officer else False
+	db.session.commit()
+	return member_id
+
+def update(member_data):
+	##assumes to have had all other table data removed before receipt
+	member = Member.query.get(member_data)
+	for k,v in member_data:
+		if member[k] != v:
+			member[k] = v
+	return member
+
+def index():
+	return Member.query.all()
+
+def get_by_email(email_add):
+	return Member.query.filter_by(email=email_add).first()
+
+def get_by_id(id):
+	return db.session.query(Member).filter_by(id=id).first()
 
 
-	def __init__(self, member_data):
-		self.first_name = member_data['first_name']
-		self.last_name = member_data['last_name']
-		self.email = member_data['email']
-		self.password = member_data['password']
-		self.pw_salt = member_data['pw_salt']
-		self.created_at = datetime.now()
-		self.updated_at = datetime.now()
-		if 'officer' in member_data: self.officer = True
-		else: self.officer = False
-		self.active = False
-		self.institution_id = member_data['institution_id']
 
-	def __repr__(self):
-		return '<Member %r>' % self.email
-
-
-
+	
