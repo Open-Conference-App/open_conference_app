@@ -8,7 +8,6 @@
 	<script   src="https://code.jquery.com/jquery-2.2.4.min.js"   integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="   crossorigin="anonymous"></script>
 	<script type="text/javascript" src="{{url_for('static', filename='js/dashboard.js')}}"></script>
 </head>
-<!-- session['admin'] (stored as boolean value) should give access to restricted areas-->
 <body>
 	<div id="container" class="container-fluid">
 <!-- container begins -->
@@ -16,7 +15,7 @@
 		<div class="row header">
 			<div class="col-xs-12">
 				<img class="logo" src="{{ url_for('static', filename='images/socallt2015.png')}}" width="100px">
-				<h1 class="welcome">Welcome! <p class="login">You are Logged in as: <i>{{ name }}</i></p></h1>
+				<h1 class="welcome">Welcome! <p class="login">You are Logged in as: <i>{{ name }} aslkdjfapsdfa</i></p></h1>
 			</div>
 		</div>
 <!-- header ends -->
@@ -51,7 +50,7 @@
 <!-- container ends -->
 <!-- content begins -->
 <!-- conference(home) div begins -->
-	<div id="content" class="row">
+	<div class="row content">
 		<div class="col-xs-12 col-md-12 home">
 			<h3>2017 Conference</h3>
 			<p>The 2017 Conference will be held on the campus of the University of Colorado Boulder and will be hosted by ALTEC, the Anderson Language Technology Center. Details forthcoming!</p>
@@ -114,8 +113,8 @@
 						</div>	
 						<button class="btn btn-sm" type='submit' class='btn btn-primary'>Update</button>
 				</div>
-			</div>
 			<!-- contact_info ends -->
+			</div>
 			<!-- institution_info begins -->
 				<div class="institution_info">
 					<h5>Institution Information</h5>
@@ -146,8 +145,8 @@
 						</div>
 						<br>
 					</form>	
-				</div>
 			<!-- institution_info end -->
+				</div>
 			<!-- conference_info begins -->
 				<div class="conference_info">
 					<h5>Conference Information</h5>
