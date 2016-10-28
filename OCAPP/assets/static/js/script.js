@@ -1,4 +1,102 @@
 $(document).ready(function(){
+	validations = {
+		'page1_valids': [{
+				'fieldName': 'first_name',
+				'validation': (fieldname) => checkLen(fieldname, 1, '>'),
+				'message': 'Last name must be present.'
+			},
+			{		
+				'fieldName': 'last_name',
+				'validation': (fieldname) => checkLen(fieldname, 1, '>'),
+				'message': 'Last name must be present.'
+			},
+			{
+				'fieldName': 'email',
+				'validation': function(fieldname){
+					var email_patt = new RegExp($(fieldname).pattern);
+					// console.log(email_patt.test($(fieldname).val()))
+					return email_patt.test($(fieldname).val()) && $(fieldname).val();
+				},
+				'message': 'Email is not formatted correctly.'
+			},
+			{
+				'fieldName': 'password',
+				'validation': (fieldname) => checkLen(fieldname, 8, '>'),
+				'message': 'Passwords must be at least 8 characters.'
+			},
+			{
+				'fieldName': 'confirm-password',
+				'validation': (fieldname) => $(fieldname).val() == $('#password').val(),
+				'message': 'Passwords do not match.'
+			}
+		],
+		'page2_valids': [{
+				'fieldName': 'street1',
+				'validation': (fieldname) => checkLen(fieldname, 0, '>'),
+				'message': 'Street1 must be provided.'
+			},
+			{
+				'fieldName': 'street2',
+				'validation': (fieldname) => true,
+				'message': ''
+			},
+			{
+				'fieldName': 'city',
+				'validation': (fieldname) => checkLen(fieldname, 0, '>'),
+				'message': 'City is required'
+			},
+			{
+				'fieldName': 'state',
+				'validation': (fieldname) => $(fieldname+' option:selected').val() != '' ? true : false,
+				'message': ''
+			},
+			{
+				'fieldName': 'zip',
+				'validation': (fieldname) => checkLen(fieldname, 5, '='),
+				'message': 'Zip codes must be 5 digits.'
+			},
+			{
+				'fieldName': 'instution',
+				'validation': function(fieldname){
+					if($('#institution').val() < 0){
+						return false;
+					} else if($('#inst-name').val() == ''){
+						return false;
+					}
+					return true;
+				},
+				'message': ''
+			}],
+
+
+	'page3_valids': [{
+			'fieldName': 'lunch',
+			'validation': (fieldname) => checkLen(fieldname, 0, '>'),
+			'message': 'A lunch option must must be provided.'
+		},
+		{
+			'fieldName': 'gluten',
+			'validation': (fieldname) => true,
+			'message': ''
+		},
+		{
+			'fieldName': 'payment',
+			'validation': (fieldname) => checkLen(fieldname, 0, '>'),
+			'message': 'Please select a payment type.'
+		},
+		{
+			'fieldName': 'regType',
+			'validation': (fieldname) => checkLen(fieldname, 0, '>'),
+			'message': 'Registration type is required'
+		},
+		{
+			'fieldName': 'regLen',
+			'validation': (fieldname) => $(fieldname).val() ? true : false,
+			'message': 'Registration days selection is required.'
+		}]
+	}
+
+
 	//toggle view of login & registration forms	
 	var user;
 	$('button').click(function(){
@@ -20,13 +118,19 @@ $(document).ready(function(){
 			$('#inst-info').slideUp();
 		}
 	});
+
+	//populate conference price information based upon registration type selection
+	$('#conf_reg').change(function(){
+
+	})
+
 	var member = {};
 	$(document).on('click', '.continue', function(){
 		//run validations based on page div id and validations
-			var pageId = $(this).parent().parent().attr('id')
-			console.log(pageId)
-			var validObj = validate(pageId, window[pageId + '_valids']);
-			
+			var pageId = $(this).parent().parent().attr('id');
+			var validArr = pageId + '_valids';
+			console.log(window[validArr])
+			var validObj = validate(pageId, validations[validArr]);
 			//send member object to server if all validations were successful
 			console.log(validObj.allValid)
 			if(validObj.allValid) {
@@ -63,3 +167,5 @@ $(document).ready(function(){
 	});
 
 });
+
+

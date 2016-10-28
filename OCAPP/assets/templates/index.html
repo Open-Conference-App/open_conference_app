@@ -7,8 +7,7 @@
 	<link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css')}}"/>
 	<link rel="stylesheet" href="{{ url_for('static',filename='css/font-awesome-4.6.3/css/font-awesome.min.css') }}"/>
 	<link rel='stylesheet' href="{{ url_for('static',filename='css/styles.css') }}"/>
-	<script src="
-	{{ url_for('static',filename='js/jquery-3.1.1.js') }}"></script>
+	<script src="{{ url_for('static',filename='js/jquery-3.1.1.js') }}"></script>
 	<script type="text/javascript" src="{{ url_for('static',filename='js/validations.js') }}"></script>
 	<script type="text/javascript" src="{{ url_for('static',filename='js/script.js') }}"></script>
 </head>
@@ -55,7 +54,7 @@
 							<label class='form-label' for='confirm_password'>Confirm Password:</label>
 							<input class='form-input' type="password" name="confirm_password" id='confirm-password'>
 						</div>
-						<input type='hidden' value={{ data['csrf_token'] }}
+						<input type='hidden' value={{ data['csrf_token'] }}>
 						<div class='btn-group'>
 							<button class='btn primary continue' type='button'>Continue<i class="fa fa-arrow-circle-right" aria-hidden="false"></i></button>
 						</div>
@@ -92,7 +91,7 @@
 						<div class='form-group'>
 							<p>Select your institution:</p>
 							<select class='form-select' name='institution' id='institution'>
-								<option value='' id='other1'></option>
+								<option value='-1' id='other1'>---Select---</option>
 							{% for institution in data['institutions'] %}
 								<option value="{{ institution['id']}}">{{ institution['name'] }}</option>
 							{% endfor %}
