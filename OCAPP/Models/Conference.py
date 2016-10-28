@@ -3,6 +3,9 @@ from flask import flash
 from OCAPP.Schema.Conference import Conference
 from OCAPP import app, db
 
+def index():
+	return db.query(Conference).all()
+
 def create(fields):
 	is_valid = True
 	for k, v in fields.items():
@@ -27,7 +30,7 @@ def create(fields):
 	return is_valid
 
 def get_by_id(id):
-	conference = Conference.query.get(id)
+	conference = db.get(Conference, id)
 	if not conference:
 		conference = get_next()
 	return conference
@@ -36,11 +39,7 @@ def get_next():
 	return db.query(Conference).order_by(Conference.year.desc()).first()
 
 def destroy(id):
-	conference = Conference.query.get(id)
-	if conference:
-		db.session.delete(conference)
-		db.session.commit()
-	return conference
+	return db.delete(Conference, id)
 
 def update(conference, up_conf):
 	for key in conference.keys():

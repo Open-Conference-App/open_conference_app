@@ -47,11 +47,21 @@ def handle_conference(conference_id):
 #pay for conference attendance/membership fees(which are one and the same, user must already exist)
 @app.route('/conferences/<conference_id>/members/<member_id>', methods=['POST'])
 def pay(conference_id, member_id):
-	if '_id' not in session or 'csrf_token' not in request.form:
-		return json.dumps({})
-	elif request.form['csrf_token'] != session['csrf_token']:
-		payment_data = {
-			'token': request.form['token']
-			#need to link data to data found in form
-		}
+	if 'id' not in session or 'csrf_token' not in request.form:
+		return redirect('/dashboard')
+	elif request.form['csrf_token'] in csrf_token:
+		##validate registration prior to making payment
+			
+		if request.form['pay'] == 'credit_debit':
+			conf = Conference.get_by_id(conference_id)
+			price = getattr(conf, request.form['regis_type'])
+			try:
+				charge = stripe.Charge.create(
+					amount= price if request.form['regis_len'] == 'Entire Confernece' else price/2,
+					currency='usd',
+					source=request.form['stripe_token'],
+					description=request.form['first_name'], ' ', request.form['last_name'], ': ', conf.year
+					)
+			except:
+				pass
 		return	

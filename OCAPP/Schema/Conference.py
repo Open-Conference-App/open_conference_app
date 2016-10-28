@@ -46,7 +46,7 @@ class Conference(BaseChanges, db.Base):
 	host_id = Column(INTEGER(11), ForeignKey('members.id'))
 	host = relationship('Member')
 	presentations = relationship('Presentation', back_populates='conference')
-	prof_cost = Column(INTEGER(3))
+	prof_cost = Column(INTEGER(3)) # all costs are stored in cents for stripe purposes
 	stud_cost = Column(INTEGER(3))
 	vend_cost = Column(INTEGER(3))
 	date = Column(DATETIME())
