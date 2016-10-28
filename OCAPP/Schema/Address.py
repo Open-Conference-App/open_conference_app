@@ -22,7 +22,7 @@ class Address(BaseChanges, db.Base):
 	state_id = Column(INTEGER(11), ForeignKey('states.id'))
 	state = relationship('State', back_populates='addresses', uselist=False)
 	zip = Column(VARCHAR(5))
-	created_at = Column(DATETIME(), default=func.utc_timestamp(), onupdate=func.utc_timestamp())
+	created_at = Column(DATETIME(), default=func.utc_timestamp())
 	updated_at = Column(DATETIME(), default=func.utc_timestamp(), onupdate=func.utc_timestamp())
 
 	# @staticmethod

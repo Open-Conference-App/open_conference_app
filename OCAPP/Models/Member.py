@@ -91,7 +91,7 @@ def get_by_email(email_add):
 	return Member.query.filter_by(email=email_add).first()
 
 def get_by_id(id):
-	return db.session.query(Member).filter_by(id=id).first()
+	return db.query(Member).filter_by(id=id).first()
 
 
 

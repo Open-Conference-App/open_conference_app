@@ -79,7 +79,7 @@ var page2_valids = [{
 	},
 	{
 		'fieldName': 'state',
-		'validation': (fieldname) => $(fieldname).val() > -1 ? true : false,
+		'validation': (fieldname) => $(fieldname).val() ? true : false,
 		'message': ''
 	},
 	{

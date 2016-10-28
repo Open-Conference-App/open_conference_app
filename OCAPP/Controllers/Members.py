@@ -1,34 +1,23 @@
 from OCAPP import app
-from flask import render_template
+from flask import render_template, request, session, redirect
 from OCAPP.Models import Member, Conference, State, Institution
 #create a new member(when users regsiter for the next conference)
-@app.route('/')
-def load_forms():
-	data = {
-		'conference': Conference.get_next(),
-		'states': State.index(),
-		'institutions': Institution.index()
-	}
-	
-	return render_template('index.html', data=data)
+
 
 @app.route('/members', methods=['POST'])	
 def create_memb():
 	if not 'csrf_token' in session:
 		return redirect('/conferences')
-	#what's the route for adming dashboard??
+	#what's the route for admin dashboard??
 	return redirect('/')
 
 
-
-
 #creates new user in db (should be utilized if it is a new member only)
-@app.route('/members/<member_id>', methods=['GET','PUT', 'DELETE'])
+@app.route('/members/<int:member_id>', methods=['GET','PUT', 'DELETE'])
 def handle_members(member_id):
 	#show member info
 	if request.method == 'GET':
-		if not isinstance(member_id, (int, long)):
-			member = Members.get_by_id(member_id)
+		member = Member.get_by_id(member_id)
 		return render_template('dashboard-test.html', name=member.first_name)
 	#delete a conference(to be done through admin dashboard only)
 	if request.method == 'DELETE':
@@ -63,8 +52,15 @@ def handle_members(member_id):
 
 @app.route('/members/dashboard')
 def load_dashboard():
-	if '_id' in session:
-		session['csrf_token'] = sens.gen_csrf_token()
-		return render_template('dashboard.html')
-	else:
-		return redirect('/')
+	# if 'user' in session:
+	# 	member = Member.get_by_id(session['user']['id'])
+	# 	if member:
+	return render_template('dashboard.html')
+
+
+	# else:
+	# 	return redirect('/')
+
+	# if '_id' in session:
+	# 	session['csrf_token'] = sens.gen_csrf_token()
+	# else:
