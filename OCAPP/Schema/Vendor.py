@@ -16,7 +16,7 @@ class Vendor(BaseChanges, db.Base):
 	contact_email = Column(VARCHAR(255))
 	contact_phone = Column(VARCHAR(15))
 	conferences = relationship('Conference', secondary=vendor_conferences, backref=backref('conf_vendors', lazy='dynamic'))
-	created_at = Column(DATETIME(), default=func.utc_timestamp(), onupdate=func.utc_timestamp())
+	created_at = Column(DATETIME(), default=func.utc_timestamp())
 	updated_at = Column(DATETIME(), default=func.utc_timestamp(), onupdate=func.utc_timestamp())
 	
 	def __init__(self, vend_info):

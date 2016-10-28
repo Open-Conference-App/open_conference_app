@@ -9,9 +9,7 @@ def show(inst_id):
 	return Institution.query.get(inst_id)
 
 def create(inst_data):
-	inst = Institution(**inst_data)
-	# db.session.add(inst)
-	# db.session.commit()
+	return db.create(Institution, inst_data)
 
 def delete(inst_id):
 	return ''

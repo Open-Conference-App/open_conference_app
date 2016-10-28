@@ -1,10 +1,20 @@
+
+from flask import render_template, session
 from OCAPP import app
 from OCAPP.config.sensitive import Sens
 sens = Sens()
 import stripe
 stripe.api_key = sens.stripe_secret_key
-from OCAPP.Models import Conference, State
+from OCAPP.Models import Conference, State, Institution
 
+@app.route('/')
+def load_forms():
+	data = {
+		'conference': Conference.get_next(),
+		'states': State.index(),
+		'institutions': Institution.index()
+	}
+	return render_template('index.html', data=data)
 
 #create a new conference(to be done through admin dashboard only via ajax call)
 @app.route('/conferences', methods=['POST'])

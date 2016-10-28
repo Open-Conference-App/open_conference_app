@@ -33,7 +33,7 @@ class Member(BaseChanges,db.Base):
 	host = relationship('Conference', uselist=False, back_populates='host')
 	presentations = relationship('Presentation', secondary=member_presentations, back_populates='presenters')
 	conferences = relationship('MemberConferences', back_populates='member')
-	created_at = Column(DATETIME(), default=func.utc_timestamp(), onupdate=func.utc_timestamp())
+	created_at = Column(DATETIME(), default=func.utc_timestamp())
 	updated_at = Column(DATETIME(), default=func.utc_timestamp(), onupdate=func.utc_timestamp())
 
 	def __init__(self, member_data):

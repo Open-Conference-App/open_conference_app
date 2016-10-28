@@ -51,7 +51,7 @@ class Conference(BaseChanges, db.Base):
 	vend_cost = Column(INTEGER(3))
 	date = Column(DATETIME())
 	folder_id = Column(VARCHAR(255))
-	created_at = Column(DATETIME(), default=func.utc_timestamp(), onupdate=func.utc_timestamp())
+	created_at = Column(DATETIME(), default=func.utc_timestamp())
 	updated_at = Column(DATETIME(), default=func.utc_timestamp(), onupdate=func.utc_timestamp())
 
 	def __repr__(self):

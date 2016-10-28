@@ -20,7 +20,7 @@ class Institution(BaseChanges, db.Base):
 	address_id = Column(INTEGER(11), ForeignKey('addresses.id'))
 	address = relationship('Address')
 	faculty_members = relationship('Member', back_populates='institution')
-	created_at = Column(DATETIME(), default=func.utc_timestamp(), onupdate=func.utc_timestamp())
+	created_at = Column(DATETIME(), default=func.utc_timestamp())
 	updated_at = Column(DATETIME(), default=func.utc_timestamp(), onupdate=func.utc_timestamp())
 
 	def __repr__(self):
