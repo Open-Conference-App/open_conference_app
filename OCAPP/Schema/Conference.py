@@ -41,6 +41,7 @@ class Conference(BaseChanges, db.Base):
 	id = Column(INTEGER(11), primary_key=True)
 	year = Column(VARCHAR(4), unique=True)
 	institution_id = Column(INTEGER(11), ForeignKey('institutions.id'))
+	institution = relationship('Institution')
 	members = relationship('MemberConferences', back_populates='conference')
 	vendors = relationship('Vendor', secondary=vendor_conferences, backref=backref('vendor_conferences', lazy='dynamic'))
 	host_id = Column(INTEGER(11), ForeignKey('members.id'))

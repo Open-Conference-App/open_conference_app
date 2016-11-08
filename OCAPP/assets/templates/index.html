@@ -8,19 +8,27 @@
 	<link rel="stylesheet" href="{{ url_for('static',filename='css/font-awesome-4.6.3/css/font-awesome.min.css') }}"/>
 	<link rel='stylesheet' href="{{ url_for('static',filename='css/styles.css') }}"/>
 	<script src="{{ url_for('static',filename='js/jquery-3.1.1.js') }}"></script>
+	<script src="{{ url_for('static',filename='js/moment.js') }}"></script>
+	<script>
+		var confId = {{ '' if not data['conf'] else data['conf']['id'] }};
+		{% with csrf_tok = csrf_token() %}
+		var csrfToken = '{{ csrf_tok }}'
+	</script>
+
 	<script type="text/javascript" src="{{ url_for('static',filename='js/validations.js') }}"></script>
 	<script type="text/javascript" src="{{ url_for('static',filename='js/script.js') }}"></script>
 </head>
 <body class='container-fluid'>
 		<div class='registrationHeader'>
-			<h2>{{ 'SOCALLT Registration' if not data['conf'] else 'SOCALLT' ~ data['conf']['year'] ~ 'Registration'}}</h2>
-			<h4>{{ data['conf']['title'] ~ ": " ~ data['conf']['date'] if data['conf'] else ''}}</h4>
+			<h2>{{ 'SOCALLT Registration' if not data['conf'] else 'SOCALLT ' ~ data['conf']['year'] ~ ' Registration'}}</h2>
+			<h4>{{ data['conf']['title'] ~ ": " ~ data['conf']['date'].strftime('%B %d, %Y') if data['conf'] else ''}}</h4>
 		</div>
 	<div class='row content'>
 		<div class=''></div>
 		<div class='col-xs-10 col-sm-6'>
 			<div id='register-form' data-id='cool'>
 				<form action='/register' method='POST'>
+					<input type='hidden' name='_csrf_token' value='{{ csrf_tok }}'>
 					<div id='regisErrors'>
 					<!-- flashed messages and messages returned from AJAX calls should look one and the same and render in the same location-->
 					{% with messages = get_flashed_messages(category_filter=['regisErr']) %}
@@ -155,7 +163,7 @@
 							<div class='columns'>
 								<div class='form-group column col-3'>
 									<label class='form-label' for='regis_type'>Registration Type:</label>
-									<select class='form-select' name='regis_type'>
+									<select class='form-select' name='regis_type' id='regis-type'>
 										<option></option>
 										<option value='stud_cost'>Student</option>
 										<option value='prof_cost'>Professional</option>
@@ -165,12 +173,13 @@
 								<div class='column col-xs-1'></div>
 								<div class='form-group column col-3'>
 									<label class='form-label' for='regis_len'>Days:</label>
+
 									<!-- We need to have an ajax call that will populate this field with price information along with days
 										depending on what is selected in the registration type field-->
-									<select class='form-select' name='regis_len'>
+									<select class='form-select' name='regis_len' id='regis-len'>
 										<option></option>
-										<option value='friday'>Friday Only</option>
-										<option value='saturday'>Saturday Only</option>
+										<option value='friday'>Friday Only (${{ '' if not data['conf'] else data['conf']['prof_cost']/2 }})</option>
+										<option value='saturday'>Saturday Only (${{ '' if not data['conf'] else data['conf']['prof_cost']/2 }})</option>
 										<option value='vendor'>Entire Conference</option>
 									</select>
 								</div>
@@ -188,6 +197,7 @@
 		<!-- Login Form -->
 			<div class='' id='login-form'>
 				<form action='/login' method='POST'>
+					<input type='hidden' name='_csrf_token' value='{{ csrf_tok }}'>
 				<!-- flashed messages and messages returned from AJAX calls should look one and the same and render in the same location-->
 					<div id='loginErrors'>
 					{% with messages = get_flashed_messages(category_filter=['loginErr']) %}
@@ -219,6 +229,7 @@
 				<h4>Already a member and logged in before?</h4>
 				<button class='btn btn-sm btn-link' data-id='login'>Login</button>
 			</div>
+			 {% endwith %}
 		</div>
 	</div>
 </body>
