@@ -178,9 +178,9 @@
 										depending on what is selected in the registration type field-->
 									<select class='form-select' name='regis_len' id='regis-len'>
 										<option></option>
-										<option value='friday'>Friday Only (${{ '' if not data['conf'] else data['conf']['prof_cost']/2 }})</option>
-										<option value='saturday'>Saturday Only (${{ '' if not data['conf'] else data['conf']['prof_cost']/2 }})</option>
-										<option value='vendor'>Entire Conference</option>
+										<option value='friday'>Friday Only{{ '' if not data['conf'] else '($' ~ '%0.2f' | format(data['conf']['prof_cost']/2 | float ) ~ ')'}}</option>
+										<option value='saturday'>Saturday Only {{ '' if not data['conf'] else '($' ~ '%0.2f' | format(data['conf']['prof_cost']/2 | float ) ~ ')'}}</option>
+										<option value='vendor'>Entire Conference{{ '' if not data['conf'] else '($' ~ '%0.2f' | format(data['conf']['prof_cost'] | float ) ~ ')'}}</option>
 									</select>
 								</div>
 

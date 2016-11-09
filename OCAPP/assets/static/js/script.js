@@ -125,14 +125,19 @@ $(document).ready(function(){
 		//populate price in regis_len
 	$('#regis-type').change(function(){
 		var val = $('#regis-type').children(':selected').val()
+		console.log(val)
 		$.ajax({
 			method: 'GET',
 			url: '/conferences/' + confId + '/prices',
 			success: function(data){
-				console.log($('#regis-len').children()[1])
-				$('#regis-len').children()[1].text('Friday Only ( ' + data[val]/2 + ')');
-				$('#regis-len').children()[2].text('Saturday Only ( ' + data[val]/2 + ')');
-				$('#regis-len').children()[3].text('Entrire Conference( ' + data[val] + ')');
+				var val = $('#regis-type').children(':selected').val()
+				data = JSON.parse(data);
+				console.log($('#regis-len').children())
+				var price = data[val];
+				var halfPrice = price/2;
+				$('#regis-len').children()[1].innerHTML = 'Friday Only ($' + halfPrice.toFixed(2) + ')';
+				$('#regis-len').children()[2].innerHTML = 'Saturday Only ($' + halfPrice.toFixed(2) + ')';
+				$('#regis-len').children()[3].innerHTML = 'Entire Conference ($' + price.toFixed(2) + ')';
 			}
 		})
 	});
