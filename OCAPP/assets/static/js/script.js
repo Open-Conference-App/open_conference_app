@@ -97,6 +97,8 @@ $(document).ready(function(){
 	}
 
 
+
+
 	//toggle view of login & registration forms	
 	var user;
 	$('button').click(function(){
@@ -119,10 +121,28 @@ $(document).ready(function(){
 		}
 	});
 
-	//populate conference price information based upon registration type selection
-	$('#conf_reg').change(function(){
 
-	})
+		//populate price in regis_len
+	$('#regis-type').change(function(){
+		var val = $('#regis-type').children(':selected').val()
+		console.log(val)
+		$.ajax({
+			method: 'GET',
+			url: '/conferences/' + confId + '/prices',
+			success: function(data){
+				var val = $('#regis-type').children(':selected').val()
+				data = JSON.parse(data);
+				console.log($('#regis-len').children())
+				var price = data[val];
+				var halfPrice = price/2;
+				$('#regis-len').children()[1].innerHTML = 'Friday Only ($' + halfPrice.toFixed(2) + ')';
+				$('#regis-len').children()[2].innerHTML = 'Saturday Only ($' + halfPrice.toFixed(2) + ')';
+				$('#regis-len').children()[3].innerHTML = 'Entire Conference ($' + price.toFixed(2) + ')';
+			}
+		})
+	});
+
+
 
 	var member = {};
 	$(document).on('click', '.continue', function(){

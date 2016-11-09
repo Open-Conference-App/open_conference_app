@@ -1,10 +1,12 @@
 from OCAPP import app
+from OCAPP.config.sensitive import Sens
+sens = Sens()
 from flask import render_template, request, session, redirect
 from OCAPP.Models import Member, Conference, State, Institution
 #create a new member(when users regsiter for the next conference)
 
 
-@app.route('/members', methods=['POST'])	
+@app.route('/members', methods=['POST'])
 def create_memb():
 	if not 'csrf_token' in session:
 		return redirect('/conferences')

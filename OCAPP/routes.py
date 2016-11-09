@@ -6,7 +6,7 @@ from OCAPP.Controllers import States, Addresses, Vendors, Institutions, Vendors,
 
 @app.route('/dash')
 def dash():
-	return render_template('dashboard.html')
+	return redirect('/members/dashboard')
 
 
 
