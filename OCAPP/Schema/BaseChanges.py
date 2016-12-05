@@ -108,6 +108,8 @@ class BaseChanges(object):
 		##should convert dates from strings in JSON to Python Date objects
 		pass
 
+	def
+
 
 from OCAPP import db
 # from OCAPP.Models.Member import Member

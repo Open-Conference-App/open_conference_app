@@ -1,11 +1,11 @@
 
-from flask import render_template, session
+from flask import render_template, session, flash
 from OCAPP import app
 from OCAPP.config.sensitive import Sens
 sens = Sens()
 import stripe
 stripe.api_key = sens.stripe_secret_key
-from OCAPP.Models import Conference, State, Institution
+from OCAPP.Models import Conference, Member, State, Institution
 import json
 
 @app.route('/')
@@ -51,27 +51,60 @@ def handle_conference(conference_id):
 def get_prices(conference_id):
 	return json.dumps(Conference.get_prices(conference_id))
 
+#register user for the conference
+@app.route('/conferences/<int:conference_id>/register', methods=['POST'])
+def register_user(conference_id):
+	data = Member.create(request.form.copy())
+	if (data['all_valid']):
+		member = data['validated_data']
+	else:
+		for message in data['errors']:
+			flash(message,'regisErr')
+		return redirect('/')
+	conf = Conference.register(conference_id, request.form.copy())
+	if member in conf.members:
+		if request.form['pay'] == 'check_PO'
+			return render_template('confirmation.html')
+		if request.form['pay'] == 'credit_debit'
+
+		member = {
+			'id': member.id,
+			'first_name': member.first_name,
+			'last_name': member.last_name,
+			'email': member.email
+			}
+		return render_template('credit_card.html', member=member, conf_id=conf.id)
 
 
 #pay for conference attendance/membership fees(which are one and the same, user must already exist)
-@app.route('/conferences/<conference_id>/members/<member_id>', methods=['POST'])
-@sens.check_session
+@app.route('/conferences/<int:conference_id>/members/<int:member_id>', methods=['POST'])
 def pay(conference_id, member_id):
-	if 'id' not in session or 'csrf_token' not in request.form:
-		return redirect('/dashboard')
-	elif request.form['csrf_token'] in csrf_token:
+	if 'user' not in session:
+		return redirect('/')
+	else:
+		resp_object = {
+			'successful': False,
+			'errors': []
+		}
 		##validate registration prior to making payment
-			
-		if request.form['pay'] == 'credit_debit':
-			conf = Conference.get_by_id(conference_id)
+		conf = Conference.get_next()
+		memb = Member.get_by_id(member_id)
+		if memb in conf.members:
 			price = getattr(conf, request.form['regis_type'])
 			try:
 				charge = stripe.Charge.create(
-					amount= price if request.form['regis_len'] == 'Entire Confernece' else price/2,
+					amount= price if request.form['regis_len'] == 'Entire Conference' else price/2,
 					currency='usd',
-					source=request.form['stripe_token'],
-					description=request.form['first_name'] + ' ' + request.form['last_name'] + ': ' + conf.year
+					source=request.form['token'],
+					description=memb.first_name + ' ' + memb.last_name + ': ' + conf.year,
+					receipt_email=memb.email
 					)
-			except:
-				pass
-		return	
+				active = Member.activate(memb.id)
+			except(Exception e):
+				resp.errors.append('There was a problem charging the card you submitted.')
+			resp_obj['successful'] = active
+			return json.dumps(resp_obj)
+
+
+@app.route('/conferences/<int:conference_id>/confirmation')
+	return render_tempalte('confirmation.html')
