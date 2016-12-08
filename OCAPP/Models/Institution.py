@@ -3,6 +3,7 @@ from OCAPP.Schema.Institution import Institution
 from OCAPP import app, db
 
 def index():
+	print db.query(Institution).all()
 	return db.query(Institution).all()
 
 def show(inst_id):
