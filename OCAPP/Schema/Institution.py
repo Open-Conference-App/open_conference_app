@@ -27,4 +27,5 @@ class Institution(BaseChanges, db.Base):
 		return "<Institution(name=%s)>" % self.name
 
 	def __init__(self, inst_data):
-		self.name = inst_data['name']
+		self.name = inst_data
+		#changed line about from self.name = inst_data['name'] to = inst_data because was receiving string indicies must be integer. inst_data is being passed from somewhere as a string

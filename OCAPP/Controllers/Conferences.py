@@ -1,11 +1,11 @@
-
-from flask import render_template, session, flash, request
+from flask import render_template, session, request, redirect, flash 
 from OCAPP import app
 from OCAPP.config.sensitive import Sens
 sens = Sens()
 import stripe
 stripe.api_key = sens.stripe_secret_key
-from OCAPP.Models import Conference, Member, State, Institution, Address
+
+from OCAPP.Models import Address, Conference, Member, State, Institution
 import json
 
 @app.route('/')
@@ -17,10 +17,22 @@ def load_forms():
 	}
 	return render_template('index.html', data=data)
 
+@app.route("/register_user", methods=["POST"])
+def process_registration():
+	if request.form['institution']=='other':
+		Institution.create(request.form['inst-name'])
+	#full access to form in this route for creating user. 
+	print request.form
+	return redirect('/dashboard')
+
+@app.route("/dashboard")
+def render_dash():
+	return render_template('dashboard-test.html')
+
+
 #create a new conference(to be done through admin dashboard only via ajax call)
 @app.route('/conferences', methods=['POST'])
 def create_conference():
-
 	return redirect('/') #need to replace redirect with admin dashboard url
 
 #handle all RESTful routes to '/conference/<conference_id'
@@ -34,7 +46,7 @@ def handle_conference(conference_id):
 			return redirect('/conferences/', new_conference.id)
 		else:
 			return render_template('index.html', conference={'id':conference_id, 'year': new_conference.id})
-
+			
 	#delete a conference(to be done through admin dashboard only as an ajax call, to have this method, include a hidden form input with the name of '_method'
 	# a value of 'DELETE')
 	if request.method == 'DELETE':
@@ -50,6 +62,7 @@ def handle_conference(conference_id):
 @app.route('/conferences/<int:conference_id>/prices', methods=['GET'])
 def get_prices(conference_id):
 	return json.dumps(Conference.get_prices(conference_id))
+<<<<<<< HEAD
 
 #register user for the conference
 @app.route('/conferences/<int:conference_id>/register', methods=['POST'])
@@ -88,6 +101,9 @@ def register_user(conference_id):
 				'email': member.email
 				}
 			return render_template('credit_card.html', member=member, conf_id=conf.id)
+=======
+	#send data by calling functions from imported files and sending it the request.form by using request.form.copy()
+>>>>>>> fa3ce4f598ff82d91bf2f88d242db98d1653fe16
 
 
 #pay for conference attendance/membership fees(which are one and the same, user must already exist)
