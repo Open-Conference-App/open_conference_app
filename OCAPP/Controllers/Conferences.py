@@ -62,7 +62,6 @@ def handle_conference(conference_id):
 @app.route('/conferences/<int:conference_id>/prices', methods=['GET'])
 def get_prices(conference_id):
 	return json.dumps(Conference.get_prices(conference_id))
-<<<<<<< HEAD
 
 #register user for the conference
 @app.route('/conferences/<int:conference_id>/register', methods=['POST'])
@@ -101,9 +100,8 @@ def register_user(conference_id):
 				'email': member.email
 				}
 			return render_template('credit_card.html', member=member, conf_id=conf.id)
-=======
 	#send data by calling functions from imported files and sending it the request.form by using request.form.copy()
->>>>>>> fa3ce4f598ff82d91bf2f88d242db98d1653fe16
+
 
 
 #pay for conference attendance/membership fees(which are one and the same, user must already exist)
