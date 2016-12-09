@@ -22,9 +22,10 @@ class BaseChanges(object):
 			'Vendor':['name','address_id', 'contact_name','contact_email','contact_phone']
 		}
 		for method in funcs:
-			print type(cls).__name__
-			if type(cls).__name__ in requirements and method in requirements[type(cls).__name__]:
-				info = method(data)
+			if cls.__name__ in requirements:
+				func_call = 'self.' + method + "(validations['validated_data'])"
+				print func_call
+				info = eval(func_call)
 				if not info['all_valid']:
 					all_valid = False
 					for error in info['int_errors']:

@@ -19,6 +19,7 @@
 	<script type="text/javascript" src="{{ url_for('static',filename='js/script.js') }}"></script>
 </head>
 <body class='container-fluid'>
+{{data["institutions"]}}
 		<div class='registrationHeader'>
 			<h2>{{ 'SOCALLT Registration' if not data['conf'] else 'SOCALLT ' ~ data['conf']['year'] ~ ' Registration'}}</h2>
 			<h4>{{ data['conf']['title'] ~ ": " ~ data['conf']['date'].strftime('%B %d, %Y') if data['conf'] else ''}}</h4>
@@ -27,7 +28,9 @@
 		<div class=''></div>
 		<div class='col-xs-10 col-sm-6'>
 			<div id='register-form' data-id='cool'>
-				<form action='/register' method='POST'>
+
+			<!-- added id to form element for use with lunch selection option -->
+				<form action='/conferences/{{ data['conf']['id'] }}/register'' method='POST' id="main_reg_form">
 					<input type='hidden' name='_csrf_token' value='{{ csrf_tok }}'>
 					<div id='regisErrors'>
 					<!-- flashed messages and messages returned from AJAX calls should look one and the same and render in the same location-->
@@ -109,7 +112,7 @@
 						<div id='inst-info'>
 							<div class='form-group'>
 								<label class='form-label' for='inst-name'>Name:</label>
-								<input class='form-input' type="text" name="inst-name">
+								<input id="inst-id" class='form-input' type="text" name="inst-name">
 							</div>
 						</div>
 						<div class='btn-group btn-group-block'>
@@ -123,26 +126,14 @@
 					<div id='page3' class='form-content'>
 						<h5>Conference Information</h5>
 					    <div class="form-group">
-					        <label class="form-label">Lunch Options</label>
-					        <label class="form-radio">
-					            <input type="radio" name="lunch" checked/>
-					            <i class="form-icon"></i> 
-					            Regular
-					        </label>
-					        <label class="form-radio">
-					            <input type="radio" name="lunch" />
-					            <i class="form-icon"></i> 
-					            Vegan
-					        </label>
-					        <label class="form-radio">
-					            <input type="radio" name="lunch"/>
-					            <i class="form-icon"></i> Vegetarian
-					        </label>
-					        <label class="form-radio">
-					            <input type="radio" name="lunch"/>
-					            <i class="form-icon"></i> No lunch
-					        </label>
-					    </div>
+					    <label class="form-label">Lunch Options</label>
+							<select class="form-select" name="lunch" form="main-form">
+								<option selected value="Regular">Regular</option>
+								<option value="Vegetarian">Vegetarian</option>
+								<option value="Vegan">Vegan</option>
+								<option value="NoLunch">No Lunch</option>
+							</select>
+						</div>
 						<div class='form-group'>
 							<label class="form-switch">
 	           					<input type="checkbox" id='gluten'/>
@@ -152,9 +143,8 @@
 						</div>
 						<div class='form-group'>
 							<label class='form-label' for='pay'>Payment Options:</label>
-							<select class='form-select' name='pay'>
-								<option></option>
-								<option value='check_PO'>Check, Purchase Order</option>
+							<select class='form-select' name='payment'>
+								<option selected value='check_PO'>Check, Purchase Order</option>
 								<option value='credit_debit'>Credit/Debit Card</option>
 							</select>
 							<p>*The next screen will provide you with more payment information</p>
@@ -164,8 +154,7 @@
 								<div class='form-group column col-3'>
 									<label class='form-label' for='regis_type'>Registration Type:</label>
 									<select class='form-select' name='regis_type' id='regis-type'>
-										<option></option>
-										<option value='stud_cost'>Student</option>
+										<option selected value='stud_cost'>Student</option>
 										<option value='prof_cost'>Professional</option>
 										<option value='vend_cost'>Vendor/Exhibitor/Industry Rep.</option>
 									</select>
@@ -177,7 +166,6 @@
 									<!-- We need to have an ajax call that will populate this field with price information along with days
 										depending on what is selected in the registration type field-->
 									<select class='form-select' name='regis_len' id='regis-len'>
-										<option></option>
 										<option value='friday'>Friday Only{{ '' if not data['conf'] else '($' ~ '%0.2f' | format(data['conf']['prof_cost']/2 | float ) ~ ')'}}</option>
 										<option value='saturday'>Saturday Only {{ '' if not data['conf'] else '($' ~ '%0.2f' | format(data['conf']['prof_cost']/2 | float ) ~ ')'}}</option>
 										<option value='vendor'>Entire Conference{{ '' if not data['conf'] else '($' ~ '%0.2f' | format(data['conf']['prof_cost'] | float ) ~ ')'}}</option>
@@ -188,7 +176,8 @@
 						</div>
 						<div class='btn-group btn-group-block'>
 							<button class='btn' type='button'><i class="fa fa-arrow-circle-left" aria-hidden="false"></i> Previous</button>
-							<button type='button' id='register' class='btn btn-primary continue'>Register</button>
+							<!--<input type='submit' id='register' class='btn btn-primary continue' value="Register"> -->
+							<button type="submit" form="main-form" value="Submitx" class='btn btn-primary continue'>Registerxxx</button>
 						</div>
 					</div>
 				</form>

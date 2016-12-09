@@ -22,7 +22,6 @@ class BaseChanges(object):
 			'Vendor':['name','address_id', 'contact_name','contact_email','contact_phone']
 		}
 		for method in funcs:
-			print type(cls).__name__
 			if type(cls).__name__ in requirements and method in requirements[type(cls).__name__]:
 				info = method(data)
 				if not info['all_valid']:
