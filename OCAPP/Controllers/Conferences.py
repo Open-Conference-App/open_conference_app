@@ -1,11 +1,11 @@
 
-from flask import render_template, session, flash
+from flask import render_template, session, flash, request
 from OCAPP import app
 from OCAPP.config.sensitive import Sens
 sens = Sens()
 import stripe
 stripe.api_key = sens.stripe_secret_key
-from OCAPP.Models import Conference, Member, State, Institution
+from OCAPP.Models import Conference, Member, State, Institution, Address
 import json
 
 @app.route('/')
@@ -54,26 +54,40 @@ def get_prices(conference_id):
 #register user for the conference
 @app.route('/conferences/<int:conference_id>/register', methods=['POST'])
 def register_user(conference_id):
-	data = Member.create(request.form.copy())
-	if (data['all_valid']):
-		member = data['validated_data']
+	addy_data = Address.create({
+		'street1': request.form['street1'],
+		'street2': request.form['street2'],
+		'city': request.form['city'],
+		'state_id': request.form['state'],
+		'zip': request.form['zip'] })
+	if(addy_data['all_valid']):
+		data = Member.create({
+			'first_name': request.form['first_name'],
+			'last_name': request.form['last_name'],
+			'email': request.form['email'],
+			'password': request.form['password']
+			})
+		if (data['all_valid']):
+			member = Member.get_by_id(data['validated_data']['id'])
+			addy = Address.get(addy_data['validated_data']['id'])
+			Member.address(member,addy)
 	else:
 		for message in data['errors']:
 			flash(message,'regisErr')
 		return redirect('/')
 	conf = Conference.register(conference_id, request.form.copy())
 	if member in conf.members:
-		if request.form['pay'] == 'check_PO'
+		if request.form['pay'] == 'check_PO':
 			return render_template('confirmation.html')
-		if request.form['pay'] == 'credit_debit'
+		if request.form['pay'] == 'credit_debit':
 
-		member = {
-			'id': member.id,
-			'first_name': member.first_name,
-			'last_name': member.last_name,
-			'email': member.email
-			}
-		return render_template('credit_card.html', member=member, conf_id=conf.id)
+			member = {
+				'id': member.id,
+				'first_name': member.first_name,
+				'last_name': member.last_name,
+				'email': member.email
+				}
+			return render_template('credit_card.html', member=member, conf_id=conf.id)
 
 
 #pay for conference attendance/membership fees(which are one and the same, user must already exist)
@@ -100,11 +114,12 @@ def pay(conference_id, member_id):
 					receipt_email=memb.email
 					)
 				active = Member.activate(memb.id)
-			except(Exception e):
+			except Exception:
 				resp.errors.append('There was a problem charging the card you submitted.')
 			resp_obj['successful'] = active
-			return json.dumps(resp_obj)
+		return json.dumps(resp_obj)
 
 
 @app.route('/conferences/<int:conference_id>/confirmation')
-	return render_tempalte('confirmation.html')
+def confirm(conference_id):
+	return render_template('confirmation.html')

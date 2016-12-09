@@ -69,31 +69,31 @@ $(document).ready(function(){
 			}],
 
 
-	'page3_valids': [{
-			'fieldName': 'lunch',
-			'validation': (fieldname) => checkLen(fieldname, 0, '>'),
-			'message': 'A lunch option must must be provided.'
-		},
-		{
-			'fieldName': 'gluten',
-			'validation': (fieldname) => true,
-			'message': ''
-		},
-		{
-			'fieldName': 'payment',
-			'validation': (fieldname) => checkLen(fieldname, 0, '>'),
-			'message': 'Please select a payment type.'
-		},
-		{
-			'fieldName': 'regType',
-			'validation': (fieldname) => checkLen(fieldname, 0, '>'),
-			'message': 'Registration type is required'
-		},
-		{
-			'fieldName': 'regLen',
-			'validation': (fieldname) => $(fieldname).val() ? true : false,
-			'message': 'Registration days selection is required.'
-		}]
+	'page3_valids': []/*{
+	// 		'fieldName': 'lunch',
+	// 		'validation': (fieldname) => checkLen(fieldname, 0, '>'),
+	// 		'message': 'A lunch option must must be provided.'
+	// 	},*/
+	// 	{
+	// 		'fieldName': 'gluten',
+	// 		'validation': (fieldname) => true,
+	// 		'message': ''
+	// 	},
+	// 	{
+	// 		'fieldName': 'payment',
+	// 		'validation': (fieldname) => checkLen(fieldname, 0, '>'),
+	// 		'message': 'Please select a payment type.'
+	// 	},
+	// 	{
+	// 		'fieldName': 'regType',
+	// 		'validation': (fieldname) => checkLen(fieldname, 0, '>'),
+	// 		'message': 'Registration type is required'
+	// 	},
+	// 	{
+	// 		'fieldName': 'regLen',
+	// 		'validation': (fieldname) => $(fieldname).val() ? true : false,
+	// 		'message': 'Registration days selection is required.'
+	// 	}]
 	}
 
 
@@ -159,7 +159,7 @@ $(document).ready(function(){
 				}
 				var nextPage = pageId == 'page1' ? 'page2' : pageId == 'page2' ? 'page3' : false;
 				if(!nextPage){
-					
+					$('#register-form form').submit();
 				} else {
 					$('#'+pageId).hide();
 					$('#'+nextPage).fadeToggle();

@@ -21,6 +21,7 @@ class Address(BaseChanges, db.Base):
 	city = Column(VARCHAR(255))
 	state_id = Column(INTEGER(11), ForeignKey('states.id'))
 	state = relationship('State', back_populates='addresses', uselist=False)
+	member = relationship('Member', uselist=False, back_populates='address')
 	zip = Column(VARCHAR(5))
 	created_at = Column(DATETIME(), default=func.utc_timestamp())
 	updated_at = Column(DATETIME(), default=func.utc_timestamp(), onupdate=func.utc_timestamp())
@@ -48,7 +49,7 @@ class Address(BaseChanges, db.Base):
 
 	def __init__(self, address_data):
 		self.street1 = address_data['street1']
-		self.street2 = address_data['street2']
+		self.street2 = address_data['street2'] if 'street2' in address_data else ''
 		self.city = address_data['city']
 		self.state_id = address_data['state_id']
 		self.zip = address_data['zip']

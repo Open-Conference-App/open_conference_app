@@ -27,7 +27,7 @@
 		<div class=''></div>
 		<div class='col-xs-10 col-sm-6'>
 			<div id='register-form' data-id='cool'>
-				<form action='/register' method='POST'>
+				<form action='/conferences/{{ data['conf']['id'] }}/register' method='POST'>
 					<input type='hidden' name='_csrf_token' value='{{ csrf_tok }}'>
 					<div id='regisErrors'>
 					<!-- flashed messages and messages returned from AJAX calls should look one and the same and render in the same location-->
