@@ -69,36 +69,56 @@ $(document).ready(function(){
 			}],
 
 	'page3_valids': [
-		// 	{
-		// 	'fieldName': 'lunch',
-		// 	'validation': (fieldname) => checkLen(fieldname, 0, '>'),
-		// 	'message': 'A lunch option must must be provided.'
-		// },
+			{
+			'fieldName': 'lunch',
+			'validation': function(fieldname) {
+				value = $(fieldname+' option:selected').val()
+				if(value == 'Regular' || value == 'Vegan' || value == "Vegeterian" || value == "NoLunch") {
+					return true
+				}
+				return false
+			},
+			'message': 'A lunch option must must be provided.'
+		},
 		{
 			'fieldName': 'gluten',
 			'validation': (fieldname) => true,
 			'message': ''
-		}
-		// {
-		// 	'fieldName': 'payment',
-		// 	'validation': (fieldname) => checkLen(fieldname, 0, '>'),
-		// 	'message': 'Please select a payment type.'
-		// },
-		// {
-		// 	'fieldName': 'regType',
-		// 	'validation': (fieldname) => checkLen(fieldname, 0, '>'),
-		// 	'message': 'Registration type is required'
-		// },
-		// {
-		// 	'fieldName': 'regLen',
-		// 	'validation': (fieldname) => $(fieldname).val() ? true : false,
-		// 	'message': 'Registration days selection is required.'
-		// }
-		]
+		},
+		{
+			'fieldName': 'pay',
+			'validation': function(fieldname) {
+				value = $(fieldname+' option:selected').val()
+				if(value == 'credit_debit' || value == 'check_PO') {
+					return true
+				}
+				return false
+			},			
+			'message': 'Please select a payment type.'
+		},
+		{
+			'fieldName': 'regType',
+			'validation': function(fieldname) {
+				value = $(fieldname+' option:selected').val()
+				if(value == 'Professional' || value == 'Student' || value == 'Vendor') {
+					return true
+				}
+				return false
+			},
+			'message': 'Registration type is required'
+		},
+		{
+			'fieldName': 'regLen',
+			'validation': function(fieldname) {
+				value = $(fieldname+' option:selected').val()
+				if(value == 'friday' || value == 'saturday' || value == 'weekend') {
+					return true
+				}
+				return false
+			},			
+			'message': 'Registration days selection is required.'
+		}]
 	}
-
-
-
 
 	//toggle view of login & registration forms	
 	var user;
@@ -150,10 +170,8 @@ $(document).ready(function(){
 		//run validations based on page div id and validations
 		var pageId = $(this).parent().parent().attr('id');
 		var validArr = pageId + '_valids';
-		console.log(window[validArr])
 		var validObj = validate(pageId, validations[validArr]);
 		//send member object to server if all validations were successful
-		console.log(validObj.allValid)
 		if(validObj.allValid) {
 			for(var i = 0; i < validObj.validations.length; i++){
 				member[validObj.validations[i]['fieldName']] = $('#'+validObj.validations[i]['fieldName']).val();

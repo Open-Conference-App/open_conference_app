@@ -28,4 +28,4 @@ class Institution(BaseChanges, db.Base):
 
 	def __init__(self, inst_data):
 		self.name = inst_data['name']
-		#changed line about from self.name = inst_data['name'] to = inst_data because was receiving string indicies must be integer. inst_data is being passed from somewhere as a string
+

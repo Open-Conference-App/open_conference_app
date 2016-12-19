@@ -5,12 +5,3 @@ from OCAPP.Models import Institution
 def create(id):
 	inst = Institution.create({'name':request.form['name']})
 
-
-@app.route("/create-inst", methods=["POST"])
-def create_inst():
-	print request.form.copy()
-	
-def create_inst2(name):
-	inst = Institution.create({'name':name})
-	
-	
