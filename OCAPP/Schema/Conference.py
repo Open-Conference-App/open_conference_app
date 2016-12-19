@@ -17,12 +17,24 @@ from OCAPP.Models.BaseChanges import BaseChanges
 #join table for members<>conferences
 class MemberConferences(BaseChanges, db.Base):
 	__tablename__ = 'member_conferences'
-	member_id = Column('member_id', INTEGER(11), ForeignKey('members.id'), primary_key=True)
-	conference_id = Column('conference_id', INTEGER(11), ForeignKey('conferences.id'), primary_key=True)
+	id = Column(INTEGER(11), primary_key=True, autoincrement=True)
+	member_id = Column(INTEGER(11), ForeignKey('members.id'), primary_key=True)
+	conference_id = Column(INTEGER(11), ForeignKey('conferences.id'), primary_key=True)
 	food_pref = Column(VARCHAR(255))
 	gluten_free = Column(BOOLEAN())
+	days = Column(VARCHAR(255))
+	member_paid = Column(BOOLEAN())
 	member = relationship('Member', back_populates='conferences')
 	conference = relationship('Conference', back_populates='members')
+
+	def __init__(self, data):
+		self.food_pref = data['food_pref']
+		self.gluten_free = data['gluten_free']
+		self.member_paid = False
+
+	def __repr__(self):
+		return "<MemberConference(id=%s, member=%s, conference=%s)>" % (self.id, self.member_id, self.conference_id)
+
 
 #join table for vendors
 vendor_conferences = Table('vendor_conferences', db.Base.metadata,
@@ -39,6 +51,7 @@ presenter_conferences = Table('presenter_conferences', db.Base.metadata,
 class Conference(BaseChanges, db.Base):
 	__tablename__ = 'conferences'
 	id = Column(INTEGER(11), primary_key=True)
+	title = Column(VARCHAR(255))
 	year = Column(VARCHAR(4), unique=True)
 	institution_id = Column(INTEGER(11), ForeignKey('institutions.id'))
 	institution = relationship('Institution')
@@ -50,7 +63,8 @@ class Conference(BaseChanges, db.Base):
 	prof_cost = Column(INTEGER(3)) # all costs are stored in cents for stripe purposes
 	stud_cost = Column(INTEGER(3))
 	vend_cost = Column(INTEGER(3))
-	date = Column(DATETIME())
+	start_date = Column(DATETIME())
+	end_date = Column(DATETIME())
 	folder_id = Column(VARCHAR(255))
 	created_at = Column(DATETIME(), default=func.utc_timestamp())
 	updated_at = Column(DATETIME(), default=func.utc_timestamp(), onupdate=func.utc_timestamp())
@@ -59,12 +73,14 @@ class Conference(BaseChanges, db.Base):
 		return "<Conference(year=%s)>" % self.year
 
 	def __init__(self, conference_data):
-		self.institution_id = conference_data['institution_id']
 		self.year = conference_data['year']
 		self.prof_cost = conference_data['prof_cost']
 		self.stud_cost = conference_data['stud_cost']
 		self.vend_cost = conference_data['vend_cost']
-		self.date = conference_data['date'] #need to pass date object, but first I need format of date object coming from client-side
+		self.start_date = conference_data['start_date']
+		self.end_date = conference_data['end_date']
+		self.title = conference_data['title']
+		 #need to pass date object, but first I need format of date object coming from client-side
 		
 		# folder_metadata = {
 		# 	'name': conference_data['year'],

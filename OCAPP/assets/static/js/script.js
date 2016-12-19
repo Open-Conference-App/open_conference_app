@@ -133,7 +133,7 @@ $(document).ready(function(){
 			success: function(data){
 				var val = $('#regis-type').children(':selected').val()
 				data = JSON.parse(data);
-				console.log($('#regis-len').children())
+				console.log(data)
 				var price = data[val];
 				var halfPrice = price/2;
 				$('#regis-len').children()[1].innerHTML = 'Friday Only ($' + halfPrice.toFixed(2) + ')';
@@ -148,45 +148,38 @@ $(document).ready(function(){
 	var member = {};
 	$(document).on('click', '.continue', function(){
 		//run validations based on page div id and validations
-			var pageId = $(this).parent().parent().attr('id');
-			var validArr = pageId + '_valids';
-			console.log(window[validArr])
-			var validObj = validate(pageId, validations[validArr]);
-			//send member object to server if all validations were successful
-			console.log(validObj.allValid)
-			if(validObj.allValid) {
-				for(var i = 0; i < validObj.validations.length; i++){
-					member[validObj.validations[i]['fieldName']] = $('#'+validObj.validations[i]['fieldName']).val();
-				}
-				var nextPage = pageId == 'page1' ? 'page2' : pageId == 'page2' ? 'page3' : false;
-				if(!nextPage){
-
-					$('#register-form form').submit()
-				} else {
-					$('#'+pageId).hide();
-					$('#'+nextPage).fadeToggle();
-				}
-			// 	else {
-			// 		$.ajax({
-			// 			method: 'POST',
-			// 			url: '/members/create',
-			// 			data: member,
-						//success: function(){
-
-						//}
-			// 		})
-			// 	}
-			// //if some validations were unsuccessful, extract messages and display them
-			// } else {
-			// 	for(var i = 0; i < validObj.validations.length; i++){
-			// 		if(!validObj.validations[i]['valid']){
-			// 			$('#'+validObj.validations[i]['fieldName']+'Err').innerHTML = validObj.validations[i]['message'];
-			// 		}
-			// 	}
-			// }
+		var pageId = $(this).parent().parent().attr('id');
+		var validArr = pageId + '_valids';
+		console.log(window[validArr])
+		var validObj = validate(pageId, validations[validArr]);
+		//send member object to server if all validations were successful
+		console.log(validObj.allValid)
+		if(validObj.allValid) {
+			for(var i = 0; i < validObj.validations.length; i++){
+				member[validObj.validations[i]['fieldName']] = $('#'+validObj.validations[i]['fieldName']).val();
+			}
+			var nextPage = pageId == 'page1' ? 'page2' : pageId == 'page2' ? 'page3' : false;
+			if(!nextPage){
+				$('#register-form form').submit()
+			} else {
+				$('#'+pageId).hide();
+				$('#'+nextPage).fadeToggle();
+			}
 		}
 		return false;
 	});
+
+	$(document).on('click', '.previous', function(){
+		var pageId = $(this).parent().parent().attr('id');
+		var nextPage = pageId == 'page3' ? 'page2' : pageId == 'page2' ? 'page1' : false;
+		if(nextPage){
+			$('#'+pageId).hide();
+			$('#'+nextPage).fadeToggle();
+		}
+
+
+
+	})
 
 });
 

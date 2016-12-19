@@ -62,5 +62,12 @@ def address(mem, data):
 	db.session.commit()
 	return mem
 
+def addInst(mem, inst):
+	mem.institution = inst
+	db.session.add(mem)
+	db.session.commit()
+	return mem
+
+
 
 	

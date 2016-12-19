@@ -13,3 +13,4 @@ def create_inst():
 def create_inst2(name):
 	inst = Institution.create({'name':name})
 	
+	

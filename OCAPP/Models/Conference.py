@@ -1,6 +1,6 @@
 import time
 from flask import flash
-from OCAPP.Schema.Conference import Conference
+from OCAPP.Schema.Conference import Conference, MemberConferences
 from OCAPP import app, db
 
 
@@ -35,10 +35,14 @@ def update(conference, up_conf):
 			conference[key] = up_conf[key]
 	return conference
 
-def register(id, member):
+def register(id, member,data):
 	conf = db.get(Conference, id)
-	conf.members.append(member)
-	db.session.add(conf)
+	mc = MemberConferences(data);
+	mc.conference = conf
+	mc.member = member
+	mc.days = data['days']
+	print mc
+	db.session.add(mc)
 	db.session.commit()
 	return conf
 

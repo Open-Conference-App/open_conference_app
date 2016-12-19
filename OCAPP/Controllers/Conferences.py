@@ -15,12 +15,12 @@ def load_forms():
 		'states': State.index(),
 		'institutions': Institution.index()
 	}
+	print data['conf'].title
 	return render_template('index.html', data=data)
 
 @app.route("/register_user", methods=["POST"])
 def process_registration():
-	if request.form['institution']=='other':
-		Institution.create(request.form['inst-name'])
+	
 	#full access to form in this route for creating user. 
 	print request.form
 	return redirect('/dashboard')
@@ -66,40 +66,64 @@ def get_prices(conference_id):
 #register user for the conference
 @app.route('/conferences/<int:conference_id>/register', methods=['POST'])
 def register_user(conference_id):
+
 	addy_data = Address.create({
 		'street1': request.form['street1'],
 		'street2': request.form['street2'],
 		'city': request.form['city'],
 		'state_id': request.form['state'],
 		'zip': request.form['zip'] })
+
 	if(addy_data['all_valid']):
 		data = Member.create({
 			'first_name': request.form['first_name'],
 			'last_name': request.form['last_name'],
 			'email': request.form['email'],
-			'password': request.form['password']
+			'password': request.form['password'],
+			'type': request.form['regis_type']
 			})
-		if (data['all_valid']):
-			member = Member.get_by_id(data['validated_data']['id'])
-			addy = Address.get(addy_data['validated_data']['id'])
-			Member.address(member,addy)
-	else:
-		for message in data['errors']:
-			flash(message,'regisErr')
-		return redirect('/')
-	conf = Conference.register(conference_id, request.form.copy())
-	if member in conf.members:
-		if request.form['pay'] == 'check_PO':
-			return render_template('confirmation.html')
-		if request.form['pay'] == 'credit_debit':
 
-			member = {
-				'id': member.id,
-				'first_name': member.first_name,
-				'last_name': member.last_name,
-				'email': member.email
-				}
-			return render_template('credit_card.html', member=member, conf_id=conf.id)
+	else:
+		for field in addy_data['errors']:
+			for message in field:
+				flash(message, field)
+		return redirect('/')
+
+	if (data['all_valid']):
+		member = Member.get_by_id(data['validated_data']['id'])
+		if request.form['institution']=='other':
+			inst = Institution.get(Institution.create({'name': request.form['inst-name']})['validated_data']['id'])
+		else:
+			inst = Institution.get(request.form['institution'])
+		print inst
+		Member.addInst(member, inst)
+		addy = Address.get(addy_data['validated_data'])
+		Member.address(member,addy)
+		conf_data = {
+			"gluten_free": True if "gluten" in request.form else False,
+			"food_pref": request.form['lunch'], 
+			"days": request.form['regis_len'],
+		}
+		conf = Conference.register(conference_id, member,conf_data)
+		
+
+	else:
+		for field in data['errors']:
+			for message in field:
+				flash(message,field)
+		return redirect('/')
+	
+	if request.form['pay'] == 'check_PO':
+		return render_template('confirmation.html')
+	if request.form['pay'] == 'credit_debit':
+
+		member = {
+			'id': member.id,
+			'first_name': member.first_name,
+			'last_name': member.last_name,
+			'email': member.email
+			}
+		return render_template('credit_card.html', member=member, conf_id=conf.id)
 	#send data by calling functions from imported files and sending it the request.form by using request.form.copy()
 
 
