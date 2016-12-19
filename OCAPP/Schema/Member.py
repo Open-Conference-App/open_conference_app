@@ -21,12 +21,12 @@ class Member(BaseChanges,db.Base):
 	first_name = Column(VARCHAR(255))
 	last_name = Column(VARCHAR(255))
 	address_id = Column(INTEGER(11), ForeignKey('addresses.id'))
-	# address = relationship('Member')
+	address = relationship('Address')
 	email = Column(VARCHAR(255), unique=True)
 	password = Column(VARCHAR(255))
 	pw_salt = Column(VARCHAR(255))
 	officer = Column(BOOLEAN())
-	member_type = Column(VARCHAR(20))
+	type = Column(VARCHAR(20))
 	active = Column(BOOLEAN())
 	institution_id = Column(INTEGER(11), ForeignKey('institutions.id'))
 	institution = relationship('Institution', back_populates='faculty_members')
@@ -37,15 +37,17 @@ class Member(BaseChanges,db.Base):
 	updated_at = Column(DATETIME(), default=func.utc_timestamp(), onupdate=func.utc_timestamp())
 
 	def __init__(self, member_data):
+		print member_data
 		self.first_name = member_data['first_name']
 		self.last_name = member_data['last_name']
-		self.address_id = member_data['address_id']
+		# self.address_id = member_data['address_id']
 		self.email = member_data['email']
 		self.pw_salt = member_data['salt']
 		self.password = member_data['hash']
 		self.officer = True if 'officer' in member_data else False
 		self.active = False
-		self.institution_id = member_data['institution_id']
+		self.type = member_data['type']
+		# self.institution_id = member_data['institution_id']
 
 	def __repr__(self):
 		return '<Member(id=%r,email=%r>' % (self.id, self.email)

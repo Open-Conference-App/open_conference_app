@@ -58,8 +58,6 @@ def load_dashboard():
 	# 	member = Member.get_by_id(session['user']['id'])
 	# 	if member:
 	return render_template('dashboard.html')
-
-
 	# else:
 	# 	return redirect('/')
 

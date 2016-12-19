@@ -20,14 +20,16 @@
 </head>
 <body class='container-fluid'>
 		<div class='registrationHeader'>
-			<h2>{{ 'SOCALLT Registration' if not data['conf'] else 'SOCALLT ' ~ data['conf']['year'] ~ ' Registration'}}</h2>
-			<h4>{{ data['conf']['title'] ~ ": " ~ data['conf']['date'].strftime('%B %d, %Y') if data['conf'] else ''}}</h4>
+			<h2>{{ 'SOCALLT Registration' if not data['conf'] else 'SOCALLT ' ~  data['conf']['year'] ~ ' Registration' }}</h2>
+			<h4>{{ data['conf'].title }}</h4>
+			<h4>{{ data['conf']['start_date'].strftime('%B %d') ~ "-" ~ data['conf']['end_date'].strftime('%d, %Y')if data['conf'] else '' }}</h4>
 		</div>
 	<div class='row content'>
 		<div class=''></div>
 		<div class='col-xs-10 col-sm-6'>
-			<div id='register-form' data-id='cool'>
-				<form action='/register' method='POST'>
+			<div id='register-form'>
+			<!-- added id to form element for use with lunch selection option -->
+				<form action='/conferences/{{ data['conf']['id'] }}/register'' method='POST' id="main_reg_form">
 					<input type='hidden' name='_csrf_token' value='{{ csrf_tok }}'>
 					<div id='regisErrors'>
 					<!-- flashed messages and messages returned from AJAX calls should look one and the same and render in the same location-->
@@ -44,7 +46,7 @@
 						<h5>User Information</h5>
 						<div class='form-group'>
 							<label class='form-label' for='first_name'>First Name:</label>
-							<input class='form-input col-xs-12' type="text" id="first_name" name="first_name" >
+							<input class='form-input' type="text" id="first_name" name="first_name" >
 						</div>
 						<div class='form-group'>
 							<label class='form-label' for='last_name'>Last Name:</label>
@@ -113,7 +115,7 @@
 							</div>
 						</div>
 						<div class='btn-group btn-group-block'>
-							<button class='btn' type='button'><i class="fa fa-arrow-circle-left" aria-hidden="false"></i> Previous</button>
+							<button class='btn previous' type='button'><i class="fa fa-arrow-circle-left" aria-hidden="false"></i> Previous</button>
 							<button class='btn primary continue' type='button'>Continue<i class="fa fa-arrow-circle-right" aria-hidden="false"></i></button>
 						</div>
 						<br>
@@ -123,29 +125,17 @@
 					<div id='page3' class='form-content'>
 						<h5>Conference Information</h5>
 					    <div class="form-group">
-					        <label class="form-label">Lunch Options</label>
-					        <label class="form-radio">
-					            <input type="radio" name="lunch" checked/>
-					            <i class="form-icon"></i> 
-					            Regular
-					        </label>
-					        <label class="form-radio">
-					            <input type="radio" name="lunch" />
-					            <i class="form-icon"></i> 
-					            Vegan
-					        </label>
-					        <label class="form-radio">
-					            <input type="radio" name="lunch"/>
-					            <i class="form-icon"></i> Vegetarian
-					        </label>
-					        <label class="form-radio">
-					            <input type="radio" name="lunch"/>
-					            <i class="form-icon"></i> No lunch
-					        </label>
-					    </div>
+					    <label class="form-label">Lunch Options</label>
+							<select class="form-select" name="lunch" name='meal-type'>
+								<option selected value="Regular">Regular</option>
+								<option value="Vegetarian">Vegetarian</option>
+								<option value="Vegan">Vegan</option>
+								<option value="NoLunch">No Lunch</option>
+							</select>
+						</div>
 						<div class='form-group'>
 							<label class="form-switch">
-	           					<input type="checkbox" id='gluten'/>
+	           					<input type="checkbox" id='gluten' name='gluten'/>
 	            				<i class="form-icon"></i>&nbsp;&nbsp;&nbsp;&nbsp;
 	            				Gluten Free
 	        				</label>
@@ -153,9 +143,8 @@
 						<div class='form-group'>
 							<label class='form-label' for='pay'>Payment Options:</label>
 							<select class='form-select' name='pay'>
-								<option></option>
+								<option selected value='credit_debit'>Credit/Debit Card</option>
 								<option value='check_PO'>Check, Purchase Order</option>
-								<option value='credit_debit'>Credit/Debit Card</option>
 							</select>
 							<p>*The next screen will provide you with more payment information</p>
 						</div>
@@ -164,10 +153,9 @@
 								<div class='form-group column col-3'>
 									<label class='form-label' for='regis_type'>Registration Type:</label>
 									<select class='form-select' name='regis_type' id='regis-type'>
-										<option></option>
-										<option value='stud_cost'>Student</option>
-										<option value='prof_cost'>Professional</option>
-										<option value='vend_cost'>Vendor/Exhibitor/Industry Rep.</option>
+										<option selected value='Professional'>Professional</option>
+										<option value='Student'>Student</option>
+										<option value='Vendor'>Vendor/Exhibitor/Industry Rep.</option>
 									</select>
 								</div>
 								<div class='column col-xs-1'></div>
@@ -177,18 +165,18 @@
 									<!-- We need to have an ajax call that will populate this field with price information along with days
 										depending on what is selected in the registration type field-->
 									<select class='form-select' name='regis_len' id='regis-len'>
-										<option></option>
+										<option value='0'>-----</option>
 										<option value='friday'>Friday Only{{ '' if not data['conf'] else '($' ~ '%0.2f' | format(data['conf']['prof_cost']/2 | float ) ~ ')'}}</option>
 										<option value='saturday'>Saturday Only {{ '' if not data['conf'] else '($' ~ '%0.2f' | format(data['conf']['prof_cost']/2 | float ) ~ ')'}}</option>
-										<option value='vendor'>Entire Conference{{ '' if not data['conf'] else '($' ~ '%0.2f' | format(data['conf']['prof_cost'] | float ) ~ ')'}}</option>
+										<option value='weekend'>Entire Conference{{ '' if not data['conf'] else '($' ~ '%0.2f' | format(data['conf']['prof_cost'] | float ) ~ ')'}}</option>
 									</select>
 								</div>
 
 							</div>
 						</div>
 						<div class='btn-group btn-group-block'>
-							<button class='btn' type='button'><i class="fa fa-arrow-circle-left" aria-hidden="false"></i> Previous</button>
-							<button type='button' id='register' class='btn btn-primary continue'>Register</button>
+							<button class='btn previous' type='button'><i class="fa fa-arrow-circle-left" aria-hidden="false"></i> Previous</button>
+							<button type="submit" form="main-form" value="Submitx" class='btn btn-primary continue'>Register</button>
 						</div>
 					</div>
 				</form>

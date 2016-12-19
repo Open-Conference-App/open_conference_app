@@ -28,3 +28,4 @@ class Institution(BaseChanges, db.Base):
 
 	def __init__(self, inst_data):
 		self.name = inst_data['name']
+

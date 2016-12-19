@@ -11,6 +11,7 @@ sentry = Sentry(app, dsn='https://b0e8b593f1fd45b89b29bc3675cb3807:ad556a25e6a54
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import create_engine
+import sys
 
 valid_funcs = {
 	'Conference': ['check_blanks','process_dates'],
@@ -30,12 +31,13 @@ class SQLEZ:
 		return self.session.query(cls)
 
 	def create(self, cls, data):
-		val_funcs = None if type(cls).__name__ not in valid_funcs else valid_funcs[type(cls).__name__]
+		val_funcs = ['check_blanks'] if cls.__name__ not in valid_funcs else valid_funcs[cls.__name__]
 		info = BaseChanges.validate(cls, data, val_funcs) if val_funcs else BaseChanges.validate(cls, data) 
 		if info['all_valid']:
 			inst = cls(info['validated_data'])
 			self.session.add(inst)
 			self.session.commit()
+			info['validated_data']['id'] = inst.id
 		return info
 
 	def get(self, cls, id):
@@ -69,6 +71,11 @@ class SQLEZ:
 db = SQLEZ()
 from OCAPP.Models.BaseChanges import BaseChanges
 db.BaseChanges = BaseChanges()
+
+# @app.teardown_appcontext
+# def teardown_db(exception):
+# 	print 'Shutting down DB connection.'
+# 	db.engine.close()
 from OCAPP.Models import Address, Vendor, Conference, Institution, Member, Presentation, State, Vendor
 db.Base.metadata.create_all(db.engine)
 from OCAPP import routes

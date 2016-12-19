@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>SOCALLT Credit Card Payment</title>
+  <link rel="stylesheet" href="{{ url_for('static',filename='css/spectre.min.css') }}"/>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css')}}"/>
+  <link rel="stylesheet" href="{{ url_for('static',filename='css/font-awesome-4.6.3/css/font-awesome.min.css') }}"/>
+  <link rel='stylesheet' href="{{ url_for('static',filename='css/styles.css') }}"/>
+  <script src="{{ url_for('static',filename='js/jquery-3.1.1.js') }}"></script>
+  <script src="{{ url_for('static',filename='js/moment.js') }}"></script>
+  <script type="text/javascript" src="{{ url_for('static',filename='js/validations.js') }}"></script>
+  <script type="text/javascript" src="{{ url_for('static',filename='js/script.js') }}"></script>
+  <script type="text/javascript" src="{{ url_for('static',filename='js/credit_card.js') }}"></script>
+ <script>    var mem_id = {{member["id"]}}; var conf_id = {{conf_id}};  </script>
+
+</head>
+
+
+<div class="container-fluid centered">
+  <h3>Thank you for your registration information. Please complete the payment information below:</h3>
+    <form class="form-horizontal" id="payment-form">
+      <span class="payment-errors"></span>
+
+      <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
+      <div class="form-group">
+        <label class='form-label col-2' for='number'>Card Number:</label>
+        <input class='form-input col-xs-4' type="text" name="number" data-stripe="number">  
+      </div>
+
+      <div class="form-group">
+        <label class='form-label col-2' for='exp'>Expiration (MM/YY):</label>
+        <input type="text" class='form-input col-xs-1' name="exp" data-stripe="exp_month">
+        <span> / </span>
+        <input type="text" class='form-input col-xs-1' name="exp" data-stripe="exp_year">
+
+        <label class='form-label col-1' for='cvc'>CVC:</label>
+        <input class='form-input col-xs-1' name="cvc" type="text" data-stripe="cvc">
+      </div>
+      
+      <div class="form-group">
+        <label class='form-label col-2' for='zip'>Billing Zip:</label>
+        <input class='form-input col-xs-2' name="zip" type="text" data-stripe="address_zip">
+      </div>
+
+      <div class="btn-group">
+        <button type="submit" class="submit btn primary">Submit Payment <i class="fa fa-arrow-circle-right" aria-hidden="false"></i></button>
+      </div>
+  </form>
+</div>

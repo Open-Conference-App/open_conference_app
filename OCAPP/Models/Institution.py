@@ -3,10 +3,10 @@ from OCAPP.Schema.Institution import Institution
 from OCAPP import app, db
 
 def index():
-	return db.query(Institution).all()
+	return db.query(Institution).order_by(Institution.name).all()
 
-def show(inst_id):
-	return Institution.query.get(inst_id)
+def get(inst_id):
+	return db.get(Institution, inst_id)
 
 def create(inst_data):
 	return db.create(Institution, inst_data)
