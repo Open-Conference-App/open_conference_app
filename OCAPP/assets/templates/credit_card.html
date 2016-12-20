@@ -12,7 +12,9 @@
   <script type="text/javascript" src="{{ url_for('static',filename='js/validations.js') }}"></script>
   <script type="text/javascript" src="{{ url_for('static',filename='js/script.js') }}"></script>
   <script type="text/javascript" src="{{ url_for('static',filename='js/credit_card.js') }}"></script>
- <script>    var mem_id = {{member["id"]}}; var conf_id = {{conf_id}};  </script>
+  <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
+   <script>    var mem_id = {{member["id"]}}; var conf_id = {{conf_id}};  </script>
+
 
 </head>
 
@@ -25,17 +27,17 @@
       <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
       <div class="form-group">
         <label class='form-label col-2' for='number'>Card Number:</label>
-        <input class='form-input col-xs-4' type="text" name="number" data-stripe="number">  
+        <input class='form-input col-xs-4' type="text" data-stripe="number">  
       </div>
 
       <div class="form-group">
         <label class='form-label col-2' for='exp'>Expiration (MM/YY):</label>
-        <input type="text" class='form-input col-xs-1' name="exp" data-stripe="exp_month">
+        <input type="text" class='form-input col-xs-1' data-stripe="exp_month">
         <span> / </span>
-        <input type="text" class='form-input col-xs-1' name="exp" data-stripe="exp_year">
+        <input type="text" class='form-input col-xs-1' data-stripe="exp_year">
 
         <label class='form-label col-1' for='cvc'>CVC:</label>
-        <input class='form-input col-xs-1' name="cvc" type="text" data-stripe="cvc">
+        <input class='form-input col-xs-1' type="text" data-stripe="cvc">
       </div>
       
       <div class="form-group">

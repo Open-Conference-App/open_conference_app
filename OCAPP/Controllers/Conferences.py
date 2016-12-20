@@ -76,7 +76,7 @@ def register_user(conference_id):
 			for message in field:
 				flash(message, field)
 		return redirect('/')
-
+	print data 
 	if (data['all_valid']):
 		member = Member.get_by_id(data['validated_data']['id'])
 		if request.form['institution']=='other':
@@ -113,6 +113,15 @@ def register_user(conference_id):
 			}
 		return render_template('credit_card.html', member=member, conf_id=conf.id)
 	#send data by calling functions from imported files and sending it the request.form by using request.form.copy()
+
+
+
+# TEST ROUTE FOR RENDERING CREDIT CARD INFORMATION CHETAN 12/20/16
+@app.route('/creditcard')
+def cctest():
+	member = {"id": 1}
+	return render_template('credit_card.html', member = member, conf_id = 1)
+
 
 #pay for conference attendance/membership fees(which are one and the same, user must already exist)
 @app.route('/conferences/<int:conference_id>/members/<int:member_id>', methods=['POST'])

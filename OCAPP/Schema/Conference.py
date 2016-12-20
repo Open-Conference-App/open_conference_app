@@ -24,6 +24,7 @@ class MemberConferences(BaseChanges, db.Base):
 	gluten_free = Column(BOOLEAN())
 	days = Column(VARCHAR(255))
 	member_paid = Column(BOOLEAN())
+	transaction_id = Column(VARCHAR(255))
 	member = relationship('Member', back_populates='conferences')
 	conference = relationship('Conference', back_populates='members')
 
