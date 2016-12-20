@@ -69,56 +69,58 @@ $(document).ready(function(){
 			}],
 
 	'page3_valids': [
-		// 	{
-		// 	'fieldName': 'lunch',
-		// 	'validation': function(fieldname) {
-		// 		value = $(fieldname+' option:selected').val()
-		// 		if(value == 'Regular' || value == 'Vegan' || value == "Vegeterian" || value == "NoLunch") {
-		// 			return true
-		// 		}
-		// 		return false
-		// 	},
-		// 	'message': 'A lunch option must must be provided.'
-		// },
-		// {
-		// 	'fieldName': 'gluten',
-		// 	'validation': (fieldname) => true,
-		// 	'message': ''
-		// },
-		// {
-		// 	'fieldName': 'pay',
-		// 	'validation': function(fieldname) {
-		// 		value = $(fieldname+' option:selected').val()
-		// 		if(value == 'credit_debit' || value == 'check_PO') {
-		// 			return true
-		// 		}
-		// 		return false
-		// 	},			
-		// 	'message': 'Please select a payment type.'
-		// },
-		// {
-		// 	'fieldName': 'regType',
-		// 	'validation': function(fieldname) {
-		// 		value = $(fieldname+' option:selected').val()
-		// 		if(value == 'Professional' || value == 'Student' || value == 'Vendor') {
-		// 			return true
-		// 		}
-		// 		return false
-		// 	},
-		// 	'message': 'Registration type is required'
-		// },
-		// {
-		// 	'fieldName': 'regLen',
-		// 	'validation': function(fieldname) {
-		// 		value = $(fieldname+' option:selected').val()
-		// 		if(value == 'friday' || value == 'saturday' || value == 'weekend') {
-		// 			return true
-		// 		}
-		// 		return false
-		// 	},			
-		// 	'message': 'Registration days selection is required.'
-		// }
-		]
+		
+
+		{
+			'fieldName': 'lunch',
+			'validation': function(fieldname) {
+				value = $(fieldname+' option:selected').val()
+				console.log(value)
+				if(value == 'Regular' || value == 'Vegan' || value == "Vegeterian" || value == "NoLunch") {
+					return true
+				}
+				return false
+			},
+			'message': 'A lunch option must must be provided.'
+		},
+		{
+			'fieldName': 'gluten',
+			'validation': (fieldname) => true,
+			'message': ''
+		},
+		{
+			'fieldName': 'pay',
+			'validation': function(fieldname) {
+				value = $(fieldname+' option:selected').val()
+				if(value == 'credit_debit' || value == 'check_PO') {
+					return true
+				}
+				return false
+			},			
+			'message': 'Please select a payment type.'
+		},
+		{
+			'fieldName': 'regis-type',
+			'validation': function(fieldname) {
+				value = $(fieldname+' option:selected').val()
+				if(value == 'Professional' || value == 'Student' || value == 'Vendor') {
+					return true
+				}
+				return false
+			},
+			'message': 'Registration type is required'
+		},
+		{
+			'fieldName': 'regis-len',
+			'validation': function(fieldname) {
+				value = $(fieldname+' option:selected').val()
+				if(value == 'friday' || value == 'saturday' || value == 'weekend') {
+					return true
+				}
+				return false
+			},			
+			'message': 'Registration days selection is required.'
+		}]
 	}
 
 	//toggle view of login & registration forms	
@@ -136,6 +138,7 @@ $(document).ready(function(){
 
 	//display inputs for a new institution if 'other' is selected
 	$('#institution').change(function(){
+		console.log('test')
 		if(document.getElementById('other').selected){
 			$('#inst-info').slideToggle();
 		} else {
@@ -146,15 +149,15 @@ $(document).ready(function(){
 
 		//populate price in regis_len
 	$('#regis-type').change(function(){
+		console.log($())
 		var val = $('#regis-type').children(':selected').val()
-		console.log(val)
 		$.ajax({
 			method: 'GET',
 			url: '/conferences/' + confId + '/prices',
 			success: function(data){
 				var val = $('#regis-type').children(':selected').val()
+				val = val == 'Student' ? 'stud_cost' : val == 'Profession' ? 'prof_cost' : 'vend_cost';
 				data = JSON.parse(data);
-				console.log(data)
 				var price = data[val];
 				var halfPrice = price/2;
 				$('#regis-len').children()[1].innerHTML = 'Friday Only ($' + halfPrice.toFixed(2) + ')';
