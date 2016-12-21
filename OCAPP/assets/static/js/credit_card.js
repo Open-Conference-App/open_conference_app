@@ -1,3 +1,11 @@
+// $.ajaxSetup({
+//     beforeSend: function(xhr, settings) {
+//         if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
+//             xhr.setRequestHeader("X-CSRFToken", csrftoken)
+//         };
+//     };
+// });
+
 $(function() {
 	var $form = $('#payment-form');
 	$form.submit(function(event) {
@@ -29,13 +37,17 @@ function stripeResponseHandler(status, response) {
 		// Insert the token ID into the form so it gets submitted to the server:
 		$form.append($('<input type="hidden" name="stripeToken">').val(token));
 
-		// Submit the form:
-		$form.get(0).submit();
 	}
-
+	member_cost = $form.find('.member_cost').val()
+	console.log("THE MEMBER COST IS!!!")
+	console.log(member_cost)
+	console.log(csrf_token_js)
 	$.ajax({
 		method:"post",
-		data: {token: token},
+		data: {"token": token,
+				"member_cost":member_cost,
+				"_csrf_token": csrf_token_js},
+				// CHANGED URL FOR TESTING
 		url:"/conferences/"+conf_id+"/members/"+mem_id,
 		success:function(data){
 			if(data.successful){
