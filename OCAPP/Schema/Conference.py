@@ -32,6 +32,7 @@ class MemberConferences(BaseChanges, db.Base):
 		self.food_pref = data['food_pref']
 		self.gluten_free = data['gluten_free']
 		self.member_paid = False
+	
 
 	def __repr__(self):
 		return "<MemberConference(id=%s, member=%s, conference=%s)>" % (self.id, self.member_id, self.conference_id)

@@ -15,7 +15,7 @@
 		<div class="row header">
 			<div class="col-xs-12">
 				<img class="logo" src="{{ url_for('static', filename='images/socallt2015.png')}}" width="100px">
-				<h1 class="welcome">Welcome! <p class="login">You are Logged in as: <i>{{ name }} aslkdjfapsdfa</i></p></h1>
+				<h1 class="welcome">Welcome! <p class="login">You are Logged in as: <i>{{ session['first_name'] }}</i></p></h1>
 			</div>
 		</div>
 <!-- header ends -->
