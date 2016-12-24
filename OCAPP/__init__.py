@@ -33,11 +33,11 @@ class SQLEZ:
 	def create(self, cls, data):
 		val_funcs = ['check_blanks'] if cls.__name__ not in valid_funcs else valid_funcs[cls.__name__]
 		info = BaseChanges.validate(cls, data, val_funcs) if val_funcs else BaseChanges.validate(cls, data) 
-		print info
 		if info['all_valid']:
 			inst = cls(info['validated_data'])
 			self.session.add(inst)
 			self.session.commit()
+			info['validated_data']['id'] = inst.id
 		return info
 
 	def get(self, cls, id):

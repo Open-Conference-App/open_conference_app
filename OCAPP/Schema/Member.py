@@ -26,7 +26,7 @@ class Member(BaseChanges,db.Base):
 	password = Column(VARCHAR(255))
 	pw_salt = Column(VARCHAR(255))
 	officer = Column(BOOLEAN())
-	member_type = Column(VARCHAR(20))
+	type = Column(VARCHAR(20))
 	active = Column(BOOLEAN())
 	institution_id = Column(INTEGER(11), ForeignKey('institutions.id'))
 	institution = relationship('Institution', back_populates='faculty_members')
@@ -46,6 +46,7 @@ class Member(BaseChanges,db.Base):
 		self.password = member_data['hash']
 		self.officer = True if 'officer' in member_data else False
 		self.active = False
+		self.type = member_data['type']
 		# self.institution_id = member_data['institution_id']
 
 	def __repr__(self):
