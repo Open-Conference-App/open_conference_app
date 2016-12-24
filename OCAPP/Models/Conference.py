@@ -55,4 +55,19 @@ def set_transaction(conf_id, member_id, transaction_id):
 			member_conf.member_paid = True
 			db.session.add(member_conf)
 			db.session.commit()
-	return member_conf.member_paid  
+	return member_conf.member_paid 
+
+def members(conf_id):
+	conf = get_by_id(conf_id)
+	members = [];
+	for registration in conf.members:
+		memb = Member.get_by_id(registration.member_id)
+		if(memb):
+			members.append(memb)
+	return members
+
+
+
+
+
+

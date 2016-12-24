@@ -1,7 +1,7 @@
 from flask import Flask, session
 from flask.ext.seasurf import SeaSurf
-from OCAPP.config import sensitive
-sens = sensitive.Sens()
+from OCAPP.config.sensitive import Sens
+sens = Sens()
 app = Flask('OCAPP', static_folder=sens.root_path + '/assets/static', template_folder=sens.root_path + '/assets/templates')
 app.secret_key = sens.secret_key
 csrf = SeaSurf(app)
@@ -12,6 +12,23 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import create_engine
 import sys
+from flask.ext.mail import Mail
+
+mail=Mail(app)
+
+app.config.update(
+	DEBUG=True,
+	#EMAIL SETTINGS
+	MAIL_SERVER='smtp.gmail.com',
+	MAIL_PORT=587,
+	MAIL_USE_SSL=False,
+	MAIL_USE_TSL=True,
+	MAIL_USERNAME = sens.account_email,
+	MAIL_PASSWORD = sens.account_pw,
+	DEFAULT_MAIL_SENDER = sens.account_email
+	)
+
+mail=Mail(app)
 
 valid_funcs = {
 	'Conference': ['check_blanks','process_dates'],

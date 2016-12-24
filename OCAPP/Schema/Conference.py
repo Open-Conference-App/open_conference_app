@@ -93,3 +93,18 @@ class Conference(BaseChanges, db.Base):
 		self.created_at = datetime.datetime.now()
 		self.updated_at = datetime.datetime.now()
 
+	# def members(self):
+	# 	members = []
+	# 	for registration in self.members:
+	# 		memb = Member.get_by_id(registration.member_id)
+	# 		if memb:
+	# 			members.append(memb)
+	# 	return members
+
+
+
+
+
+
+
+

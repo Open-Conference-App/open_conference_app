@@ -1,11 +1,13 @@
 from flask import render_template, session, request, redirect, flash 
-from OCAPP import app
+from OCAPP import app, sentry, mail
+from flask.ext.mail import Message
 from OCAPP.config.sensitive import Sens
 sens = Sens()
 import stripe
 stripe.api_key = sens.stripe_secret_key
 from OCAPP.Models import Address, Conference, Member, State, Institution
 import json
+import smtplib
 
 @app.route('/')
 def load_forms():
@@ -122,6 +124,17 @@ def register_user(conference_id):
 			member_type_cost = conf.stud_cost
 
 		member_cost = member_type_cost/day_divisor
+		fromaddr = sens.account_email
+		toaddrs  = member_data['email']
+		msg = 'Why,Oh why!'
+		username = sens.account_email
+		password = sens.account_pw
+		server = smtplib.SMTP('smtp.gmail.com:587')
+		server.ehlo()
+		server.starttls()
+		server.login(username,password)
+		server.sendmail(fromaddr, toaddrs, msg)
+		server.quit()
 		return render_template('credit_card.html', member=member_data, conf_id=conf.id, member_cost = member_cost)
 	#send data by calling functions from imported files and sending it the request.form by using request.form.copy()
 
@@ -137,19 +150,17 @@ def cctest():
 #pay for conference attendance/membership fees(which are one and the same, user must already exist)
 @app.route('/conferences/<int:conference_id>/members/<int:member_id>', methods=['POST'])
 def pay(conference_id, member_id):
-	if 1>2: #'user' not in session:
-		pass #set to pass for debugging purposes, delete and uncomment return redirect for production.
-		#return redirect('/')
+	if 'user' not in session:
+		return redirect('/')
 	else:
 		resp_object = {
 			'successful': False,
 			'errors': []
 		}
 		##validate registration prior to making payment
-		conf = Conference.get_next() #why not get_by_id using conference_id from url?
 		memb = Member.get_by_id(member_id)
 		#FAILS ON MEMB IN CONF.MEMBERS SO PUT IN 1>0 TO ALLOW IT TO PASS
-		if 1>0: #memb in conf.members:
+		if memb in Conference.members(conference_id):
 			try:
 				stripe_charge = stripe.Charge.create(
 					amount= int(request.form['member_cost'])*100,
@@ -167,8 +178,9 @@ def pay(conference_id, member_id):
 				err = body['error']
 				for var in err:
 					resp_object['error'].append(var)
+				sentry.captureException()
 			except Exception as e:
-				pass
+				sentry.captureException()
 		return json.dumps(resp_object)
 
 

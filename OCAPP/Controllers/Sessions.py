@@ -1,6 +1,6 @@
 from flask import session, flash, request, redirect
 from OCAPP.Models import Member
-from OCAPP import app
+from OCAPP import app, sentry
 import hashlib
 
 @app.route('/sessions', methods=['POST'])
@@ -22,6 +22,10 @@ def login():
 		session['first_name'] = member.first_name
 		if member.officer:
 			session['admin'] = True
+		sentry.user_context({
+			'email': member.email,
+			'institution': member.institution.name
+			})
 		return redirect('/members/dashboard')
 
 
