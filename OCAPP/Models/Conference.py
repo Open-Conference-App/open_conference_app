@@ -1,6 +1,7 @@
 import time
 from flask import flash
 from OCAPP.Schema.Conference import Conference, MemberConferences
+from OCAPP.Models import Member 
 from OCAPP import app, db
 
 
@@ -41,8 +42,17 @@ def register(id, member,data):
 	mc.conference = conf
 	mc.member = member
 	mc.days = data['days']
-	print mc
 	db.session.add(mc)
 	db.session.commit()
 	return conf
 
+def set_transaction(conf_id, member_id, transaction_id):
+	conf = db.get(Conference, conf_id)
+	memb = Member.get_by_id(member_id)
+	for member_conf in conf.members:
+		if member_conf.member_id == memb.id:
+			member_conf.transaction_id = transaction_id
+			member_conf.member_paid = True
+			db.session.add(member_conf)
+			db.session.commit()
+	return member_conf.member_paid  

@@ -69,6 +69,8 @@ $(document).ready(function(){
 			}],
 
 	'page3_valids': [
+		
+
 		{
 			'fieldName': 'lunch',
 			'validation': function(fieldname) {
