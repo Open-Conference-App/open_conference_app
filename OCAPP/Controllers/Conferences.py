@@ -14,7 +14,6 @@ def load_forms():
 		'states': State.index(),
 		'institutions': Institution.index()
 	}
-	print data['conf'].title
 	return render_template('index.html', data=data)
 
 #create a new conference(to be done through admin dashboard only via ajax call)
@@ -76,14 +75,12 @@ def register_user(conference_id):
 			for message in field:
 				flash(message, field)
 		return redirect('/')
-	print data 
 	if (data['all_valid']):
 		member = Member.get_by_id(data['validated_data']['id'])
 		if request.form['institution']=='other':
 			inst = Institution.get(Institution.create({'name': request.form['inst-name']})['validated_data']['id'])
 		else:
 			inst = Institution.get(request.form['institution'])
-		print inst
 		Member.addInst(member, inst)
 		addy = Address.get(addy_data['validated_data'])
 		Member.address(member,addy)
@@ -154,6 +151,8 @@ def pay(conference_id, member_id):
 		#FAILS ON MEMB IN CONF.MEMBERS SO PUT IN 1>0 TO ALLOW IT TO PASS
 		if 1>0: #memb in conf.members:
 			try:
+				print "!!!!!!!!!!!!!memeber email!!!!!!!!!!!!!"
+				print memb.email 
 				stripe_charge = stripe.Charge.create(
 					amount= int(request.form['member_cost'])*100,
 					currency='usd',
@@ -164,8 +163,6 @@ def pay(conference_id, member_id):
 				active = Member.activate(memb.id)
 				resp_object['successful'] = active
 				Conference.set_transaction(conf.id, member_id, stripe_charge["id"]) 
-				print stripe_charge
-				print 'completed stripe charge...'
 			except stripe.error.CardError as e:
 				resp_object['errors'].append('There was a problem charging the card you submitted.')
 				body = e.json_body
@@ -173,7 +170,8 @@ def pay(conference_id, member_id):
 				for var in err:
 					resp_object['error'].append(var)
 			except Exception as e:
-				print e 	
+				pass
+		print stripe_charge  
 		return json.dumps(resp_object)
 
 

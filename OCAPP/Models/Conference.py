@@ -55,4 +55,4 @@ def set_transaction(conf_id, member_id, transaction_id):
 			member_conf.member_paid = True
 			db.session.add(member_conf)
 			db.session.commit()
-	return 
+	return member_conf.member_paid  
