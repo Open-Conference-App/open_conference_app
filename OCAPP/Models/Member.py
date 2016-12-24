@@ -12,13 +12,13 @@ def create(fields):
 	return valid_obj
 
 def activate(id):	
-	member = Member.query.get(id)
+	member = db.query(Member).filter_by(id=id).first()
 	if member:
 		active = True
 	else:
 		active = False
-	member = Member.query.get(id)
 	member.active = active
+	db.session.add(member)
 	db.session.commit()
 	return member.active
 
@@ -61,6 +61,13 @@ def address(mem, data):
 	db.session.add(mem)
 	db.session.commit()
 	return mem
+
+def addInst(mem, inst):
+	mem.institution = inst
+	db.session.add(mem)
+	db.session.commit()
+	return mem
+
 
 
 	

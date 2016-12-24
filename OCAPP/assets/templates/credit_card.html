@@ -2,6 +2,10 @@
 <html>
 <head>
   <title>SOCALLT Credit Card Payment</title>
+  {%with csrf_tok = csrf_token()%}
+  <script type="text/javascript">
+    var csrf_token_js = '{{csrf_tok}}';
+  </script>
   <link rel="stylesheet" href="{{ url_for('static',filename='css/spectre.min.css') }}"/>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css')}}"/>
@@ -12,30 +16,36 @@
   <script type="text/javascript" src="{{ url_for('static',filename='js/validations.js') }}"></script>
   <script type="text/javascript" src="{{ url_for('static',filename='js/script.js') }}"></script>
   <script type="text/javascript" src="{{ url_for('static',filename='js/credit_card.js') }}"></script>
- <script>    var mem_id = {{member["id"]}}; var conf_id = {{conf_id}};  </script>
+  <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
+  <script type="text/javascript">Stripe.setPublishableKey("pk_test_xpE6AzgUAUBlHakgoTrS6yz8")</script>
+  <script>
+      var mem_id = {{member["id"]}}; 
+      var conf_id = {{conf_id}};  
+  </script>
+
+
 
 </head>
 
-
 <div class="container-fluid centered">
-  <h3>Thank you for your registration information. Please complete the payment information below:</h3>
+  <h3>Thank you for your registration information. The cost for the conference is ${{member_cost}}. Please complete the payment information below:</h3>
     <form class="form-horizontal" id="payment-form">
       <span class="payment-errors"></span>
-
-      <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
+      <input type="hidden" name="member_cost" class="member_cost" value={{member_cost}}>
+      <input type="hidden" name="_csrf_token" value="{{ csrf_tok }}">
       <div class="form-group">
         <label class='form-label col-2' for='number'>Card Number:</label>
-        <input class='form-input col-xs-4' type="text" name="number" data-stripe="number">  
+        <input class='form-input col-xs-4' type="text" data-stripe="number">  
       </div>
 
       <div class="form-group">
         <label class='form-label col-2' for='exp'>Expiration (MM/YY):</label>
-        <input type="text" class='form-input col-xs-1' name="exp" data-stripe="exp_month">
+        <input type="text" class='form-input col-xs-1' data-stripe="exp_month">
         <span> / </span>
-        <input type="text" class='form-input col-xs-1' name="exp" data-stripe="exp_year">
+        <input type="text" class='form-input col-xs-1' data-stripe="exp_year">
 
         <label class='form-label col-1' for='cvc'>CVC:</label>
-        <input class='form-input col-xs-1' name="cvc" type="text" data-stripe="cvc">
+        <input class='form-input col-xs-1' type="text" data-stripe="cvc">
       </div>
       
       <div class="form-group">
@@ -47,4 +57,5 @@
         <button type="submit" class="submit btn primary">Submit Payment <i class="fa fa-arrow-circle-right" aria-hidden="false"></i></button>
       </div>
   </form>
+  {%endwith%}
 </div>

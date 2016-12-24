@@ -69,36 +69,59 @@ $(document).ready(function(){
 			}],
 
 	'page3_valids': [
-		// 	{
-		// 	'fieldName': 'lunch',
-		// 	'validation': (fieldname) => checkLen(fieldname, 0, '>'),
-		// 	'message': 'A lunch option must must be provided.'
-		// },
+		
+
+		{
+			'fieldName': 'lunch',
+			'validation': function(fieldname) {
+				value = $(fieldname+' option:selected').val()
+				console.log(value)
+				if(value == 'Regular' || value == 'Vegan' || value == "Vegeterian" || value == "NoLunch") {
+					return true
+				}
+				return false
+			},
+			'message': 'A lunch option must must be provided.'
+		},
 		{
 			'fieldName': 'gluten',
 			'validation': (fieldname) => true,
 			'message': ''
-		}
-		// {
-		// 	'fieldName': 'payment',
-		// 	'validation': (fieldname) => checkLen(fieldname, 0, '>'),
-		// 	'message': 'Please select a payment type.'
-		// },
-		// {
-		// 	'fieldName': 'regType',
-		// 	'validation': (fieldname) => checkLen(fieldname, 0, '>'),
-		// 	'message': 'Registration type is required'
-		// },
-		// {
-		// 	'fieldName': 'regLen',
-		// 	'validation': (fieldname) => $(fieldname).val() ? true : false,
-		// 	'message': 'Registration days selection is required.'
-		// }
-		]
+		},
+		{
+			'fieldName': 'pay',
+			'validation': function(fieldname) {
+				value = $(fieldname+' option:selected').val()
+				if(value == 'credit_debit' || value == 'check_PO') {
+					return true
+				}
+				return false
+			},			
+			'message': 'Please select a payment type.'
+		},
+		{
+			'fieldName': 'regis-type',
+			'validation': function(fieldname) {
+				value = $(fieldname+' option:selected').val()
+				if(value == 'Professional' || value == 'Student' || value == 'Vendor') {
+					return true
+				}
+				return false
+			},
+			'message': 'Registration type is required'
+		},
+		{
+			'fieldName': 'regis-len',
+			'validation': function(fieldname) {
+				value = $(fieldname+' option:selected').val()
+				if(value == 'friday' || value == 'saturday' || value == 'weekend') {
+					return true
+				}
+				return false
+			},			
+			'message': 'Registration days selection is required.'
+		}]
 	}
-
-
-
 
 	//toggle view of login & registration forms	
 	var user;
@@ -115,6 +138,7 @@ $(document).ready(function(){
 
 	//display inputs for a new institution if 'other' is selected
 	$('#institution').change(function(){
+		console.log('test')
 		if(document.getElementById('other').selected){
 			$('#inst-info').slideToggle();
 		} else {
@@ -125,15 +149,15 @@ $(document).ready(function(){
 
 		//populate price in regis_len
 	$('#regis-type').change(function(){
+		console.log($())
 		var val = $('#regis-type').children(':selected').val()
-		console.log(val)
 		$.ajax({
 			method: 'GET',
 			url: '/conferences/' + confId + '/prices',
 			success: function(data){
 				var val = $('#regis-type').children(':selected').val()
+				val = val == 'Student' ? 'stud_cost' : val == 'Profession' ? 'prof_cost' : 'vend_cost';
 				data = JSON.parse(data);
-				console.log($('#regis-len').children())
 				var price = data[val];
 				var halfPrice = price/2;
 				$('#regis-len').children()[1].innerHTML = 'Friday Only ($' + halfPrice.toFixed(2) + ')';
@@ -148,45 +172,36 @@ $(document).ready(function(){
 	var member = {};
 	$(document).on('click', '.continue', function(){
 		//run validations based on page div id and validations
-			var pageId = $(this).parent().parent().attr('id');
-			var validArr = pageId + '_valids';
-			console.log(window[validArr])
-			var validObj = validate(pageId, validations[validArr]);
-			//send member object to server if all validations were successful
-			console.log(validObj.allValid)
-			if(validObj.allValid) {
-				for(var i = 0; i < validObj.validations.length; i++){
-					member[validObj.validations[i]['fieldName']] = $('#'+validObj.validations[i]['fieldName']).val();
-				}
-				var nextPage = pageId == 'page1' ? 'page2' : pageId == 'page2' ? 'page3' : false;
-				if(!nextPage){
-
-					$('#register-form form').submit()
-				} else {
-					$('#'+pageId).hide();
-					$('#'+nextPage).fadeToggle();
-				}
-			// 	else {
-			// 		$.ajax({
-			// 			method: 'POST',
-			// 			url: '/members/create',
-			// 			data: member,
-						//success: function(){
-
-						//}
-			// 		})
-			// 	}
-			// //if some validations were unsuccessful, extract messages and display them
-			// } else {
-			// 	for(var i = 0; i < validObj.validations.length; i++){
-			// 		if(!validObj.validations[i]['valid']){
-			// 			$('#'+validObj.validations[i]['fieldName']+'Err').innerHTML = validObj.validations[i]['message'];
-			// 		}
-			// 	}
-			// }
+		var pageId = $(this).parent().parent().attr('id');
+		var validArr = pageId + '_valids';
+		var validObj = validate(pageId, validations[validArr]);
+		//send member object to server if all validations were successful
+		if(validObj.allValid) {
+			for(var i = 0; i < validObj.validations.length; i++){
+				member[validObj.validations[i]['fieldName']] = $('#'+validObj.validations[i]['fieldName']).val();
+			}
+			var nextPage = pageId == 'page1' ? 'page2' : pageId == 'page2' ? 'page3' : false;
+			if(!nextPage){
+				$('#register-form form').submit()
+			} else {
+				$('#'+pageId).hide();
+				$('#'+nextPage).fadeToggle();
+			}
 		}
 		return false;
 	});
+
+	$(document).on('click', '.previous', function(){
+		var pageId = $(this).parent().parent().attr('id');
+		var nextPage = pageId == 'page3' ? 'page2' : pageId == 'page2' ? 'page1' : false;
+		if(nextPage){
+			$('#'+pageId).hide();
+			$('#'+nextPage).fadeToggle();
+		}
+
+
+
+	})
 
 });
 
