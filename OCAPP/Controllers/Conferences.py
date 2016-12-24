@@ -151,8 +151,6 @@ def pay(conference_id, member_id):
 		#FAILS ON MEMB IN CONF.MEMBERS SO PUT IN 1>0 TO ALLOW IT TO PASS
 		if 1>0: #memb in conf.members:
 			try:
-				print "!!!!!!!!!!!!!memeber email!!!!!!!!!!!!!"
-				print memb.email 
 				stripe_charge = stripe.Charge.create(
 					amount= int(request.form['member_cost'])*100,
 					currency='usd',
@@ -171,7 +169,6 @@ def pay(conference_id, member_id):
 					resp_object['error'].append(var)
 			except Exception as e:
 				pass
-		print stripe_charge  
 		return json.dumps(resp_object)
 
 
