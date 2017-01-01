@@ -48,7 +48,7 @@ def update(member_data):
 	return member
 
 def index():
-	return db.query.all()
+	return db.query(Member).order_by(Member.last_name).all()
 
 def get_by_email(email_add):
 	return db.query(Member).filter_by(email=email_add).first()

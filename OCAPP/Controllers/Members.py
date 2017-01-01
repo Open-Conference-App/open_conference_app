@@ -4,6 +4,12 @@ sens = Sens()
 from flask import render_template, request, session, redirect
 from OCAPP.Models import Member, Conference, State, Institution
 
+@app.route('/members', methods=['GET'])
+def show_members():
+	if not session['admin']:
+		return redirect('/')
+	members = Member.index()
+	return render_template('/dashboard/admin/members.html', members=members)
 
 
 
@@ -21,8 +27,10 @@ def create_memb():
 def handle_members(member_id):
 	#show member info
 	if request.method == 'GET':
+		if 'id' not in session or session['id'] != member_id:
+			return redirect('/')
 		member = Member.get_by_id(member_id)
-		return render_template('dashboard-test.html', name=member.first_name)
+		return render_template('dashboard/members/membership.html', member=member)
 	#delete a conference(to be done through admin dashboard only)
 	if request.method == 'DELETE':
 		return redirect('/')

@@ -21,7 +21,10 @@ def load_forms():
 
 @app.route('/conferences', methods=['GET'])
 def load_member_conferences():
-	return render_template('conference-dashboard.html')
+	if not session['admin']:
+		return redirect('/')
+	confs = Conference.index();
+	return render_template('dashboard/admin/conferences.html', confs=confs)
 
 #create a new conference(to be done through admin dashboard only via ajax call)
 @app.route('/conferences', methods=['POST'])

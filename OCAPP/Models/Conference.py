@@ -6,7 +6,7 @@ from OCAPP import app, db
 
 
 def index():
-	return db.query(Conference).all()
+	return db.query(Conference).order_by(Conference.year.desc()).all()
 
 def create(fields):
 	return ''
