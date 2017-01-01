@@ -1,49 +1,42 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>SOCALLT My Account</title>
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+	<title>SOCALLT Member Dashboard</title>
+	<!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/> -->
+	<link rel="stylesheet" href="https://unpkg.com/purecss@0.6.1/build/pure-min.css" integrity="sha384-CCTZv2q9I9m3UOxRLaJneXrrqKwUNOzZ6NGEUMwHtShDJ+nCoiXJCAgi05KfkLGY" crossorigin="anonymous">
 	<link rel="stylesheet" href="{{ url_for('static', filename='css/spectre.min.css')}}"/>
-	<link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css')}}"/>
+	<!-- <link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css')}}"/> -->
 	<script   src="https://code.jquery.com/jquery-2.2.4.min.js"   integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="   crossorigin="anonymous"></script>
 	<script type="text/javascript" src="{{url_for('static', filename='js/dashboard.js')}}"></script>
 </head>
 <body>
-	<div id="container" class="container-fluid">
+	<div id="pure-g" class="container-fluid">
 <!-- container begins -->
 <!-- header begins -->
-		<div class="row header">
-			<div class="col-xs-12">
-				<img class="logo" src="{{ url_for('static', filename='images/socallt2015.png')}}" width="100px">
-				<h1 class="welcome">Welcome! <p class="login">You are Logged in as: <i>{{ session['first_name'] }}</i></p></h1>
-			</div>
+		<div class="pure-u-1 header">
+			<img class="logo" src="{{ url_for('static', filename='images/socallt2015.png')}}" width="100px">
+			<h1 class="welcome">Welcome! <p class="login">You are Logged in as: <i>{{ session['first_name'] }}</i></p></h1>
 		</div>
 <!-- header ends -->
 <!-- nav begins -->
-		<div class="row">
-			<div class="nav">
-			<ul class="">
-				<li class="presentations">Presentations</li>
-				<li class="conferences">Conferences
-				<span class="col-xs-12">
+		<div class="pure-menu pure-menu-horizontal navbar">
+			<ul class="pure-menu-list">
+				<li class="pure-menu-item presentations"><a class='pure-menu-link'>Presentations</a></li>
+				<li class="pure-menu-item conferences"><a class='pure-menu-link'>Conferences</a>
 					<ul class="sub_conferences">
 						<li class="current_conference">2017 Conference</li>
 						<li>//other conferences{{ con }}</li>
 						<li>//other conferences{{ con }}</li>
 					</ul>
-					</span>
 				</li>
-				<li class="account">Account
-				<span class="col-xs-12">
+				<li class="pure-menu-item account"><a class='pure-menu-link'>Account</a>
 					<ul class="sub_account">
 						<li class="edit">Edit Profile</li>
 						<li class="payment">Membership</li>
 						<li class="logout">Logout</li>
 					</ul>
-					</span>
-				</li></li>
+				</li>	
 			</ul>
-			</div>
 		</div>
 <!-- nav ends -->
 	</div>

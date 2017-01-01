@@ -8,11 +8,11 @@ function validate(page, valiArr){
 		valiArr[i]['valid'] = valiArr[i]['validation'](name);
 		// console.log('11111' + valiArr[i]['valid'])
 		if(valiArr[i]['valid']){
-			$(name).removeClass('is-danger');
+			$(name).removeClass('invalid');
 			continue;
 		} else {
 			console.log('There was a problem with...' + name)
-			$(name).addClass('is-danger'); 
+			$(name).addClass('invalid'); 
 			valid = false;
 		}
 	}

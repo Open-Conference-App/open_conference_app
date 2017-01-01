@@ -13,6 +13,36 @@
 ul {
 	list-style-type: none;
 }
+
+.pure-menu {
+	height: 100vh;
+}
+
+.pure-menu-item:hover, .pure-menu-link:hover {
+	background-color: #9fe19d;
+}
+
+.pure-menu-item.pure-menu-has-children .pure-menu-children {
+	border: 1px solid #757575;
+	border-radius: 2px;
+}
+
+.pure-menu {
+	border-right: 1px solid #757575;
+}
+
+.pure-button {
+	background-color: #757575;
+	color: white;
+}
+
+.green {
+	color: #9fe19d;
+}
+
+.invalid {
+	border: 1px solid red;
+}
 /*SOCALLT Green #39b237*/
 
 

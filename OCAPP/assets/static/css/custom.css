@@ -27,22 +27,22 @@
 	display: inline-block;
 	border:1px solid silver;
 }
-.nav>ul{
+.pure-menu>ul{
 	background-color: #000;
 	padding: 0 3% 0;
 	width: 100%;
 	text-align: center;
 	margin: 0;
 }
-.nav>ul >li {
+.pure-menu>ul >li {
 	color: #dedfe0;
-	font-size: .5em;
+	font-size: 1em;
 	display: inline-block;
 	text-align: right;
 	margin: 0;
 	text-align: center;
 }
-.nav li:hover{
+.pure-menu li:hover{
 	color: #47935a;
 }
 .sub_conferences, .sub_account{

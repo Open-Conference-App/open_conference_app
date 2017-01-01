@@ -32,7 +32,7 @@ class Member(BaseChanges,db.Base):
 	institution = relationship('Institution', back_populates='faculty_members')
 	host = relationship('Conference', uselist=False, back_populates='host')
 	presentations = relationship('Presentation', secondary=member_presentations, back_populates='presenters')
-	conferences = relationship('MemberConferences', back_populates='member')
+	registrations = relationship('Registration', back_populates='member')
 	created_at = Column(DATETIME(), default=func.utc_timestamp())
 	updated_at = Column(DATETIME(), default=func.utc_timestamp(), onupdate=func.utc_timestamp())
 
@@ -40,7 +40,7 @@ class Member(BaseChanges,db.Base):
 		print member_data
 		self.first_name = member_data['first_name']
 		self.last_name = member_data['last_name']
-		# self.address_id = member_data['address_id']
+		self.address_id = member_data['address_id']
 		self.email = member_data['email']
 		self.pw_salt = member_data['salt']
 		self.password = member_data['hash']

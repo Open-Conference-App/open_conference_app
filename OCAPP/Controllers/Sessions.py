@@ -20,6 +20,7 @@ def login():
 		session['id'] = member.id
 		session['email'] = member.email
 		session['first_name'] = member.first_name
+		session['admin'] = False
 		if member.officer:
 			session['admin'] = True
 		sentry.user_context({
@@ -29,19 +30,21 @@ def login():
 		return redirect('/members/dashboard')
 
 
-def create(cred):
-	is_valid = True
-	if not member:
-		return False
-	if member.password != hashlib.sha256(cred['password'] + user.pw_salt).hexdigest():
-		is_valid = False
-	if is_valid:
-		session['_id'] = user.id
-		session['username'] = user.username
-	if member.officer:
-		session['admin'] = True
-	return is_valid
+# def create(cred):
+# 	is_valid = True
+# 	if not member:
+# 		return False
+# 	if member.password != hashlib.sha256(cred['password'] + user.pw_salt).hexdigest():
+# 		is_valid = False
+# 	if is_valid:
+# 		session['_id'] = user.id
+# 		session['username'] = user.username
+# 		session['admin'] = False
+# 	if member.officer:
+# 		session['admin'] = True
+# 	return is_valid
 
+@app.route('/logout', methods=['GET'])
 def delete():
 	session.clear()
-	return
+	return redirect('/')

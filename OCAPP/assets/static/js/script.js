@@ -156,7 +156,7 @@ $(document).ready(function(){
 			url: '/conferences/' + confId + '/prices',
 			success: function(data){
 				var val = $('#regis-type').children(':selected').val()
-				val = val == 'Student' ? 'stud_cost' : val == 'Profession' ? 'prof_cost' : 'vend_cost';
+				val = val == 'Student' ? 'stud_cost' : val == 'Professional' ? 'prof_cost' : 'vend_cost';
 				data = JSON.parse(data);
 				var price = data[val];
 				var halfPrice = price/2;
@@ -172,8 +172,9 @@ $(document).ready(function(){
 	var member = {};
 	$(document).on('click', '.continue', function(){
 		//run validations based on page div id and validations
-		var pageId = $(this).parent().parent().attr('id');
+		var pageId = $(this).parent().attr('id');
 		var validArr = pageId + '_valids';
+		console.log(validations[validArr]);
 		var validObj = validate(pageId, validations[validArr]);
 		//send member object to server if all validations were successful
 		if(validObj.allValid) {

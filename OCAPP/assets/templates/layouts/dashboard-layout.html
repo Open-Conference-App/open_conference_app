@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+	{% block head %}
+
+
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!-- need to add table for customer organization information to populate fields like this -->
+	<title>SOCALLT Member Dashboard</title>
+	<link rel="stylesheet" href="https://unpkg.com/purecss@0.6.1/build/pure-min.css" integrity="sha384-CCTZv2q9I9m3UOxRLaJneXrrqKwUNOzZ6NGEUMwHtShDJ+nCoiXJCAgi05KfkLGY" crossorigin="anonymous">
+	<!--[if lte IE 8]>
+        <link rel="stylesheet" href="https://unpkg.com/purecss@0.6.1/build/grids-responsive-old-ie-min.css">
+    <![endif]-->
+    <!--[if gt IE 8]><!-->
+        <link rel="stylesheet" href="https://unpkg.com/purecss@0.6.1/build/grids-responsive-min.css">
+    <!--<![endif]-->
+	<link rel="stylesheet" href="{{ url_for('static',filename='css/font-awesome-4.6.3/css/font-awesome.min.css') }}"/>
+	<link rel='stylesheet' href="{{ url_for('static',filename='css/styles.css') }}"/>
+	<script   src="https://code.jquery.com/jquery-2.2.4.min.js"   integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="   crossorigin="anonymous"></script>
+	<script type="text/javascript" src="{{url_for('static', filename='js/dashboard.js')}}"></script>
+
+	{% endblock %}
+</head>
+<body>
+	{% block content %} 
+	{% endblock %} 
+</body>
+</html>

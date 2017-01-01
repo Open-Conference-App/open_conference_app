@@ -2,8 +2,9 @@
 <html>
 <head>
 	<title>SOCALLT Members</title>
+	<link rel="stylesheet" href="https://unpkg.com/purecss@0.6.1/build/pure-min.css" integrity="sha384-CCTZv2q9I9m3UOxRLaJneXrrqKwUNOzZ6NGEUMwHtShDJ+nCoiXJCAgi05KfkLGY" crossorigin="anonymous">
 	<link rel="stylesheet" href="{{ url_for('static',filename='css/spectre.min.css') }}"/>
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	<!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"> -->
 	<link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css')}}"/>
 	<link rel="stylesheet" href="{{ url_for('static',filename='css/font-awesome-4.6.3/css/font-awesome.min.css') }}"/>
 	<link rel='stylesheet' href="{{ url_for('static',filename='css/styles.css') }}"/>
@@ -14,91 +15,71 @@
 		{% with csrf_tok = csrf_token() %}
 		var csrfToken = '{{ csrf_tok }}'
 	</script>
-
 	<script type="text/javascript" src="{{ url_for('static',filename='js/validations.js') }}"></script>
 	<script type="text/javascript" src="{{ url_for('static',filename='js/script.js') }}"></script>
 </head>
 <body class='container-fluid'>
-		<div class='registrationHeader'>
-			<h2>{{ 'SOCALLT Registration' if not data['conf'] else 'SOCALLT ' ~  data['conf']['year'] ~ ' Registration' }}</h2>
-			<h4>{{ data['conf'].title }}</h4>
-			<h4>{{ data['conf']['start_date'].strftime('%B %d') ~ "-" ~ data['conf']['end_date'].strftime('%d, %Y')if data['conf'] else '' }}</h4>
-		</div>
-	<div class='row content'>
-		<div class=''></div>
-		<div class='col-xs-10 col-sm-6'>
-			<div id='register-form'>
-			<!-- added id to form element for use with lunch selection option -->
-				<form action='/conferences/{{ data['conf']['id'] }}/register'' method='POST' id="main_reg_form">
-					<input type='hidden' name='_csrf_token' value='{{ csrf_tok }}'>
-					<div id='regisErrors'>
-					<!-- flashed messages and messages returned from AJAX calls should look one and the same and render in the same location-->
-					{% with messages = get_flashed_messages(category_filter=['regisErr']) %}
-						{% for message in messages %}
-							<p class='error'>{{ message }}</p>
-						{% endfor %}
-					{% endwith %}
-					</div>
-					<!-- registration page 1 -->
-					<input type='hidden' id='conference' >
-					<h2>Register</h2>
-					<div class='form-content' id='page1'>
-						<h5>User Information</h5>
-						<div class='form-group'>
+	<div class='pure-g'>
+	<div class='pure-u-1-12'></div>
+	<div class='pure-u-2-3'>
+		<div class='pure-g'>
+			<div class='pure-u-1'>
+				<h2>{{ 'SOCALLT Registration' if not data['conf'] else 'SOCALLT ' ~  data['conf']['year'] ~ ' Registration' }}</h2>
+				<h4>{{ data['conf'].title }}</h4>
+				<h4>{{ data['conf']['start_date'].strftime('%B %d') ~ "-" ~ data['conf']['end_date'].strftime('%d, %Y')if data['conf'] else '' }}</h4>
+			</div>
+			<div class='pure-u-7-12'>
+				<div id='register-form'>
+				<!-- added id to form element for use with lunch selection option -->
+					<form action='/conferences/{{ data['conf']['id'] }}/register'' method='POST' class='pure-form pure-form-stacked' id="main_reg_form">
+						<input type='hidden' name='_csrf_token' value='{{ csrf_tok }}'>
+						<div id='regisErrors'>
+						<!-- flashed messages and messages returned from AJAX calls should look one and the same and render in the same location-->
+						{% with messages = get_flashed_messages(category_filter=['regisErr']) %}
+							{% for message in messages %}
+								<p class='error'>{{ message }}</p>
+							{% endfor %}
+						{% endwith %}
+						</div>
+						<!-- registration page 1 -->
+						<input type='hidden' id='conference' >
+						<h2>Register</h2>
+						<div class='form-content' id='page1'>
+							<h5>Member Information</h5>
 							<label class='form-label' for='first_name'>First Name:</label>
 							<input class='form-input' type="text" id="first_name" name="first_name" >
-						</div>
-						<div class='form-group'>
 							<label class='form-label' for='last_name'>Last Name:</label>
 							<input class='form-input' type="text" name="last_name" id="last_name" value="{{ session['last_name'] }}">
-						</div>
-						<div class='form-group'>
 							<label class='form-label' for='email'>Email:</label>
 							<input class='form-input' type="email" name="email" id="email">
-						</div>
-						<div class='form-group'>
 							<label class='form-label' for='password'>Password:</label>
 							<input class='form-input' type="password" name="password" id='password'>
-						</div>
-						<div class='form-group'>
 							<label class='form-label' for='confirm_password'>Confirm Password:</label>
 							<input class='form-input' type="password" name="confirm_password" id='confirm-password'>
+							<input type='hidden' value={{ data['csrf_token'] }}>
+							<button class='pure-button continue' type='button'>Continue <i class="fa fa-arrow-circle-right green" aria-hidden="false"></i></button>
 						</div>
-						<input type='hidden' value={{ data['csrf_token'] }}>
-						<div class='btn-group'>
-							<button class='btn primary continue' type='button'>Continue<i class="fa fa-arrow-circle-right" aria-hidden="false"></i></button>
-						</div>
-					</div>
 
-					<!-- registration page 2 -->
-					<div class='form-content' id='page2'>
-						<h5>Contact Information</h5>
-						<div class='form-group'>
+						<!-- registration page 2 -->
+						<div class='form-content' id='page2'>
+							<h5>Contact Information</h5>
 							<label class='form-label' for='street1'>Address 1:</label>
 							<input class='form-input' type="text" name="street1" id="street1" value="{{ session['street1'] }}">
-						</div>
-						<div class='form-group'>
 							<label class='form-label' for='street2'>Address 2:</label>
 							<input class='form-input' type="text" name="street2" id="street2" value="{{ session['street2'] }}">
-						</div>
-						<div class='form-group'>
+
 							<label class='form-label' for='city'>City:</label>
 							<input class='form-input' type="text" name="city" id="city" value="{{ session['city'] }}">
-						</div>
-						<div class='form-group'>
+
 							<label class='form-label' for='state'>State:</label>
 							<select class='form-select' name='state'>
 								{% for state in data['states'] %}
 									<option value="{{ state['id'] }}">{{ state['abbrev'] }}</option>
 								{% endfor %}
 							</select>
-						</div>
-						<div class='form-group'>
 							<label class='form-label' for='zip'>Zip:</label>
 							<input class='form-input' type="text" name="zip" id="zip" value="{{ session['zip'] }}">
-						</div>
-						<h5>Institution Information</h5>
-						<div class='form-group'>
+							<h5>Institution Information</h5>
 							<p>Select your institution:</p>
 							<select class='form-select' name='institution' id='institution'>
 								<option value='-1' id='other1'>---Select---</option>
@@ -107,83 +88,61 @@
 							{% endfor %}
 								<option value='other' id='other'>Other</option>
 							</select>
-						</div>
-						<div id='inst-info'>
-							<div class='form-group'>
+							<div id='inst-info'>
 								<label class='form-label' for='inst-name'>Name:</label>
 								<input class='form-input' type="text" name="inst-name">
 							</div>
-						</div>
-						<div class='btn-group btn-group-block'>
 							<button class='btn previous' type='button'><i class="fa fa-arrow-circle-left" aria-hidden="false"></i> Previous</button>
-							<button class='btn primary continue' type='button'>Continue<i class="fa fa-arrow-circle-right" aria-hidden="false"></i></button>
+							<button class='pure-button continue' type='button'>Continue<i class="fa fa-arrow-circle-right" aria-hidden="false"></i></button>
+							<br>
 						</div>
-						<br>
-					</div>
 
-					<!-- registration page 3 -->
-					<div id='page3' class='form-content'>
-						<h5>Conference Information</h5>
-					    <div class="form-group">
-					    <label class="form-label">Lunch Options</label>
-							<select class="form-select" name="lunch" id='lunch'>
-								<option selected value="Regular">Regular</option>
-								<option value="Vegetarian">Vegetarian</option>
-								<option value="Vegan">Vegan</option>
-								<option value="NoLunch">No Lunch</option>
-							</select>
-						</div>
-						<div class='form-group'>
-							<label class="form-switch">
-	           					<input type="checkbox" id='gluten' name='gluten'/>
-	            				<i class="form-icon"></i>&nbsp;&nbsp;&nbsp;&nbsp;
-	            				Gluten Free
-	        				</label>
-						</div>
-						<div class='form-group'>
-							<label class='form-label' for='pay'>Payment Options:</label>
-							<select class='form-select' name='pay' id='pay'>
-								<option selected value='credit_debit'>Credit/Debit Card</option>
-								<option value='check_PO'>Check, Purchase Order</option>
-							</select>
-							<p>*The next screen will provide you with more payment information</p>
-						</div>
-						<div class='container'>
-							<div class='columns'>
-								<div class='form-group column col-3'>
-									<label class='form-label' for='regis_type'>Registration Type:</label>
-									<select class='form-select' name='regis_type' id='regis-type'>
-										<option selected value='Professional'>Professional</option>
-										<option value='Student'>Student</option>
-										<option value='Vendor'>Vendor/Exhibitor/Industry Rep.</option>
-									</select>
-								</div>
-								<div class='column col-xs-1'></div>
-								<div class='form-group column col-3'>
-									<label class='form-label' for='regis_len'>Days:</label>
+						<!-- registration page 3 -->
+						<div id='page3' class='form-content'>
+							<h5>Conference Information</h5>
+						    <label class="form-label">Lunch Options</label>
+								<select class="form-select" name="lunch" id='lunch'>
+									<option selected value="Regular">Regular</option>
+									<option value="Vegetarian">Vegetarian</option>
+									<option value="Vegan">Vegan</option>
+									<option value="NoLunch">No Lunch</option>
+								</select>
+								<label class="form-switch">
+		           					<input type="checkbox" id='gluten' name='gluten'/>
+		            				<i class="form-icon"></i>&nbsp;&nbsp;&nbsp;&nbsp;
+		            				Gluten Free
+		        				</label>
+								<label class='form-label' for='pay'>Payment Options:</label>
+								<select class='form-select' name='pay' id='pay'>
+									<option selected value='credit_debit'>Credit/Debit Card</option>
+									<option value='check_PO'>Check, Purchase Order</option>
+								</select>
+								<p>*The next screen will provide you with more payment information</p>
+								<label class='form-label' for='regis_type'>Registration Type:</label>
+								<select class='form-select' name='regis_type' id='regis-type'>
+									<option selected value='Professional'>Professional</option>
+									<option value='Student'>Student</option>
+									<option value='Vendor'>Vendor/Exhibitor/Industry Rep.</option>
+								</select>
 
-									<!-- We need to have an ajax call that will populate this field with price information along with days
-										depending on what is selected in the registration type field-->
-									<select class='form-select' name='regis_len' id='regis-len'>
-										<option value='0'>-----</option>
-										<option value='friday'>Friday Only{{ '' if not data['conf'] else '($' ~ '%0.2f' | format(data['conf']['prof_cost']/2 | float ) ~ ')'}}</option>
-										<option value='saturday'>Saturday Only {{ '' if not data['conf'] else '($' ~ '%0.2f' | format(data['conf']['prof_cost']/2 | float ) ~ ')'}}</option>
-										<option value='weekend'>Entire Conference{{ '' if not data['conf'] else '($' ~ '%0.2f' | format(data['conf']['prof_cost'] | float ) ~ ')'}}</option>
-									</select>
-								</div>
+								<label class='form-label' for='regis_len'>Days:</label>
 
+								<!-- We need to have an ajax call that will populate this field with price information along with days
+									depending on what is selected in the registration type field-->
+								<select class='form-select' name='regis_len' id='regis-len'>
+									<option value='0'>-----</option>
+									<option value='friday'>Friday Only{{ '' if not data['conf'] else '($' ~ '%0.2f' | format(data['conf']['prof_cost']/2 | float ) ~ ')'}}</option>
+									<option value='saturday'>Saturday Only {{ '' if not data['conf'] else '($' ~ '%0.2f' | format(data['conf']['prof_cost']/2 | float ) ~ ')'}}</option>
+									<option value='weekend'>Entire Conference{{ '' if not data['conf'] else '($' ~ '%0.2f' | format(data['conf']['prof_cost'] | float ) ~ ')'}}</option>
+								</select>
+								<button class='pure-button previous' type='button'><i class="fa fa-arrow-circle-left" aria-hidden="false"></i> Previous</button>
+								<button type="submit" form="main-form" value="Submit" class='pure-button continue'>Register</button>						
 							</div>
-						</div>
-						<div class='btn-group btn-group-block'>
-							<button class='btn previous' type='button'><i class="fa fa-arrow-circle-left" aria-hidden="false"></i> Previous</button>
-							<button type="submit" form="main-form" value="Submitx" class='btn btn-primary continue'>Register</button>
-						</div>
-					</div>
-				</form>
+					</form>
+				</div>
 			</div>
-
-		<!-- Login Form -->
-			<div class='' id='login-form'>
+	<!-- Login Form -->
+			<div class='pure-u-7-12' id='login-form'>
 				<form action='/sessions' method='POST'>
 					<input type='hidden' name='_csrf_token' value='{{ csrf_tok }}'>
 				<!-- flashed messages and messages returned from AJAX calls should look one and the same and render in the same location-->
@@ -206,19 +165,20 @@
 					<button class='btn btn-primary' id='login'>Login</button>
 				</form>
 			</div>
-		</div>
-		<div class='column col-xs-1'></div>
-		<div class='col-xs-10 col-sm-4 p-t-15'>
-			<div id='show-register'>
-				<h4>Never been to a SOCALLT conference or new to our online system?</h4>
-				<button class='btn btn-sm btn-link' data-id='register'>Register</button>
-			</div>
-			<div id='show-login' class="col-xs-10 ">
-				<h4>Already a member and logged in before?</h4>
-				<button class='btn btn-sm btn-link' data-id='login'>Login</button>
-			</div>
+			<div class='pure-u-1-12'></div>
+			<div class='pure-u-1-4'>
+				<div id='show-register'>
+					<h4>Never been to a SOCALLT conference or new to our online system?</h4>
+					<button class='btn btn-sm btn-link' data-id='register'>Register</button>
+				</div>
+				<div id='show-login'>
+					<h4>Already a member and logged in before?</h4>
+					<button class='btn btn-sm btn-link' data-id='login'>Login</button>
+				</div>
 			 {% endwith %}
+			</div>
 		</div>
 	</div>
+	<div class='pure-u-1-12'></div>
 </body>
 </html>

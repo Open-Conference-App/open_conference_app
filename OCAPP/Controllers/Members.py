@@ -3,9 +3,11 @@ from OCAPP.config.sensitive import Sens
 sens = Sens()
 from flask import render_template, request, session, redirect
 from OCAPP.Models import Member, Conference, State, Institution
+
+
+
+
 #create a new member(when users regsiter for the next conference)
-
-
 @app.route('/members', methods=['POST'])
 def create_memb():
 	if not 'csrf_token' in session:
@@ -52,15 +54,20 @@ def handle_members(member_id):
 	else:
 		return redirect('/')
 
+@app.route('/members/<int:member_id>/conferences/<int:conference_id>', methods=['GET'])
+def show(conference_id, member_id):
+	if 'id' not in session or session['id'] != member_id:
+		return redirect('/')
+	member = Member.get_by_id(member_id)
+	conference = Conference.get_by_id(conference_id)
+	return render_template('member-conferences.html', member=member, conference=conference)
+
 @app.route('/members/dashboard')
 def load_dashboard():
-	# if 'user' in session:
-	# 	member = Member.get_by_id(session['user']['id'])
-	# 	if member:
-	return render_template('dashboard.html')
-	# else:
-	# 	return redirect('/')
+	if 'id' in session:
+		member = Member.get_by_id(session['id'])
+		if member:
+			return render_template('dashboard/dashboard.html', member=member)
+		else:
+			return redirect('/')
 
-	# if '_id' in session:
-	# 	session['csrf_token'] = sens.gen_csrf_token()
-	# else:

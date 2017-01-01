@@ -15,8 +15,8 @@ engine = create_engine(sens.db_path)
 from OCAPP.Models.BaseChanges import BaseChanges
 
 #join table for members<>conferences
-class MemberConferences(BaseChanges, db.Base):
-	__tablename__ = 'member_conferences'
+class Registration(BaseChanges, db.Base):
+	__tablename__ = 'registrations'
 	id = Column(INTEGER(11), primary_key=True, autoincrement=True)
 	member_id = Column(INTEGER(11), ForeignKey('members.id'), primary_key=True)
 	conference_id = Column(INTEGER(11), ForeignKey('conferences.id'), primary_key=True)
@@ -25,17 +25,16 @@ class MemberConferences(BaseChanges, db.Base):
 	days = Column(VARCHAR(255))
 	member_paid = Column(BOOLEAN())
 	transaction_id = Column(VARCHAR(255))
-	member = relationship('Member', back_populates='conferences')
-	conference = relationship('Conference', back_populates='members')
+	member = relationship('Member', back_populates='registrations')
+	conference = relationship('Conference', back_populates='attendees')
 
 	def __init__(self, data):
 		self.food_pref = data['food_pref']
 		self.gluten_free = data['gluten_free']
 		self.member_paid = False
 	
-
 	def __repr__(self):
-		return "<MemberConference(id=%s, member=%s, conference=%s)>" % (self.id, self.member_id, self.conference_id)
+		return "<Registration(id=%s, member=%s, conference=%s)>" % (self.id, self.member_id, self.conference_id)
 
 
 #join table for vendors
@@ -57,7 +56,7 @@ class Conference(BaseChanges, db.Base):
 	year = Column(VARCHAR(4), unique=True)
 	institution_id = Column(INTEGER(11), ForeignKey('institutions.id'))
 	institution = relationship('Institution')
-	members = relationship('MemberConferences', back_populates='conference')
+	attendees = relationship('Registration', back_populates='conference')
 	vendors = relationship('Vendor', secondary=vendor_conferences, backref=backref('vendor_conferences', lazy='dynamic'))
 	host_id = Column(INTEGER(11), ForeignKey('members.id'))
 	host = relationship('Member')

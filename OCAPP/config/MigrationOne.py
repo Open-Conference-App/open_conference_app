@@ -20,32 +20,33 @@ for state in states:
 	db.session.add(state)
 
 addy = Address.Address({
-	'street1': 'Hellems Hall 156',
-	'street2': '239 UCB',
-	'city': 'Boulder',
-	'state_id': 6,
-	'zip': '80309' 
+	'street1': '1010 Birchwood Lane',
+	'street2': '',
+	'city': 'Mansfield',
+	'state_id': 43,
+	'zip': '76063' 
 })
 
 db.session.add(addy)
 
 
 inst = Institution.Institution({
-	'name': 'University of Colorado Boulder'
+	'name': 'Texas Tech University'
 })
 
 db.session.add(inst)
 
 salt = binascii.hexlify(os.urandom(16))
-hash = hashlib.sha256(salt + 'Password2017').hexdigest()
+hash = hashlib.sha256(salt + 'Swons789.').hexdigest()
 mem = Member.Member({
-	'first_name':'Mark',
-	'last_name': 'Knowles',
+	'first_name':'Ryan',
+	'last_name': 'Culpepper',
 	'address_id': 1,
-	'email': 'mark.knowles@colorado.edu',
+	'email': 'ryan.culpepper@gmail.com',
 	'salt': salt,
 	'hash':hash,
-	"type": 'Professional'
+	"type": 'Professional',
+	"officer": True
 })
 mem.institution = inst
 db.session.add(mem)

@@ -6,8 +6,9 @@ sens = Sens()
 import stripe
 stripe.api_key = sens.stripe_secret_key
 from OCAPP.Models import Address, Conference, Member, State, Institution
+from OCAPP.Controllers import Mail
 import json
-import smtplib
+
 
 @app.route('/')
 def load_forms():
@@ -17,6 +18,10 @@ def load_forms():
 		'institutions': Institution.index()
 	}
 	return render_template('index.html', data=data)
+
+@app.route('/conferences', methods=['GET'])
+def load_member_conferences():
+	return render_template('conference-dashboard.html')
 
 #create a new conference(to be done through admin dashboard only via ajax call)
 @app.route('/conferences', methods=['POST'])
@@ -39,8 +44,7 @@ def handle_conference(conference_id):
 	#delete a conference(to be done through admin dashboard only as an ajax call, to have this method, include a hidden form input with the name of '_method'
 	# a value of 'DELETE')
 	if request.method == 'DELETE':
-
-		return json.dumps({'result': Conferences.destroy(conference_id)})
+		return json.dumps({'result': Conference.destroy(conference_id)})
 	#update conference information(to be done through admin dashboard only as an ajax call)
 	if request.method =='PUT':
 		conference = Conferences.get_by_id(conference_id)
@@ -69,7 +73,8 @@ def register_user(conference_id):
 			'last_name': request.form['last_name'],
 			'email': request.form['email'],
 			'password': request.form['password'],
-			'type': request.form['regis_type']
+			'type': request.form['regis_type'],
+			'address_id': addy_data['validated_data']['id']
 			})
 
 	else:
@@ -124,17 +129,8 @@ def register_user(conference_id):
 			member_type_cost = conf.stud_cost
 
 		member_cost = member_type_cost/day_divisor
-		fromaddr = sens.account_email
-		toaddrs  = member_data['email']
-		msg = 'Why,Oh why!'
-		username = sens.account_email
-		password = sens.account_pw
-		server = smtplib.SMTP('smtp.gmail.com:587')
-		server.ehlo()
-		server.starttls()
-		server.login(username,password)
-		server.sendmail(fromaddr, toaddrs, msg)
-		server.quit()
+		Mail.send(member.email, 'We have received your payment.  Thank you!')
+
 		return render_template('credit_card.html', member=member_data, conf_id=conf.id, member_cost = member_cost)
 	#send data by calling functions from imported files and sending it the request.form by using request.form.copy()
 
@@ -150,7 +146,7 @@ def cctest():
 #pay for conference attendance/membership fees(which are one and the same, user must already exist)
 @app.route('/conferences/<int:conference_id>/members/<int:member_id>', methods=['POST'])
 def pay(conference_id, member_id):
-	if 'user' not in session:
+	if 'id' not in session:
 		return redirect('/')
 	else:
 		resp_object = {
