@@ -1,4 +1,4 @@
-#login-form, #show-register, #prices, #page2, #page3 {
+#login-form, #show-register, #prices, #page2, #page3, #page1-err, #page2-err, #page3-err {
 	display: none;
 }
 
@@ -40,8 +40,40 @@ ul {
 	color: #9fe19d;
 }
 
-.invalid {
+input.form-input.invalid {
+	border: 1px solid #ef6262;
+}
+
+.error {
 	border: 1px solid red;
+	background-color: #ef6262;
+	border-radius: 2px;
+	padding: 5px;
+	font-size: .8em;
+}
+
+.errors {
+	padding-left: 10px;
+}
+
+.header {
+	border-bottom: 1px solid black;
+}
+
+.header h5 {
+	margin: 5px;
+}
+
+.pure-u-3-4.input {
+	margin-left: 0;
+}
+
+div.pure-u-1-4 {
+	margin-left: 0;
+}
+
+label.form-label {
+	margin-left: 0;
 }
 /*SOCALLT Green #39b237*/
 

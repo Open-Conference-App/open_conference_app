@@ -5,7 +5,7 @@
 	<link rel="stylesheet" href="https://unpkg.com/purecss@0.6.1/build/pure-min.css" integrity="sha384-CCTZv2q9I9m3UOxRLaJneXrrqKwUNOzZ6NGEUMwHtShDJ+nCoiXJCAgi05KfkLGY" crossorigin="anonymous">
 	<link rel="stylesheet" href="{{ url_for('static',filename='css/spectre.min.css') }}"/>
 	<!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"> -->
-	<link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css')}}"/>
+	<!-- <link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css')}}"/> -->
 	<link rel="stylesheet" href="{{ url_for('static',filename='css/font-awesome-4.6.3/css/font-awesome.min.css') }}"/>
 	<link rel='stylesheet' href="{{ url_for('static',filename='css/styles.css') }}"/>
 	<script src="{{ url_for('static',filename='js/jquery-3.1.1.js') }}"></script>
@@ -21,92 +21,129 @@
 <body class='container-fluid'>
 	<div class='pure-g'>
 	<div class='pure-u-1-12'></div>
-	<div class='pure-u-2-3'>
+	<div class='pure-u-20-24'>
 		<div class='pure-g'>
-			<div class='pure-u-1'>
-				<h2>{{ 'SOCALLT Registration' if not data['conf'] else 'SOCALLT ' ~  data['conf']['year'] ~ ' Registration' }}</h2>
-				<h4>{{ data['conf'].title }}</h4>
-				<h4>{{ data['conf']['start_date'].strftime('%B %d') ~ "-" ~ data['conf']['end_date'].strftime('%d, %Y')if data['conf'] else '' }}</h4>
+			<div class='pure-u-1 header'>
+				<h3>{{ 'SOCALLT Registration' if not data['conf'] else 'SOCALLT ' ~  data['conf']['year'] ~ ' Registration' }}</h3>
+				<h5>{{ data['conf'].title }}</h5>
+				<h5>{{ data['conf'].institution.name }}</h5>
+				<h5>{{ data['conf']['start_date'].strftime('%B %d') ~ "-" ~ data['conf']['end_date'].strftime('%d, %Y')if data['conf'] else '' }}</h5>
 			</div>
-			<div class='pure-u-7-12'>
-				<div id='register-form'>
-				<!-- added id to form element for use with lunch selection option -->
-					<form action='/conferences/{{ data['conf']['id'] }}/register'' method='POST' class='pure-form pure-form-stacked' id="main_reg_form">
-						<input type='hidden' name='_csrf_token' value='{{ csrf_tok }}'>
-						<div id='regisErrors'>
-						<!-- flashed messages and messages returned from AJAX calls should look one and the same and render in the same location-->
-						{% with messages = get_flashed_messages(category_filter=['regisErr']) %}
-							{% for message in messages %}
-								<p class='error'>{{ message }}</p>
-							{% endfor %}
-						{% endwith %}
-						</div>
-						<!-- registration page 1 -->
-						<input type='hidden' id='conference' >
-						<h2>Register</h2>
-						<div class='form-content' id='page1'>
-							<h5>Member Information</h5>
-							<label class='form-label' for='first_name'>First Name:</label>
-							<input class='form-input' type="text" id="first_name" name="first_name" >
-							<label class='form-label' for='last_name'>Last Name:</label>
-							<input class='form-input' type="text" name="last_name" id="last_name" value="{{ session['last_name'] }}">
-							<label class='form-label' for='email'>Email:</label>
-							<input class='form-input' type="email" name="email" id="email">
-							<label class='form-label' for='password'>Password:</label>
-							<input class='form-input' type="password" name="password" id='password'>
-							<label class='form-label' for='confirm_password'>Confirm Password:</label>
-							<input class='form-input' type="password" name="confirm_password" id='confirm-password'>
-							<input type='hidden' value={{ data['csrf_token'] }}>
-							<button class='pure-button continue' type='button'>Continue <i class="fa fa-arrow-circle-right green" aria-hidden="false"></i></button>
-						</div>
-
-						<!-- registration page 2 -->
-						<div class='form-content' id='page2'>
-							<h5>Contact Information</h5>
-							<label class='form-label' for='street1'>Address 1:</label>
-							<input class='form-input' type="text" name="street1" id="street1" value="{{ session['street1'] }}">
-							<label class='form-label' for='street2'>Address 2:</label>
-							<input class='form-input' type="text" name="street2" id="street2" value="{{ session['street2'] }}">
-
-							<label class='form-label' for='city'>City:</label>
-							<input class='form-input' type="text" name="city" id="city" value="{{ session['city'] }}">
-
-							<label class='form-label' for='state'>State:</label>
-							<select class='form-select' name='state'>
-								{% for state in data['states'] %}
-									<option value="{{ state['id'] }}">{{ state['abbrev'] }}</option>
-								{% endfor %}
-							</select>
-							<label class='form-label' for='zip'>Zip:</label>
-							<input class='form-input' type="text" name="zip" id="zip" value="{{ session['zip'] }}">
-							<h5>Institution Information</h5>
-							<p>Select your institution:</p>
-							<select class='form-select' name='institution' id='institution'>
-								<option value='-1' id='other1'>---Select---</option>
-							{% for institution in data['institutions'] %}
-								<option value="{{ institution['id']}}">{{ institution['name'] }}</option>
-							{% endfor %}
-								<option value='other' id='other'>Other</option>
-							</select>
-							<div id='inst-info'>
-								<label class='form-label' for='inst-name'>Name:</label>
-								<input class='form-input' type="text" name="inst-name">
+			<div class='pure-u-18-24' id='register-form'>
+				<div class='pure-g'>
+					<div class='pure-u-1 form-header'>
+						<h3>Register</h3>
+						<h5>Member Information</h5>	
+					</div>
+					<div class='pure-u-1'>
+						<!-- added id to form element for use with lunch selection option -->
+						<form action='/conferences/{{ data['conf']['id'] }}/register'' method='POST' class='pure-form pure-form-stacked' id="main_reg_form">
+							<input type='hidden' name='_csrf_token' value='{{ csrf_tok }}'>
+							<!-- registration page 1 -->
+							<input type='hidden' id='conference'>
+							<div class='form-content' id='page1'>
+								<div class='pure-g'>
+									<div class='pure-u-3-4 input'>
+										<label class='form-label' for='first_name'>First Name:</label>
+										<input class='form-input' type="text" id="first_name" name="first_name" >
+									</div>
+									<div class='pure-u-1-4'>
+										<br>
+										<p id='first_name-err' class='error'></p>
+									</div>
+								</div>
+								<div class='pure-g'>
+									<div class='pure-u-3-4 input'>							
+										<label class='form-label' for='last_name'>Last Name:</label>
+										<input class='form-input' type="text" name="last_name" id="last_name" value="{{ session['last_name'] }}">
+									</div>
+									<div class='pure-u-1-4'>
+										<br>
+										<p id='last_name-err' class='error'></p>
+									</div>
+								</div>
+								<div class='pure-g'>
+									<div class='pure-u-3-4 input'>								
+										<label class='form-label' for='email'>Email:</label>
+										<input class='form-input' type="email" name="email" id="email">
+									</div>
+									<div class='pure-u-1-4'>
+										<br>
+										<p id='email-err' class='error'></p>
+									</div>
+								</div>
+								<div class='pure-g'>
+									<div class='pure-u-3-4 input'>
+										<label class='form-label' for='password'>Password:</label>
+										<input class='form-input' type="password" name="password" id='password'>
+									</div>
+									<div class='pure-u-1-4'>
+										<br>
+										<p id='password-err' class='error'></p>
+									</div>
+								</div>
+								<div class='pure-g'>
+									<div class='pure-u-3-4 input'>
+										<label class='form-label' for='confirm_password'>Confirm Password:</label>
+										<input class='form-input' type="password" name="confirm_password" id='confirm_password'>
+									</div>
+									<div class='pure-u-1-4'>
+										<br>
+										<p id='confirm_password-err' class='error'></p>
+									</div>
+								</div>
+								<input type='hidden' value={{ data['csrf_token'] }}>
+								<button class='pure-button continue' type='button'>Continue <i class="fa fa-arrow-circle-right green" aria-hidden="false"></i></button>
 							</div>
-							<button class='btn previous' type='button'><i class="fa fa-arrow-circle-left" aria-hidden="false"></i> Previous</button>
-							<button class='pure-button continue' type='button'>Continue<i class="fa fa-arrow-circle-right" aria-hidden="false"></i></button>
-							<br>
-						</div>
 
-						<!-- registration page 3 -->
-						<div id='page3' class='form-content'>
-							<h5>Conference Information</h5>
-						    <label class="form-label">Lunch Options</label>
-								<select class="form-select" name="lunch" id='lunch'>
-									<option selected value="Regular">Regular</option>
-									<option value="Vegetarian">Vegetarian</option>
-									<option value="Vegan">Vegan</option>
-									<option value="NoLunch">No Lunch</option>
+							<!-- registration page 2 -->
+							<div class='form-content' id='page2'>
+								<h5>Contact Information</h5>
+
+								<label class='form-label' for='street1'>Address 1:</label>
+								<input class='form-input' type="text" name="street1" id="street1" value="{{ session['street1'] }}">
+								<label class='form-label' for='street2'>Address 2:</label>
+								<input class='form-input' type="text" name="street2" id="street2" value="{{ session['street2'] }}">
+
+								<label class='form-label' for='city'>City:</label>
+								<input class='form-input' type="text" name="city" id="city" value="{{ session['city'] }}">
+
+								<label class='form-label' for='state'>State:</label>
+								<select class='form-select' name='state'>
+									{% for state in data['states'] %}
+										<option value="{{ state['id'] }}">{{ state['abbrev'] }}</option>
+									{% endfor %}
 								</select>
+								<label class='form-label' for='zip'>Zip:</label>
+								<input class='form-input' type="text" name="zip" id="zip" value="{{ session['zip'] }}">
+								<h5>Institution Information</h5>
+								<p>Select your institution:</p>
+								<select class='form-select' name='institution' id='institution'>
+									<option value='-1' id='other1'>---Select---</option>
+								{% for institution in data['institutions'] %}
+									<option value="{{ institution['id']}}">{{ institution['name'] }}</option>
+								{% endfor %}
+									<option value='other' id='other'>Other</option>
+								</select>
+								<div id='inst-info'>
+									<label class='form-label' for='inst-name'>Name:</label>
+									<input class='form-input' type="text" name="inst-name">
+								</div>
+								<button class='btn previous' type='button'><i class="fa fa-arrow-circle-left" aria-hidden="false"></i> Previous</button>
+								<button class='pure-button continue' type='button'>Continue<i class="fa fa-arrow-circle-right" aria-hidden="false"></i></button>
+								<br>
+							</div>
+
+							<!-- registration page 3 -->
+							<div id='page3' class='form-content'>
+								<h5>Conference Information</h5>
+							    <label class="form-label">Lunch Options</label>
+									<select class="form-select" name="lunch" id='lunch'>
+										<option selected value="Regular">Regular</option>
+										<option value="Vegetarian">Vegetarian</option>
+										<option value="Vegan">Vegan</option>
+										<option value="NoLunch">No Lunch</option>
+									</select>
 								<label class="form-switch">
 		           					<input type="checkbox" id='gluten' name='gluten'/>
 		            				<i class="form-icon"></i>&nbsp;&nbsp;&nbsp;&nbsp;
@@ -138,35 +175,76 @@
 								<button class='pure-button previous' type='button'><i class="fa fa-arrow-circle-left" aria-hidden="false"></i> Previous</button>
 								<button type="submit" form="main-form" value="Submit" class='pure-button continue'>Register</button>						
 							</div>
-					</form>
+						</form>
+					</div>
+					<!-- <div class='pure-u-1-4 errors'>
+						<div id='page1-err'>
+
+							<br>
+							<p id='last_name-err' class='error'></p>
+							<br>
+							<p id='email-err' class='error'></p>
+							<br>
+							<p id='password-err' class='error'></p>
+							<br>
+							<p id='confirm-password-err' class='error'></p>
+						</div>
+						<div id='page2-err'>
+							<br>
+							<p id='street1-err' class='error'></p>
+							<br>
+							<p id='street2-err' class='error'></p>
+							<br>
+							<p id='city-err' class='error'></p>
+							<br>
+							<p id='state-err' class='error'></p>
+							<br>
+							<p id='zip-password-err' class='error'></p>
+							<br>
+						</div>
+						<div id='page3-err'>
+							<br>
+							<p id='lunch-err' class='error'></p>
+							<br>
+							<p id='gluten-err' class='error'></p>
+							<br>
+							<p id='pay-err' class='error'></p>
+							<br>
+							<p id='regis-type-err' class='error'></p>
+							<br>
+							<p id='regis-len-err' class='error'></p>
+						</div>
+					</div> -->
 				</div>
 			</div>
 	<!-- Login Form -->
-			<div class='pure-u-7-12' id='login-form'>
-				<form action='/sessions' method='POST'>
-					<input type='hidden' name='_csrf_token' value='{{ csrf_tok }}'>
-				<!-- flashed messages and messages returned from AJAX calls should look one and the same and render in the same location-->
-					<div id='loginErrors'>
-					{% with messages = get_flashed_messages(category_filter=['loginErr']) %}
-						{% for message in messages %}
-							<p class='error'>{{ message }}</p>
-						{% endfor %}
-					{% endwith %}
+			<div class='pure-u-18-24' id='login-form'>
+				<div class='pure-g'>
+					<div class='pure-u-1 form-header'>
+						<h3>Login</h3>
 					</div>
-					<h2>Login</h2>
-					<div class='form-group'>
-						<label class='form-label' for='email'>Email:</label> 
-						<input class='form-input' type="text" name="email" value="{{ session['email'] }}">
+					<div class='pure-u-3-4'>
+						<form action='/sessions' method='POST'>
+							<input type='hidden' name='_csrf_token' value='{{ csrf_tok }}'>
+						<!-- flashed messages and messages returned from AJAX calls should look one and the same and render in the same location-->
+							<div class='form-group'>
+								<label class='form-label' for='email'>Email:</label> 
+								<input class='form-input' type="text" name="email" value="{{ session['email'] }}">
+							</div>
+							<div class='form-group'>
+								<label class='form-label' for='password'>Password:</label>
+								<input class='form-input' type="password" name="password">
+							</div>
+							<button class='btn btn-primary' id='login'>Login</button>
+						</form>
 					</div>
-					<div class='form-group'>
-						<label class='form-label' for='password'>Password:</label>
-						<input class='form-input' type="password" name="password">
+					<div class='pure-u-1-4 errors'>
+						<br>
+						Errors here
 					</div>
-					<button class='btn btn-primary' id='login'>Login</button>
-				</form>
+				</div>
 			</div>
-			<div class='pure-u-1-12'></div>
-			<div class='pure-u-1-4'>
+			<div class='pure-u-6-24'>
 				<div id='show-register'>
 					<h4>Never been to a SOCALLT conference or new to our online system?</h4>
 					<button class='btn btn-sm btn-link' data-id='register'>Register</button>

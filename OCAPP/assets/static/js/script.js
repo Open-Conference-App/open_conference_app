@@ -3,7 +3,7 @@ $(document).ready(function(){
 		'page1_valids': [{
 				'fieldName': 'first_name',
 				'validation': (fieldname) => checkLen(fieldname, 1, '>'),
-				'message': 'Last name must be present.'
+				'message': 'First name must be present.'
 			},
 			{		
 				'fieldName': 'last_name',
@@ -25,7 +25,7 @@ $(document).ready(function(){
 				'message': 'Passwords must be at least 8 characters.'
 			},
 			{
-				'fieldName': 'confirm-password',
+				'fieldName': 'confirm_password',
 				'validation': (fieldname) => $(fieldname).val() == $('#password').val(),
 				'message': 'Passwords do not match.'
 			}
@@ -186,7 +186,10 @@ $(document).ready(function(){
 				$('#register-form form').submit()
 			} else {
 				$('#'+pageId).hide();
+				$('#'+pageId+'-err').hide();
 				$('#'+nextPage).fadeToggle();
+				$('#'+nextPage+'-err').fadeToggle();
+
 			}
 		}
 		return false;

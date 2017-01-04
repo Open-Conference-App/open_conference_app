@@ -19,6 +19,7 @@
 						<tr>
 							<th>Name</th>
 							<th>Active</th>
+							<th>Institution</th>
 							<th># of Conferences Attended</th>
 							<th># of Presentations</th>
 						</tr>
@@ -28,6 +29,7 @@
 						<tr>
 							<td>{{mem.first_name}} {{mem.last_name}}</td>
 							<td>{{mem.active}}</td>
+							<td>{{mem.institution.name}}</td>
 							<td>{{mem.registrations | length}}</td>
 							<td>{{mem.presentations | length}}</td>
 						</tr>

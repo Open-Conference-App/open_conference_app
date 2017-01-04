@@ -83,7 +83,7 @@ def register_user(conference_id):
 	else:
 		for field in addy_data['errors']:
 			for message in field:
-				flash(message, field)
+				flash(message, 'regisErr')
 		return redirect('/')
 	if (data['all_valid']):
 		member = Member.get_by_id(data['validated_data']['id'])
@@ -105,7 +105,7 @@ def register_user(conference_id):
 	else:
 		for field in data['errors']:
 			for message in field:
-				flash(message,field)
+				flash(message,'regisErr')
 		return redirect('/')
 	if request.form['pay'] == 'check_PO':
 		return render_template('confirmation.html')
