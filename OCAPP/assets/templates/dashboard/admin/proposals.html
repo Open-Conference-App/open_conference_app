@@ -1,0 +1,46 @@
+{% extends 'layouts/dashboard-layout.html' %}
+{% block head %}
+	{{ super() }} 
+
+{% endblock %}
+{% block content %}
+	<div class='pure-u-7-8'>
+		<div class='pure-g'>
+			<h2 class='pure-u-1'>Current Conference Proposals</h2>
+			<div class='pure-u-1-24'></div>
+			<table class='pure-u-22-24 pure-table pure-table-striped'>
+				<thead>
+					<tr>
+						<th>Title</th>
+						<th>Abstract</th>
+						<th>Type</th>
+						<th>Presenters</th>
+						<th>Actions</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for prop in data['proposals'] %}
+					<tr>
+						<td>{{ prop.title }}</td>
+						<td>{{ prop.summary }}</td>
+						<td>{{ prop.type.name }}</td>
+						<td>
+							{% for presenter in prop.presenters %}
+							<p><a href='mailto:{{presenter.email}}'>{{ presenter.first_name }}<{{presenter.last_name}}</a></p>
+							{% endfor %}
+
+							{% for presenter in prop.decoded_nonmember_presenters %}
+							<p><a href='mailto:{{presenter.email}}'>{{ presenter.fname }} {{presenter.lname}}</a></p>
+							{% endfor %}
+						</td>
+						<td>
+							<a class='pure-button' href='/presentations/{{prop.id}}/approve'>Approve</a>
+						</td>
+					</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+			<div class='pure-u-1-24'></div>
+		</div>
+	</div>
+{% endblock %}

@@ -1,5 +1,5 @@
 from flask import render_template, session, request, redirect, flash 
-from OCAPP import app, sentry, savepoint, rollback, csrf
+from OCAPP import app, savepoint, rollback, csrf
 from flask.ext.mail import Message
 from OCAPP.config.sensitive import Sens
 sens = Sens()
@@ -166,11 +166,11 @@ def register_user(conference_id):
 
 
 
-# TEST ROUTE FOR RENDERING CREDIT CARD INFORMATION CHETAN 12/20/16
-@app.route('/creditcard')
-def cctest():
-	member = {"id": 1}
-	return render_template('credit_card.html', member = member, conf_id = 1, member_cost=30)
+# # TEST ROUTE FOR RENDERING CREDIT CARD INFORMATION CHETAN 12/20/16
+# @app.route('/creditcard')
+# def cctest():
+# 	member = {"id": 1}
+# 	return render_template('credit_card.html', member=member, conf_id = 1, member_cost=30)
 
 
 #pay for conference attendance/membership fees(which are one and the same, user must already exist)
@@ -204,9 +204,10 @@ def pay(conference_id, member_id):
 				err = body['error']
 				for var in err:
 					resp_object['error'].append(var)
-				sentry.captureException()
+				# sentry.captureException()
 			except Exception as e:
-				sentry.captureException()
+				pass
+				# sentry.captureException()
 		return json.dumps(resp_object)
 
 
@@ -287,8 +288,6 @@ def submit_proposal(conference_id):
 			"template": "proposal-submission.html",
 			"data": {"data": data}
 			}
-
-			print presenter
 
 			if not presenter['is_member']:
 				email_data['plain_message'] += ' You may regsiter and pay for the conference at that time.'

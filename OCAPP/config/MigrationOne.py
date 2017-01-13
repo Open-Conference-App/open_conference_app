@@ -74,10 +74,10 @@ types = {
 }
 
 for type, info in types.items():
-	pres_type = PresentationType({
+	pres_type = PresentationType.PresentationType({
 		"name": type,
 		"description": info[0],
-		"duration": info[1],
+		"duration": info[1]
 		})
 	db.session.add(pres_type)
 
