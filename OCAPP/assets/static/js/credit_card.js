@@ -31,9 +31,7 @@ function stripeResponseHandler(status, response) {
 
 	}
 	member_cost = $form.find('.member_cost').val()
-	console.log("THE MEMBER COST IS!!!")
-	console.log(member_cost)
-	console.log(csrf_token_js)
+
 	$.ajax({
 		method:"post",
 		data: {"token": token,

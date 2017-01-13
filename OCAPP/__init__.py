@@ -5,8 +5,8 @@ sens = Sens()
 app = Flask('OCAPP', static_folder=sens.root_path + '/assets/static', template_folder=sens.root_path + '/assets/templates')
 app.secret_key = sens.secret_key
 csrf = SeaSurf(app)
-from raven.contrib.flask import Sentry
-sentry = Sentry(app, dsn='https://b0e8b593f1fd45b89b29bc3675cb3807:ad556a25e6a54c98be03bbcfef090a80@sentry.io/111734')
+# from raven.contrib.flask import Sentry
+# sentry = Sentry(app, dsn='https://b0e8b593f1fd45b89b29bc3675cb3807:ad556a25e6a54c98be03bbcfef090a80@sentry.io/111734')
 
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
@@ -102,7 +102,7 @@ db.BaseChanges = BaseChanges()
 # from OCAPP.Models import Address, Vendor, Conference, Institution, Member, Presentation, State, Vendor,PresentationType
 # db.Base.metadata.create_all(db.engine)
 from OCAPP import routes
-from OCAPP.Schema import State, Address, Institution, Conference, Member, Presentation, Vendor, PresentationType
+# from OCAPP.Schema import State, Address, Institution, Conference, Member, Presentation, Vendor, PresentationType
 from OCAPP.Schema.State import State
 from OCAPP.Schema.Address import Address
 from OCAPP.Schema.Institution import Institution
