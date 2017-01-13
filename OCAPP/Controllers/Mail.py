@@ -40,6 +40,7 @@ def send(msg):
 	server.starttls()
 	server.login(username, password)
 	server.sendmail(fromAddy, msg['toAddy'], message.as_string())
+	print 'mail sent'
 	server.quit()
 
 

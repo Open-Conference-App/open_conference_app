@@ -1,6 +1,7 @@
 from flask import render_template, session, request, redirect, flash 
-from OCAPP import app, savepoint, rollback, csrf
-from flask.ext.mail import Message
+
+from OCAPP import app,savepoint, rollback, csrf #,sentry
+
 from OCAPP.config.sensitive import Sens
 sens = Sens()
 import stripe
