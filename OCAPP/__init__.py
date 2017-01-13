@@ -86,6 +86,12 @@ class SQLEZ:
 		return BaseChanges.validate(cl, data, funcs)
 
 db = SQLEZ()
+def savepoint():
+	db.session.begin_nested()
+
+def rollback():
+	db.session.rollback()
+
 from OCAPP.Models.BaseChanges import BaseChanges
 db.BaseChanges = BaseChanges()
 
@@ -93,18 +99,20 @@ db.BaseChanges = BaseChanges()
 # def teardown_db(exception):
 # 	print 'Shutting down DB connection.'
 # 	db.engine.close()
-from OCAPP.Models import Address, Vendor, Conference, Institution, Member, Presentation, State, Vendor
-db.Base.metadata.create_all(db.engine)
-from OCAPP import routes
-# from OCAPP.Models import State, Address, Institution, Conference, Member, Presentation, Vendor
+# from OCAPP.Models import Address, Vendor, Conference, Institution, Member, Presentation, State, Vendor,PresentationType
 # db.Base.metadata.create_all(db.engine)
-# from OCAPP.Models.State import State
-# from OCAPP.Models.Address import Address
-# from OCAPP.Models.Institution import Institution
-# from OCAPP.Models.Member import Member
-# from OCAPP.Models.Conference import Conference, MemberConferences
-# from OCAPP.Models.Presentation import Presentation
-# from OCAPP.Models.Vendor import Vendor
+from OCAPP import routes
+from OCAPP.Schema import State, Address, Institution, Conference, Member, Presentation, Vendor, PresentationType
+from OCAPP.Schema.State import State
+from OCAPP.Schema.Address import Address
+from OCAPP.Schema.Institution import Institution
+from OCAPP.Schema.Member import Member
+from OCAPP.Schema.Conference import Conference, Registration
+from OCAPP.Schema.Presentation import Presentation
+from OCAPP.Schema.PresentationType import PresentationType
+from OCAPP.Schema.Vendor import Vendor
+db.Base.metadata.create_all(db.engine)
+
 
 
 

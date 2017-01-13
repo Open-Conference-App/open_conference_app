@@ -18,7 +18,7 @@ class BaseChanges(object):
 	#validation checks: check_blanks, check_email, process_password
 	@staticmethod
 	def validate(cls, data, funcs=['check_blanks']):
-		validations = {'all_valid': False, 'errors': [], 'validated_data': {}, 'int_errors':[]}
+		validations = {'all_valid': False, 'errors': {}, 'validated_data': {}, 'int_errors':[]}
 		all_valid = True
 
 		for method in funcs:
@@ -29,8 +29,11 @@ class BaseChanges(object):
 					all_valid = False
 					for error in info['int_errors']:
 						validations['int_errors'].append(error)
-					for error in info['errors']:
-						validations['errors'].append(error)
+
+					print type(info['errors'])
+					print cls.__name__
+					for field, errors in info['errors'].items():
+						validations['errors'][field] = errors
 				if method == 'process_password' and all_valid:
 					data['salt'] = info['salt']
 					data['hash'] = info['hash']
@@ -40,14 +43,14 @@ class BaseChanges(object):
 
 	@staticmethod
 	def check_blanks(cls, data):
-		ret_obj = {'all_valid': False, 'errors':[], 'int_errors':[]}
+		ret_obj = {'all_valid': False, 'errors':{}, 'int_errors':[]}
 		try:
 			all_valid = True
 			for key, value in data.items():
 				if key in requirements[cls.__name__] and not value:
 					all_valid = False
 					ret_obj['errors'][key] = []
-					ret_obj['errors'][key].append(key + 'should not be blank.')
+					ret_obj['errors'][key].append(key + ' should not be blank.')
 			ret_obj['all_valid'] = all_valid
 		except:
 			e = sys.exc_info()[:0]
@@ -69,9 +72,12 @@ class BaseChanges(object):
 			if EMAIL_REGEX.match(data['email']) == None:
 				ret_obj['errors']['email'].append('Email formatted incorrectly.  Please check for errors.')
 				all_valid = False
+				print ret_obj['errors']['email']
 			if db.session.query(cls).filter_by(email=data['email']).first():
 				ret_obj['errors']['email'].append('The email you entered already exists in our database.')
 				all_valid = False
+				print ret_obj['errors']['email']
+
 		except:
 			e = sys.exc_info()[:0]
 			all_valid = False

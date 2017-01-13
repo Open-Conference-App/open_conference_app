@@ -27,11 +27,11 @@
 					<tbody>
 						{% for mem in members %}
 						<tr>
-							<td>{{mem.first_name}} {{mem.last_name}}</td>
-							<td>{{mem.active}}</td>
-							<td>{{mem.institution.name}}</td>
-							<td>{{mem.registrations | length}}</td>
-							<td>{{mem.presentations | length}}</td>
+							<td>{{ mem.first_name }} {{mem.last_name}}</td>
+							<td>{{ mem.active }}</td>
+							<td>{{ mem.institution.name }}</td>
+							<td>{{ mem.registrations | length }}</td>
+							<td>{{ mem.presentations | length }}</td>
 						</tr>
 						{% endfor %}
 					</tbody>

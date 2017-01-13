@@ -22,7 +22,7 @@ $(document).ready(function(){
 			{
 				'fieldName': 'password',
 				'validation': (fieldname) => checkLen(fieldname, 8, '>'),
-				'message': 'Passwords must be at least 8 characters.'
+				'message': 'Passwords must be at least 8 characters.  Required: lowercase letter, uppercase letter and one number'
 			},
 			{
 				'fieldName': 'confirm_password',
@@ -131,8 +131,8 @@ $(document).ready(function(){
 			var other = id == 'login' ? 'register' : 'login';
 			$('#show-' + id).hide();
 			$('#' + other + '-form').hide();
-			$('#' + id + '-form').slideToggle();
-			$('#show-' + other).slideToggle();
+			$('#' + id + '-form').fadeToggle();
+			$('#show-' + other).fadeToggle();
 		}
 	});
 

@@ -1,4 +1,4 @@
-#login-form, #show-register, #prices, #page2, #page3, #page1-err, #page2-err, #page3-err {
+#login-form, #show-register, #prices, #page2, #page3, #first_name-err, #last_name-err, #email-err, #password-err, #confirm_password-err, #street1-err, #street2-err, #city-err, #state-err, #zip-err, #institution-err, #lunch-err, #pay-err, #regis_type-err, #regis_len-err {
 	display: none;
 }
 
@@ -40,6 +40,11 @@ ul {
 	color: #9fe19d;
 }
 
+.green-back {
+	background-color: #9fe19d;
+	color: white!important;
+}
+
 input.form-input.invalid {
 	border: 1px solid #ef6262;
 }
@@ -61,7 +66,7 @@ input.form-input.invalid {
 }
 
 .header h5 {
-	margin: 5px;
+	margin: 7px;
 }
 
 .pure-u-3-4.input {
@@ -75,6 +80,72 @@ div.pure-u-1-4 {
 label.form-label {
 	margin-left: 0;
 }
+
+.pure-image {
+	height: 25vh;
+}
+
+body {
+	min-height: 200vh;
+}
+
+.continue i , .previous i {
+	color: #9fe19d;
+}
+
+.vert-space {
+	height: 20px;
+}
+
+.pure-button.continue.register {
+	background-color: #9fe19d;
+	/*color: #757575;*/
+	border: 1px solid #757575;
+}
+.pure-form textarea {
+	width: 90%;
+	height: 100%;
+	resize: none;
+}
+
+.proposal_input {
+	width: 90%;
+}
+
+.pure-button.custom-button {
+	margin-top: 5%;
+	background-color: #39b237;
+}
+
+a:hover {
+	color: initial;
+}
+
+a:visited {
+	color: initial;
+}
+
+.socallt-green {
+	color: #39b237;
+}
+
+.information {
+	background-color: #c5c9c5;
+	margin-top: 10px;
+	border-radius: 5px;
+	padding: 10px 5px;
+	vertical-align: top;
+}
+
+.information a.pure-button {
+	background-color: white;
+	color: #39b237!important;
+}
+
+.pure-menu-item {
+	height: 30px;
+}
+
 /*SOCALLT Green #39b237*/
 
 

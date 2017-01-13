@@ -26,7 +26,7 @@ class Registration(BaseChanges, db.Base):
 	member_paid = Column(BOOLEAN())
 	transaction_id = Column(VARCHAR(255))
 	member = relationship('Member', back_populates='registrations')
-	conference = relationship('Conference', back_populates='attendees')
+	conference = relationship('Conference', back_populates='registrations')
 
 	def __init__(self, data):
 		self.food_pref = data['food_pref']
@@ -56,7 +56,7 @@ class Conference(BaseChanges, db.Base):
 	year = Column(VARCHAR(4), unique=True)
 	institution_id = Column(INTEGER(11), ForeignKey('institutions.id'))
 	institution = relationship('Institution')
-	attendees = relationship('Registration', back_populates='conference')
+	registrations = relationship('Registration', back_populates='conference')
 	vendors = relationship('Vendor', secondary=vendor_conferences, backref=backref('vendor_conferences', lazy='dynamic'))
 	host_id = Column(INTEGER(11), ForeignKey('members.id'))
 	host = relationship('Member')

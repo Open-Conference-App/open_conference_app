@@ -9,6 +9,7 @@ def show_members():
 	if not session['admin']:
 		return redirect('/')
 	members = Member.index()
+
 	return render_template('/dashboard/admin/members.html', members=members)
 
 
@@ -75,7 +76,12 @@ def load_dashboard():
 	if 'id' in session:
 		member = Member.get_by_id(session['id'])
 		if member:
-			return render_template('dashboard/dashboard.html', member=member)
+			data = {
+			'conf': Conference.get_next(),
+			'states': State.index(),
+			'institutions': Institution.index()
+			}
+			return render_template('dashboard/dashboard.html', member=member, data=data)
 		else:
 			return redirect('/')
 
