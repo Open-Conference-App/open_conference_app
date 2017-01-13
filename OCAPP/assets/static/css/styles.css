@@ -1,4 +1,4 @@
-#login-form, #show-register, #prices, #page2, #page3 {
+#login-form, #show-register, #prices, #page2, #page3, #first_name-err, #last_name-err, #email-err, #password-err, #confirm_password-err, #street1-err, #street2-err, #city-err, #state-err, #zip-err, #institution-err, #lunch-err, #pay-err, #regis_type-err, #regis_len-err {
 	display: none;
 }
 
@@ -13,6 +13,139 @@
 ul {
 	list-style-type: none;
 }
+
+.pure-menu {
+	height: 100vh;
+}
+
+.pure-menu-item:hover, .pure-menu-link:hover {
+	background-color: #9fe19d;
+}
+
+.pure-menu-item.pure-menu-has-children .pure-menu-children {
+	border: 1px solid #757575;
+	border-radius: 2px;
+}
+
+.pure-menu {
+	border-right: 1px solid #757575;
+}
+
+.pure-button {
+	background-color: #757575;
+	color: white;
+}
+
+.green {
+	color: #9fe19d;
+}
+
+.green-back {
+	background-color: #9fe19d;
+	color: white!important;
+}
+
+input.form-input.invalid {
+	border: 1px solid #ef6262;
+}
+
+.error {
+	border: 1px solid red;
+	background-color: #ef6262;
+	border-radius: 2px;
+	padding: 5px;
+	font-size: .8em;
+}
+
+.errors {
+	padding-left: 10px;
+}
+
+.header {
+	border-bottom: 1px solid black;
+}
+
+.header h5 {
+	margin: 7px;
+}
+
+.pure-u-3-4.input {
+	margin-left: 0;
+}
+
+div.pure-u-1-4 {
+	margin-left: 0;
+}
+
+label.form-label {
+	margin-left: 0;
+}
+
+.pure-image {
+	height: 25vh;
+}
+
+body {
+	min-height: 200vh;
+}
+
+.continue i , .previous i {
+	color: #9fe19d;
+}
+
+.vert-space {
+	height: 20px;
+}
+
+.pure-button.continue.register {
+	background-color: #9fe19d;
+	/*color: #757575;*/
+	border: 1px solid #757575;
+}
+.pure-form textarea {
+	width: 90%;
+	height: 100%;
+	resize: none;
+}
+
+.proposal_input {
+	width: 90%;
+}
+
+.pure-button.custom-button {
+	margin-top: 5%;
+	background-color: #39b237;
+}
+
+a:hover {
+	color: initial;
+}
+
+a:visited {
+	color: initial;
+}
+
+.socallt-green {
+	color: #39b237;
+}
+
+.information {
+	background-color: #c5c9c5;
+	margin-top: 10px;
+	border-radius: 5px;
+	padding: 10px 5px;
+	vertical-align: top;
+}
+
+.information a.pure-button {
+	background-color: white;
+	color: #39b237!important;
+}
+
+.pure-menu-item {
+	height: 30px;
+}
+
 /*SOCALLT Green #39b237*/
 
 

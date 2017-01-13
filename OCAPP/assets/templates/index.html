@@ -1,200 +1,396 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<title>SOCALLT Members</title>
-	<link rel="stylesheet" href="{{ url_for('static',filename='css/spectre.min.css') }}"/>
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-	<link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css')}}"/>
-	<link rel="stylesheet" href="{{ url_for('static',filename='css/font-awesome-4.6.3/css/font-awesome.min.css') }}"/>
-	<link rel='stylesheet' href="{{ url_for('static',filename='css/styles.css') }}"/>
-	<script src="{{ url_for('static',filename='js/jquery-3.1.1.js') }}"></script>
-	<script src="{{ url_for('static',filename='js/moment.js') }}"></script>
-	<script>
-		var confId = {{ '' if not data['conf'] else data['conf']['id'] }};
-		{% with csrf_tok = csrf_token() %}
-		var csrfToken = '{{ csrf_tok }}'
-	</script>
+{% extends 'layouts/base.html' %}
+	{% block head %}
+		{{ super() }}
+		<script>
+		$(document).ready(function() {
+			var inputs = ['first_name','last_name','email','password','street1','city','state','zip','lunch', 'pay', 'regis_type', 'regis_len'];
+			var len = inputs.length
+			for(let i = 0; i < len; i++) {
+				let inputId = '#' + inputs[i] + '-err'
+				console.log($(inputId).html())
+				if($.trim($(inputId).html()).length) {
+					$(inputId).show();
+					console.log(inputId)
+				}
+			}
+		})
+			
+		</script>
 
-	<script type="text/javascript" src="{{ url_for('static',filename='js/validations.js') }}"></script>
-	<script type="text/javascript" src="{{ url_for('static',filename='js/script.js') }}"></script>
-</head>
-<body class='container-fluid'>
-		<div class='registrationHeader'>
-			<h2>{{ 'SOCALLT Registration' if not data['conf'] else 'SOCALLT ' ~  data['conf']['year'] ~ ' Registration' }}</h2>
-			<h4>{{ data['conf'].title }}</h4>
-			<h4>{{ data['conf']['start_date'].strftime('%B %d') ~ "-" ~ data['conf']['end_date'].strftime('%d, %Y')if data['conf'] else '' }}</h4>
-		</div>
-	<div class='row content'>
-		<div class=''></div>
-		<div class='col-xs-10 col-sm-6'>
-			<div id='register-form'>
-			<!-- added id to form element for use with lunch selection option -->
-				<form action='/conferences/{{ data['conf']['id'] }}/register'' method='POST' id="main_reg_form">
-					<input type='hidden' name='_csrf_token' value='{{ csrf_tok }}'>
-					<div id='regisErrors'>
-					<!-- flashed messages and messages returned from AJAX calls should look one and the same and render in the same location-->
-					{% with messages = get_flashed_messages(category_filter=['regisErr']) %}
-						{% for message in messages %}
-							<p class='error'>{{ message }}</p>
-						{% endfor %}
-					{% endwith %}
-					</div>
+	{% endblock %}
+	{% block body %}
+	<div class='pure-u-18-24' id='register-form'>
+		<div class='pure-g'>
+			<div class='pure-u-1 form-header'>
+				<h3>Register</h3>
+				<h5>Member Information</h5>	
+			</div>
+			<div class='pure-u-1'>
+				<!-- added id to form element for use with lunch selection option -->
+				<form action='/conferences/{{ data['conf']['id'] }}/register'' method='POST' class='pure-form pure-form-stacked' id="main_reg_form">
+					<input type='hidden' name='_csrf_token'>
 					<!-- registration page 1 -->
-					<input type='hidden' id='conference' >
-					<h2>Register</h2>
+					<input type='hidden' id='conference'>
 					<div class='form-content' id='page1'>
-						<h5>User Information</h5>
-						<div class='form-group'>
-							<label class='form-label' for='first_name'>First Name:</label>
-							<input class='form-input' type="text" id="first_name" name="first_name" >
+						<div class='pure-g'>
+							<div class='pure-u-3-4 input'>
+								<label class='form-label' for='first_name'>First Name:</label>
+								<input class='form-input' type="text" id="first_name" name="first_name" >
+							</div>
+							<div class='pure-u-1-4'>
+								<br>
+								<p id='first_name-err' class='error'>
+								{% with errors = get_flashed_messages(category_filter=["first_name"]) %}
+									{% if errors %}
+										{% for message in errors %}
+											{{ message }}
+										{% endfor %}
+									{% endif %}
+								{% endwith %}
+								</p>
+							</div>
 						</div>
-						<div class='form-group'>
-							<label class='form-label' for='last_name'>Last Name:</label>
-							<input class='form-input' type="text" name="last_name" id="last_name" value="{{ session['last_name'] }}">
+						<div class='pure-g'>
+							<div class='pure-u-3-4 input'>							
+								<label class='form-label' for='last_name'>Last Name:</label>
+								<input class='form-input' type="text" name="last_name" id="last_name" value="{{ session['last_name'] }}">
+							</div>
+							<div class='pure-u-1-4'>
+								<br>
+								<p id='last_name-err' class='error'>
+								{% with errors = get_flashed_messages(category_filter=["last_name"]) %}
+									{% if errors %}
+										{% for message in errors %}
+											{{ message }}
+										{% endfor %}
+									{% endif %}
+								{% endwith %}
+								</p>
+							</div>
 						</div>
-						<div class='form-group'>
-							<label class='form-label' for='email'>Email:</label>
-							<input class='form-input' type="email" name="email" id="email">
+						<div class='pure-g'>
+							<div class='pure-u-3-4 input'>								
+								<label class='form-label' for='email'>Email:</label>
+								<input class='form-input' type="email" name="email" id="email">
+							</div>
+							<div class='pure-u-1-4'>
+								<br>
+								<p id='email-err' class='error'>
+								{% with errors = get_flashed_messages(category_filter=["email"]) %}
+									{% if errors %}
+										{% for message in errors %}
+											{{ message }}
+										{% endfor %}
+									{% endif %}
+								{% endwith %}
+								</p>
+							</div>
 						</div>
-						<div class='form-group'>
-							<label class='form-label' for='password'>Password:</label>
-							<input class='form-input' type="password" name="password" id='password'>
+						<div class='pure-g'>
+							<div class='pure-u-3-4 input'>
+								<label class='form-label' for='password'>Password:</label>
+								<input class='form-input' type="password" name="password" id='password'>
+							</div>
+							<div class='pure-u-1-4'>
+								<br>
+								<p id='password-err' class='error'>
+								{% with errors = get_flashed_messages(category_filter=["password"]) %}
+									{% if errors %}
+										{% for message in errors %}
+											{{ message }}
+										{% endfor %}
+									{% endif %}
+								{% endwith %}
+								</p>
+							</div>
 						</div>
-						<div class='form-group'>
-							<label class='form-label' for='confirm_password'>Confirm Password:</label>
-							<input class='form-input' type="password" name="confirm_password" id='confirm-password'>
+						<div class='pure-g'>
+							<div class='pure-u-3-4 input'>
+								<label class='form-label' for='confirm_password'>Confirm Password:</label>
+								<input class='form-input' type="password" name="confirm_password" id='confirm_password'>
+							</div>
+							<div class='pure-u-1-4'>
+								<br>
+								<p id='confirm_password-err' class='error'>
+								{% with errors = get_flashed_messages(category_filter=["confirm_password"]) %}
+									{% if errors %}
+										{% for message in errors %}
+											{{ message }}
+										{% endfor %}
+									{% endif %}
+								{% endwith %}
+								</p>
+							</div>
 						</div>
 						<input type='hidden' value={{ data['csrf_token'] }}>
-						<div class='btn-group'>
-							<button class='btn primary continue' type='button'>Continue<i class="fa fa-arrow-circle-right" aria-hidden="false"></i></button>
-						</div>
+						<button class='pure-button continue' type='button'>Continue <i class="fa fa-arrow-circle-right green" aria-hidden="false"></i></button>
 					</div>
 
 					<!-- registration page 2 -->
 					<div class='form-content' id='page2'>
 						<h5>Contact Information</h5>
-						<div class='form-group'>
-							<label class='form-label' for='street1'>Address 1:</label>
-							<input class='form-input' type="text" name="street1" id="street1" value="{{ session['street1'] }}">
-						</div>
-						<div class='form-group'>
-							<label class='form-label' for='street2'>Address 2:</label>
-							<input class='form-input' type="text" name="street2" id="street2" value="{{ session['street2'] }}">
-						</div>
-						<div class='form-group'>
-							<label class='form-label' for='city'>City:</label>
-							<input class='form-input' type="text" name="city" id="city" value="{{ session['city'] }}">
-						</div>
-						<div class='form-group'>
-							<label class='form-label' for='state'>State:</label>
-							<select class='form-select' name='state'>
-								{% for state in data['states'] %}
-									<option value="{{ state['id'] }}">{{ state['abbrev'] }}</option>
-								{% endfor %}
-							</select>
-						</div>
-						<div class='form-group'>
-							<label class='form-label' for='zip'>Zip:</label>
-							<input class='form-input' type="text" name="zip" id="zip" value="{{ session['zip'] }}">
-						</div>
-						<h5>Institution Information</h5>
-						<div class='form-group'>
-							<p>Select your institution:</p>
-							<select class='form-select' name='institution' id='institution'>
-								<option value='-1' id='other1'>---Select---</option>
-							{% for institution in data['institutions'] %}
-								<option value="{{ institution['id']}}">{{ institution['name'] }}</option>
-							{% endfor %}
-								<option value='other' id='other'>Other</option>
-							</select>
-						</div>
-						<div id='inst-info'>
-							<div class='form-group'>
-								<label class='form-label' for='inst-name'>Name:</label>
-								<input class='form-input' type="text" name="inst-name">
+						<div class='pure-g'>
+							<div class='pure-u-3-4 input'>
+								<label class='form-label' for='street1'>Address 1:</label>
+								<input class='form-input' type="text" name="street1" id="street1" value="{{ session['street1'] }}">
+							</div>
+							<div class='pure-u-1-4'>
+								<br>
+								<p id='street1-err' class='error'>
+								{% with errors = get_flashed_messages(category_filter=["street1"]) %}
+									{% if errors %}
+										{% for message in errors %}
+											{{ message }}
+										{% endfor %}
+									{% endif %}
+								{% endwith %}
+								</p>
 							</div>
 						</div>
-						<div class='btn-group btn-group-block'>
-							<button class='btn previous' type='button'><i class="fa fa-arrow-circle-left" aria-hidden="false"></i> Previous</button>
-							<button class='btn primary continue' type='button'>Continue<i class="fa fa-arrow-circle-right" aria-hidden="false"></i></button>
+						<div class='pure-g'>
+							<div class='pure-u-3-4 input'>
+								<label class='form-label' for='street2'>Address 2:</label>
+								<input class='form-input' type="text" name="street2" id="street2" value="{{ session['street2'] }}">
+							</div>
+							<div class='pure-u-1-4'>
+								<br>
+								<p id='street2-err' class='error'>
+								{% with errors = get_flashed_messages(category_filter=["street2"]) %}
+									{% if errors %}
+										{% for message in errors %}
+											{{ message }}
+										{% endfor %}
+									{% endif %}
+								{% endwith %}
+								</p>
+							</div>
 						</div>
+						<div class='pure-g'>
+							<div class='pure-u-3-4 input'>
+								<label class='form-label' for='city'>City:</label>
+								<input class='form-input' type="text" name="city" id="city" value="{{ session['city'] }}">
+							</div>
+							<div class='pure-u-1-4'>
+								<br>
+								<p id='city-err' class='error'>
+								{% with errors = get_flashed_messages(category_filter=["city"]) %}
+									{% if errors %}
+										{% for message in errors %}
+											{{ message }}
+										{% endfor %}
+									{% endif %}
+								{% endwith %}
+								</p>
+							</div>
+						</div>
+						<div class='pure-g'>
+							<div class='pure-u-3-4 input'>
+								<label class='form-label' for='state'>State:</label>
+								<select class='form-select' name='state'>
+									{% for state in data['states'] %}
+										<option value="{{ state['id'] }}">{{ state['abbrev'] }}</option>
+									{% endfor %}
+								</select>
+							</div>
+							<div class='pure-u-1-4'>
+								<br>
+								<p id='state-err' class='error'>
+								{% with errors = get_flashed_messages(category_filter=["state"]) %}
+									{% if errors %}
+										{% for message in errors %}
+											{{ message }}
+										{% endfor %}
+									{% endif %}
+								{% endwith %}
+								</p>
+							</div>
+						</div>
+						<div class='pure-g'>
+							<div class='pure-u-3-4 input'>
+								<label class='form-label' for='zip'>Zip:</label>
+								<input class='form-input' type="text" name="zip" id="zip" value="{{ session['zip'] }}">
+							</div>
+							<div class='pure-u-1-4'>
+								<br>
+								<p id='zip-err' class='error'>
+								{% with errors = get_flashed_messages(category_filter=["zip"]) %}
+									{% if errors %}
+										{% for message in errors %}
+											{{ message }}
+										{% endfor %}
+									{% endif %}
+								{% endwith %}
+								</p>
+							</div>
+						</div>
+<!-- 						<p>Select your Affiliated Institution</p>
+-->						<div class='pure-g'>
+							<div class='pure-u-3-4 input'>
+								<label for='institution'><h6>Select your Affiliated Institution</h6></label>
+								<select class='form-select' name='institution' id='institution'>
+									<option value='-1' id='other1'>---Select---</option>
+								{% for institution in data['institutions'] %}
+									<option value="{{ institution['id']}}">{{ institution['name'] }}</option>
+								{% endfor %}
+									<option value='other' id='other'>Other</option>
+								</select>
+								<div id='inst-info'>
+									<label class='form-label' for='inst-name'>Name:</label>
+									<input class='form-input' type="text" name="inst-name">
+								</div>
+							</div>
+							<div class='pure-u-1-4'>
+								<br>
+								<p id='institution-err' class='error'>
+								{% with errors = get_flashed_messages(category_filter=["institution"]) %}
+									{% if errors %}
+										{% for message in errors %}
+											{{ message }}
+										{% endfor %}
+									{% endif %}
+								{% endwith %}
+								</p>
+							</div>
+						</div>
+						<div class='pure-g'>
+							<div class='pure-u-1 vert-space'></div>
+						</div>
+						<button class='pure-button previous' type='button'><i class="fa fa-arrow-circle-left" aria-hidden="false"></i> Previous</button>
+						<button class='pure-button continue' type='button'>Continue <i class="fa fa-arrow-circle-right" aria-hidden="false"></i></button>
 						<br>
 					</div>
-
 					<!-- registration page 3 -->
 					<div id='page3' class='form-content'>
 						<h5>Conference Information</h5>
-					    <div class="form-group">
-					    <label class="form-label">Lunch Options</label>
-							<select class="form-select" name="lunch" id='lunch'>
-								<option selected value="Regular">Regular</option>
-								<option value="Vegetarian">Vegetarian</option>
-								<option value="Vegan">Vegan</option>
-								<option value="NoLunch">No Lunch</option>
-							</select>
-						</div>
-						<div class='form-group'>
-							<label class="form-switch">
-	           					<input type="checkbox" id='gluten' name='gluten'/>
-	            				<i class="form-icon"></i>&nbsp;&nbsp;&nbsp;&nbsp;
-	            				Gluten Free
-	        				</label>
-						</div>
-						<div class='form-group'>
-							<label class='form-label' for='pay'>Payment Options:</label>
-							<select class='form-select' name='pay' id='pay'>
-								<option selected value='credit_debit'>Credit/Debit Card</option>
-								<option value='check_PO'>Check, Purchase Order</option>
-							</select>
-							<p>*The next screen will provide you with more payment information</p>
-						</div>
-						<div class='container'>
-							<div class='columns'>
-								<div class='form-group column col-3'>
-									<label class='form-label' for='regis_type'>Registration Type:</label>
-									<select class='form-select' name='regis_type' id='regis-type'>
-										<option selected value='Professional'>Professional</option>
-										<option value='Student'>Student</option>
-										<option value='Vendor'>Vendor/Exhibitor/Industry Rep.</option>
-									</select>
-								</div>
-								<div class='column col-xs-1'></div>
-								<div class='form-group column col-3'>
-									<label class='form-label' for='regis_len'>Days:</label>
-
-									<!-- We need to have an ajax call that will populate this field with price information along with days
-										depending on what is selected in the registration type field-->
-									<select class='form-select' name='regis_len' id='regis-len'>
-										<option value='0'>-----</option>
-										<option value='friday'>Friday Only{{ '' if not data['conf'] else '($' ~ '%0.2f' | format(data['conf']['prof_cost']/2 | float ) ~ ')'}}</option>
-										<option value='saturday'>Saturday Only {{ '' if not data['conf'] else '($' ~ '%0.2f' | format(data['conf']['prof_cost']/2 | float ) ~ ')'}}</option>
-										<option value='weekend'>Entire Conference{{ '' if not data['conf'] else '($' ~ '%0.2f' | format(data['conf']['prof_cost'] | float ) ~ ')'}}</option>
-									</select>
-								</div>
-
+					    <div class='pure-g'>
+							<div class='pure-u-1-4 input'>
+							    <label class="form-label">Lunch Options</label>
+								<select class="form-select" name="lunch" id='lunch'>
+									<option selected value="Regular">Regular</option>
+									<option value="Vegetarian">Vegetarian</option>
+									<option value="Vegan">Vegan</option>
+									<option value="NoLunch">No Lunch</option>
+								</select>
 							</div>
+							<div class='pure-u-1-2'>
+								<br>
+								<p id='lunch-err' class='error'>
+								{% with errors = get_flashed_messages(category_filter=["lunch"]) %}
+									{% if errors %}
+										{% for message in errors %}
+											{{ message }}
+										{% endfor %}
+									{% endif %}
+								{% endwith %}
+								</p>
+							</div>
+							<div class='pure-u-1-4'></div>
+
 						</div>
-						<div class='btn-group btn-group-block'>
-							<button class='btn previous' type='button'><i class="fa fa-arrow-circle-left" aria-hidden="false"></i> Previous</button>
-							<button type="submit" form="main-form" value="Submitx" class='btn btn-primary continue'>Register</button>
+						<div class='pure-g'>
+							<div class='pure-u-1-4 input'>
+								<label class="form-switch">
+		           					<input type="checkbox" id='gluten' name='gluten'/>
+		            				<i class="form-icon"></i>&nbsp;&nbsp;&nbsp;&nbsp;
+		            				Gluten Free
+		        				</label>
+		        			</div>
+		        			<div class='pure-u-1-2'>
+							</div>
+							<div class='pure-u-1-4'></div>
+
 						</div>
+						<div class='pure-g'>
+							<div class='pure-u-1-4 input'>
+								<label class='form-label' for='pay'>Payment Options:</label>
+								<select class='form-select' name='pay' id='pay'>
+									<option selected value='credit_debit'>Credit/Debit Card</option>
+									<option value='check_PO'>Check, Purchase Order</option>
+								</select>
+							</div>
+							<div class='pure-u-1-2'>
+								<br>
+								<p id='pay-err' class='error'>
+								{% with errors = get_flashed_messages(category_filter=["lunch"]) %}
+									{% if errors %}
+										{% for message in errors %}
+											{{ message }}
+										{% endfor %}
+									{% endif %}
+								{% endwith %}
+								</p>
+							</div>
+							<div class='pure-u-1-4'></div>
+
+						</div>
+						<div class='pure-g'>
+							<div class='pure-u-1'>
+								<p>*The next screen will provide you with more payment information</p>
+							</div>
+							<div class='pure-u-1-4 input'>	
+								<label class='form-label' for='regis_type'>Registration Type:</label>
+								<select class='form-select' name='regis_type' id='regis-type'>
+									<option selected value='Professional'>Professional</option>
+									<option value='Student'>Student</option>
+									<!-- We dont have vendor registration built in yet, hiding this until completely functional. -->
+									<!-- <option value='Vendor'>Vendor/Exhibitor/Industry Rep.</option> -->
+								</select>
+							</div>
+							<div class='pure-u-1-2'>
+								<br>
+								<p id='regis_type-err' class='error'>
+								{% with errors = get_flashed_messages(category_filter=["regis_type"]) %}
+									{% if errors %}
+										{% for message in errors %}
+											{{ message }}
+										{% endfor %}
+									{% endif %}
+								{% endwith %}
+								</p>
+							</div>
+							<div class='pure-u-1-4'></div>
+						</div>
+						<div class='pure-g'>
+							<div class='pure-u-1-4 input'>
+								<label class='form-label' for='regis_len'>Days:</label>
+								<select class='form-select' name='regis_len' id='regis-len'>
+									<option value='0'>-----</option>
+									<option value='friday'>Friday Only{{ '' if not data['conf'] else '($' ~ '%0.2f' | format(data['conf']['prof_cost']/2 | float ) ~ ')'}}</option>
+									<option value='saturday'>Saturday Only {{ '' if not data['conf'] else '($' ~ '%0.2f' | format(data['conf']['prof_cost']/2 | float ) ~ ')'}}</option>
+									<option value='weekend'>Entire Conference{{ '' if not data['conf'] else '($' ~ '%0.2f' | format(data['conf']['prof_cost'] | float ) ~ ')'}}</option>
+								</select>
+							</div>
+							<div class='pure-u-1-2'>
+								<br>
+								<p id='regis_len-err' class='error'>
+								{% with errors = get_flashed_messages(category_filter=["regis_len"]) %}
+									{% if errors %}
+										{% for message in errors %}
+											{{ message }}
+										{% endfor %}
+									{% endif %}
+								{% endwith %}
+								</p>
+							</div>
+							<div class='pure-u-1-4'></div>
+						</div>
+						<button class='pure-button previous' type='button'><i class="fa fa-arrow-circle-left" aria-hidden="false"></i> Previous</button>
+						<button type="submit" form="main-form" value="Submit" class='pure-button continue register'>Register</button>						
 					</div>
 				</form>
 			</div>
-
-		<!-- Login Form -->
-			<div class='' id='login-form'>
-				<form action='/login' method='POST'>
+		</div>
+	</div>
+<!-- Login Form -->
+	<div class='pure-u-18-24' id='login-form'>
+		<div class='pure-g'>
+			<div class='pure-u-1 form-header'>
+				<h3>Login</h3>
+			</div>
+			<div class='pure-u-3-4'>
+				<form action='/sessions' method='POST'>
 					<input type='hidden' name='_csrf_token' value='{{ csrf_tok }}'>
 				<!-- flashed messages and messages returned from AJAX calls should look one and the same and render in the same location-->
-					<div id='loginErrors'>
-					{% with messages = get_flashed_messages(category_filter=['loginErr']) %}
-						{% for message in messages %}
-							<p class='error'>{{ message }}</p>
-						{% endfor %}
-					{% endwith %}
-					</div>
-					<h2>Login</h2>
 					<div class='form-group'>
 						<label class='form-label' for='email'>Email:</label> 
 						<input class='form-input' type="text" name="email" value="{{ session['email'] }}">
@@ -206,19 +402,24 @@
 					<button class='btn btn-primary' id='login'>Login</button>
 				</form>
 			</div>
-		</div>
-		<div class='column col-xs-1'></div>
-		<div class='col-xs-10 col-sm-4 p-t-15'>
-			<div id='show-register'>
-				<h4>Never been to a SOCALLT conference or new to our online system?</h4>
-				<button class='btn btn-sm btn-link' data-id='register'>Register</button>
+			<div class='pure-u-1-4 errors'>
+				<br>
+				Errors here
 			</div>
-			<div id='show-login' class="col-xs-10 ">
-				<h4>Already a member and logged in before?</h4>
-				<button class='btn btn-sm btn-link' data-id='login'>Login</button>
-			</div>
-			 {% endwith %}
 		</div>
 	</div>
-</body>
-</html>
+	<div class='pure-u-6-24'>
+		<div id='show-register'>
+			<h4>Never been to a SOCALLT conference or new to our online system?</h4>
+			<button class='pure-button green-back' data-id='register'>Register</button>
+		</div>
+		<div id='show-login'>
+			<h4>Already a member and logged in before?</h4>
+			<button class='pure-button green-back' data-id='login'>Login</button>
+		</div>
+		<div>
+			<h4>Share you're discoveries, create discussion!</h4>
+			<a class='pure-button green-back' href="/conferences/{{ data['conf']['id'] }}/proposals">Submit a Proposal</a>
+		</div>
+	</div>				
+	{% endblock %}

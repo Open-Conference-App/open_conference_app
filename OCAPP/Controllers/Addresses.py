@@ -7,7 +7,7 @@ import json
 def create_address():
 	return json.dumps(Address.create(request.form.copy()))
 
-@app.route('/conferences/<int:address_id>', methods=['GET','DELETE','PUT'])
+@app.route('/addresses/<int:address_id>', methods=['GET','DELETE','PUT'])
 def handle_address(address_id):
 	#show next conference registration page, even if using a past conference idnumber or a non-int type
 	if request.method == 'GET':

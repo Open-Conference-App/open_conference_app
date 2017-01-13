@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+	{% block head %}
+	<title>SOCALLT Members</title>
+	<link rel="stylesheet" href="https://unpkg.com/purecss@0.6.1/build/pure-min.css" integrity="sha384-CCTZv2q9I9m3UOxRLaJneXrrqKwUNOzZ6NGEUMwHtShDJ+nCoiXJCAgi05KfkLGY" crossorigin="anonymous">
+	<link rel="stylesheet" href="{{ url_for('static',filename='css/spectre.min.css') }}"/>
+	<!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"> -->
+	<!-- <link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css')}}"/> -->
+	<link rel="stylesheet" href="{{ url_for('static',filename='css/font-awesome-4.6.3/css/font-awesome.min.css') }}"/>
+	<link rel='stylesheet' href="{{ url_for('static',filename='css/styles.css') }}"/>
+	<script src="{{ url_for('static',filename='js/jquery-3.1.1.js') }}"></script>
+	<script src="{{ url_for('static',filename='js/moment.js') }}"></script>
+	<script>
+		var confId = {{ '' if not data['conf'] else data['conf']['id'] }};
+		{% with csrf_tok = csrf_token() %}
+		var csrfToken = '{{ csrf_tok }}'
+		$(document).ready(function(){
+			$("input[name='_csrf_token']").val(csrfToken);
+		});
+		{% endwith %}
+	</script>
+	<script type="text/javascript" src="{{ url_for('static',filename='js/validations.js') }}"></script>
+	<script type="text/javascript" src="{{ url_for('static',filename='js/script.js') }}"></script>
+	{% endblock %}
+</head>
+<body>	
+	<div class='pure-g'>	
+		<div class='pure-u-1-12'></div>
+		<div class='pure-u-20-24'>
+			<div class='pure-g'>
+				<div class='pure-u-1 header'>
+					<div class='pure-g'>
+						<div class='pure-u-1-2'>
+							<img class='pure-image' src="{{ url_for('static', filename='images/SOCALLT.png') }}">
+						</div>
+						{% block conference_data %}
+						<div class='pure-u-1-2'>
+						<h3>{{ 'SOCALLT Registration' if not data['conf'] else 'SOCALLT ' ~  data['conf']['year'] ~ ' Registration' }}</h3>
+							<h5>{{ data['conf'].title }}</h5>
+							<h5>{{ data['conf'].institution.name }}</h5>
+							<h5>{{ data['conf']['start_date'].strftime('%B %d') ~ "-" ~ data['conf']['end_date'].strftime('%d, %Y')if data['conf'] else '' }}</h5>
+						</div>
+						{% endblock %}
+					</div>
+				</div>
+				
+				{% block body %}{% endblock %}				
+			</div>
+		</div>
+		<div class='pure-u-1-12'></div>
+	</div>
+</body>
+</html>

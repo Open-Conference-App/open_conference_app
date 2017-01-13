@@ -1,0 +1,47 @@
+{% extends 'layouts/dashboard-layout.html' %}
+{% block head %}
+	{{ super() }} 
+
+{% endblock %}
+{% block content %}
+	{% block conference_data %}{% endblock %}
+
+	<div class='pure-u-7-8'>
+		<div class='pure-g'>
+			<div class='pure-u-1-8'></div>
+			<div class='pure-u-3-4'>
+				<h2>Membership Information</h2>
+				<table class='pure-table pure-table-striped'>
+					<tr>
+						<td><b>Name</b></td>
+						<td>{{member.first_name}} {{member.last_name}}</td>
+					</tr>
+					<tr>
+						<td><b>Email</b></td>
+						<td>{{member.email}}</td>
+					</tr>
+					<tr>
+						<td><b>Address</b></td>
+						<td>
+							{{ member.address.street1 }}<br>
+							{% if member.address.street2 != '' %}
+								{{ member.address.street2 }}<br>
+							{% endif %}
+							{{ member.address.city }}, {{ member.address.state.abbrev }} {{ member.address.zip }}
+						</td>
+					</tr>
+					<tr>
+						<td><b>Active?</b></td>
+						{% if member.active %}
+							<td>Yes</td>
+						{% else %}
+							<td>Yes</td>
+						{% endif %}
+					</tr>
+				</table>
+			</div>
+			<div class='pure-u-1-8'></div>
+		</div>
+	</div>
+
+{% endblock %}

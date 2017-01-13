@@ -3,7 +3,7 @@ $(document).ready(function(){
 		'page1_valids': [{
 				'fieldName': 'first_name',
 				'validation': (fieldname) => checkLen(fieldname, 1, '>'),
-				'message': 'Last name must be present.'
+				'message': 'First name must be present.'
 			},
 			{		
 				'fieldName': 'last_name',
@@ -22,10 +22,10 @@ $(document).ready(function(){
 			{
 				'fieldName': 'password',
 				'validation': (fieldname) => checkLen(fieldname, 8, '>'),
-				'message': 'Passwords must be at least 8 characters.'
+				'message': 'Passwords must be at least 8 characters.  Required: lowercase letter, uppercase letter and one number'
 			},
 			{
-				'fieldName': 'confirm-password',
+				'fieldName': 'confirm_password',
 				'validation': (fieldname) => $(fieldname).val() == $('#password').val(),
 				'message': 'Passwords do not match.'
 			}
@@ -131,8 +131,8 @@ $(document).ready(function(){
 			var other = id == 'login' ? 'register' : 'login';
 			$('#show-' + id).hide();
 			$('#' + other + '-form').hide();
-			$('#' + id + '-form').slideToggle();
-			$('#show-' + other).slideToggle();
+			$('#' + id + '-form').fadeToggle();
+			$('#show-' + other).fadeToggle();
 		}
 	});
 
@@ -156,7 +156,7 @@ $(document).ready(function(){
 			url: '/conferences/' + confId + '/prices',
 			success: function(data){
 				var val = $('#regis-type').children(':selected').val()
-				val = val == 'Student' ? 'stud_cost' : val == 'Profession' ? 'prof_cost' : 'vend_cost';
+				val = val == 'Student' ? 'stud_cost' : val == 'Professional' ? 'prof_cost' : 'vend_cost';
 				data = JSON.parse(data);
 				var price = data[val];
 				var halfPrice = price/2;
@@ -172,8 +172,9 @@ $(document).ready(function(){
 	var member = {};
 	$(document).on('click', '.continue', function(){
 		//run validations based on page div id and validations
-		var pageId = $(this).parent().parent().attr('id');
+		var pageId = $(this).parent().attr('id');
 		var validArr = pageId + '_valids';
+		console.log(validations[validArr]);
 		var validObj = validate(pageId, validations[validArr]);
 		//send member object to server if all validations were successful
 		if(validObj.allValid) {
@@ -185,7 +186,10 @@ $(document).ready(function(){
 				$('#register-form form').submit()
 			} else {
 				$('#'+pageId).hide();
+				$('#'+pageId+'-err').hide();
 				$('#'+nextPage).fadeToggle();
+				$('#'+nextPage+'-err').fadeToggle();
+
 			}
 		}
 		return false;

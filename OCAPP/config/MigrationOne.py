@@ -10,7 +10,7 @@ Base = declarative_base()
 engine = create_engine(sens.db_path)
 Session = sessionmaker(bind=engine)
 session = Session()
-from OCAPP.Schema import State,Address,Institution, Member, Conference
+from OCAPP.Schema import State,Address,Institution, Member, Conference, PresentationType
 from OCAPP import db
 import datetime, os, binascii, hashlib
 
@@ -20,11 +20,11 @@ for state in states:
 	db.session.add(state)
 
 addy = Address.Address({
-	'street1': 'Hellems Hall 156',
-	'street2': '239 UCB',
-	'city': 'Boulder',
-	'state_id': 6,
-	'zip': '80309' 
+	'street1': '1010 Birchwood Lane',
+	'street2': '',
+	'city': 'Mansfield',
+	'state_id': 43,
+	'zip': '76063' 
 })
 
 db.session.add(addy)
@@ -37,15 +37,16 @@ inst = Institution.Institution({
 db.session.add(inst)
 
 salt = binascii.hexlify(os.urandom(16))
-hash = hashlib.sha256(salt + 'Password2017').hexdigest()
+hash = hashlib.sha256(salt + 'Swons789.').hexdigest()
 mem = Member.Member({
-	'first_name':'Mark',
-	'last_name': 'Knowles',
+	'first_name':'Ryan',
+	'last_name': 'Culpepper',
 	'address_id': 1,
-	'email': 'mark.knowles@colorado.edu',
+	'email': 'ryan.culpepper@gmail.com',
 	'salt': salt,
 	'hash':hash,
-	"type": 'Professional'
+	"type": 'Professional',
+	"officer": True
 })
 mem.institution = inst
 db.session.add(mem)
@@ -63,4 +64,21 @@ conf = Conference.Conference({
 conf.host = mem
 conf.institution = inst
 db.session.add(conf)
+
+types = {
+'Individual/Group Presentation': ['Typically, presenters share information before a group in a classroom / lecture room setting.', 30],
+'Workshop': ['Workshops are usually done in a computer lab (or BYOD if the proposal description calls for it). Participants have meaningful hands on time to interact with technology.', 60],
+'Demonstration': ['Demonstration sessions are typically given by vendors of language technology products relevant to teaching and learning languages in academic settings such as K12 schools and colleges and universities.', 30],
+'Panel Discussion': ['Typically, a panel discussion is a small group of individuals who respond to various questions and prompts. Each participant has time to react to these questions and prompts. Panel groups are organized by the member submitting the proposal. Specify the desired length (30 or 60 min) in your proposal.', 60],
+'Technology Test Kitchen': ["We invite anyone to participate as 'tech chefs' in the technology test kitchen! In this session, there will be multiple facilitators, each at their own table. They will demonstrate a product (giving hands on time to a small group) in round robin style. After 10 minutes, attendees at one table will switch to the next to encounter another demonstration. Think of it as a low pressure, hands on 'speed dating' sales pitch for the technology you're demonstrating! We'd like at least one test kitchen session each day, both having at least 6 tables with different demos going on at the same time.", 10]
+}
+
+for type, info in types.items():
+	pres_type = PresentationType({
+		"name": type,
+		"description": info[0],
+		"duration": info[1],
+		})
+	db.session.add(pres_type)
+
 db.session.commit()

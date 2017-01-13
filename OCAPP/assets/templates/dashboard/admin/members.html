@@ -1,0 +1,43 @@
+{% extends 'layouts/dashboard-layout.html' %}
+{% block head %}
+	{{ super() }} 
+
+{% endblock %}
+{% block content %}
+	<div class='pure-u-7-8'>
+		<div class='pure-g'>
+		<div class='pure-u-1-12'></div>
+			<div class='pure-u-5-6'>
+				<h2>SOCALLT Members</h2>
+				<div class='pure-g'>
+					<h4 class='pure-u-1-6'><i>Total: </i></h4>
+					<h4 class='pure-u-1-6'><i>Active: </i></h4>
+					<h4 class='pure-u-1-6'><i>Inactive: </i></h4>
+				</div>
+				<table class='pure-table pure-table-striped'>
+					<thead>
+						<tr>
+							<th>Name</th>
+							<th>Active</th>
+							<th>Institution</th>
+							<th># of Conferences Attended</th>
+							<th># of Presentations</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for mem in members %}
+						<tr>
+							<td>{{ mem.first_name }} {{mem.last_name}}</td>
+							<td>{{ mem.active }}</td>
+							<td>{{ mem.institution.name }}</td>
+							<td>{{ mem.registrations | length }}</td>
+							<td>{{ mem.presentations | length }}</td>
+						</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+			<div class='pure-u-1-12'></div>
+		</div>
+	</div>
+{% endblock %}

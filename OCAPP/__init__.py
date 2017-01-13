@@ -1,7 +1,7 @@
 from flask import Flask, session
 from flask.ext.seasurf import SeaSurf
-from OCAPP.config import sensitive
-sens = sensitive.Sens()
+from OCAPP.config.sensitive import Sens
+sens = Sens()
 app = Flask('OCAPP', static_folder=sens.root_path + '/assets/static', template_folder=sens.root_path + '/assets/templates')
 app.secret_key = sens.secret_key
 csrf = SeaSurf(app)
@@ -12,6 +12,23 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import create_engine
 import sys
+from flask.ext.mail import Mail
+
+mail=Mail(app)
+
+app.config.update(
+	DEBUG=True,
+	#EMAIL SETTINGS
+	MAIL_SERVER='smtp.gmail.com',
+	MAIL_PORT=587,
+	MAIL_USE_SSL=False,
+	MAIL_USE_TSL=True,
+	MAIL_USERNAME = sens.account_email,
+	MAIL_PASSWORD = sens.account_pw,
+	DEFAULT_MAIL_SENDER = sens.account_email
+	)
+
+mail=Mail(app)
 
 valid_funcs = {
 	'Conference': ['check_blanks','process_dates'],
@@ -69,6 +86,12 @@ class SQLEZ:
 		return BaseChanges.validate(cl, data, funcs)
 
 db = SQLEZ()
+def savepoint():
+	db.session.begin_nested()
+
+def rollback():
+	db.session.rollback()
+
 from OCAPP.Models.BaseChanges import BaseChanges
 db.BaseChanges = BaseChanges()
 
@@ -76,18 +99,20 @@ db.BaseChanges = BaseChanges()
 # def teardown_db(exception):
 # 	print 'Shutting down DB connection.'
 # 	db.engine.close()
-from OCAPP.Models import Address, Vendor, Conference, Institution, Member, Presentation, State, Vendor
-db.Base.metadata.create_all(db.engine)
-from OCAPP import routes
-# from OCAPP.Models import State, Address, Institution, Conference, Member, Presentation, Vendor
+# from OCAPP.Models import Address, Vendor, Conference, Institution, Member, Presentation, State, Vendor,PresentationType
 # db.Base.metadata.create_all(db.engine)
-# from OCAPP.Models.State import State
-# from OCAPP.Models.Address import Address
-# from OCAPP.Models.Institution import Institution
-# from OCAPP.Models.Member import Member
-# from OCAPP.Models.Conference import Conference, MemberConferences
-# from OCAPP.Models.Presentation import Presentation
-# from OCAPP.Models.Vendor import Vendor
+from OCAPP import routes
+from OCAPP.Schema import State, Address, Institution, Conference, Member, Presentation, Vendor, PresentationType
+from OCAPP.Schema.State import State
+from OCAPP.Schema.Address import Address
+from OCAPP.Schema.Institution import Institution
+from OCAPP.Schema.Member import Member
+from OCAPP.Schema.Conference import Conference, Registration
+from OCAPP.Schema.Presentation import Presentation
+from OCAPP.Schema.PresentationType import PresentationType
+from OCAPP.Schema.Vendor import Vendor
+db.Base.metadata.create_all(db.engine)
+
 
 
 
