@@ -38,7 +38,7 @@ class Presentation(BaseChanges, db.Base):
 	type = relationship('PresentationType', back_populates='presentations')
 	preferred_time = Column(VARCHAR(255))
 	scheduled_time = Column(DATETIME())
-	nonmember_presenters = Column(JSON())
+	nonmember_presenters = Column(TEXT())
 	presenters = relationship('Member', secondary=member_presentations, back_populates='presentations')
 	conference_id = Column(INTEGER(11), ForeignKey('conferences.id'))
 	conference = relationship('Conference', back_populates='presentations', uselist=False)

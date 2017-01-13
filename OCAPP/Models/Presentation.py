@@ -1,5 +1,5 @@
 from OCAPP.Schema.Presentation import Presentation
-from OCAPP.Models import Member
+from OCAPP.Models import Member, Conference
 
 from OCAPP.Schema.PresentationType import PresentationType
 from OCAPP import db, rollback, savepoint
@@ -18,7 +18,7 @@ def get_by_id(id):
 	return db.get(Presentation, id)
 
 def add_presenters(id, presenters):
-	savepoint()
+	# savepoint()
 	pres = get_by_id(id)
 	nonmember_presenters = []
 	try:
@@ -26,6 +26,7 @@ def add_presenters(id, presenters):
 			if key != 'num':
 				if presenter['is_member']:
 					db_presenter = Member.get_by_email(presenter['email'])
+					print db_presenter
 					pres.presenters.append(db_presenter)
 				else:
 					presenter_hash = binascii.hexlify(os.urandom(16))
@@ -46,3 +47,8 @@ def add_presenters(id, presenters):
 		raise
 		return False
 
+def get_current_proposals():
+	conf = Conference.get_next()
+	props = db.query(Presentation).filter(Presentation.conference_id == conf.id, Presentation.approved == False).all()
+
+	return props

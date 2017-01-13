@@ -39,7 +39,7 @@ valid_funcs = {
 class SQLEZ:
 	def __init__(self):
 		self.Base = declarative_base()
-		self.engine = create_engine(sens.db_path)
+		self.engine = create_engine(sens.db_path, echo=True)
 		Session = sessionmaker(bind=self.engine)
 		self.session = Session()
 		self.BaseChanges = {}
