@@ -25,9 +25,9 @@
 			<h2>Proposal Submission</h2>
 		</div>
 		<div class='pure-u-1-2 information'>
-			<p>Registration is not required (but you can) prior to submitting a proposal, but is required once your proposal is accepted.  You will recieve an email to register once an official decision has been made. </p>
+			<p>Registration is not required, but encouraged prior to submitting a proposal. If you have not, you will be required to register once your proposal is accepted.  You will recieve an email when an official decision has been made. </p>
 
-			<p>Please submit your proposals for presentations, workshops, panel discussions, demonstrations, and test kitchen demos by midnight, February 15, 2017.</p>
+			<p>Please submit your proposals for presentations, workshops, panel discussions, demonstrations, and test kitchen demos by midnight, {{ data['conf']['proposal_deadline'].strftime('%B %d, %Y')}}.</p>
 			<a class='pure-button green-back' href="/conferences/{{ data['conf']['id'] }}">Register </a>
 			<a class='pure-button green-back' href="http://www.socallt.org/conf/{{ data['conf'].year }}-conference">Conference Info</a>
 		</div>
@@ -84,45 +84,37 @@
 		<div class='pure-u-1-2'>
 			<label for='title'><b>Title</b></label><br>
 			<input type='text' name='title' class='proposal_input'><br><br>
-
-			<label for='summary'><b>Abstract</b> (+/- 200 words)</label>
-			<p><i>Please be clear about your objectives and what attendees will take away from your session. This will describe your session in the program, so be careful with wording. Use paragraph form.</i></p>
-			<textarea name='summary'></textarea>
+			<div class='pure-g'>
+				<label for='summary' class='pure-u-1'><b>Abstract</b> (+/- 200 words)</label>
+				<p class='pure-u-7-8'><i>Please be clear about your objectives and what attendees will take away from your session. This will describe your session in the program, so be careful with wording. Use paragraph form.</i></p>
+				<textarea name='summary' id='summary'></textarea>
+			</div>
 		</div>
 		<div class='pure-u-1-2'>
-			<p><b>Presentation Type</b></p>
-			<p><i>Please be sure to allow for 10 miinutes at the end of your presentation for Q&A.</i></p>
+			<p class='subtitle'><b>Presentation Type</b></p>
+			<p><i>Please be sure to allow for 10 minutes at the end of your presentation for Q&A.</i></p>
 			{% for type in data['presentation_types'] %}
 			<label for='type' class='pure-radio'>
-				<input  type='radio'  value='{{ type.id }}' name='type'>{{ type.name }} ({{ type.duration }} min) 
+				<input  type='radio'  value='{{ type.id }}' name='type'> {{ type.name }} ({{ type.duration }} min) 
 				<i class="fa fa-info-circle socallt-green" aria-hidden="true" title='{{ type.description }}' ></i>
 			</label>
 			{% endfor %}
-			<p><b>Technology Needs</b></p>
+			<p class='subtitle'><b>Technology Needs</b></p>
 			<label for='tech_needs'><i>Please share any needs you will have for your presentation.</i></label>
 			<br>
 			<input name='tech_needs' type='text' class='proposal_input' name='type'>
-			<p><b>Time of Day Preference</b></p>
+			<p class='subtitle'><b>Day and Time Preference</b></p>
+			<select name='preferred_day'>
+				<option value='Friday'>Friday</option>
+				<option value='Saturday'>Saturday</option>
+			</select>
 			<select name='preferred_time'>
 				<option value='AM'>Morning</option>
-				<option value='earlyPM'>Early Afternoon</option>
-				<option value='latePM'>Late Afternoon</option>
-			</select>
+				<option value='Early PM'>Early Afternoon</option>
+				<option value='Late PM'>Late Afternoon</option>
+			</select><br>
 			<button class='pure-button custom-button'>Submit</button>
 		</div>
 	</form>
 </div>
-<!-- //Name of presenters
-//Email addrresses
-//Institutional Affiliation
-
-//Presentation type
-//Session Title
-//Abstract (+/- 200 words)
-//Technology Needs -->
-
-
-
-
-
 {% endblock %}

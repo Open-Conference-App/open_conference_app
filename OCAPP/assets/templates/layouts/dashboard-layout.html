@@ -38,12 +38,12 @@
 								<li class="pure-menu-item">
 									<a href="/members/{{ session['id'] }}" class='pure-menu-link'>Membership</a>
 								</li>
-								<li class="pure-menu-item">
+							<!-- 	<li class="pure-menu-item">
 									<a href="/members/{{ session['id'] }}/presentations" class="pure-menu-link">Presentations</a>
 								</li>
 								<li class="pure-menu-item">
 									<a href="/members/{{ session['id'] }}/conferences" class="pure-menu-link">Conferences</a>
-								</li>
+								</li> -->
 							{% endif %}
 							{% if session['admin'] %}
 								<li class='pure-menu-item pure-menu-has-children pure-menu-allow-hover'>
@@ -52,12 +52,12 @@
 										<li class="pure-menu-item">
 											<a href="/members/{{ session['id'] }}" class='pure-menu-link'>Membership</a>
 										</li>
-										<li class="pure-menu-item">
+										<!-- <li class="pure-menu-item">
 											<a href="/members/{{ session['id'] }}/presentations" class="pure-menu-link">Presentations</a>
 										</li>
 										<li class="pure-menu-item">
 											<a href="/members/{{ session['id'] }}/conferences" class="pure-menu-link">Conferences</a>
-										</li>	
+										</li>	 -->
 			                				</ul>  	
 								</li>
 								<li class='pure-menu-item'>
@@ -72,12 +72,12 @@
 								<li class='pure-menu-item'>
 									<a href="/members" class="pure-menu-link">Members</a>
 								</li>
-								<li class='pure-menu-item'>
+								<!-- <li class='pure-menu-item'>
 									<a href="/vendors" class="pure-menu-link">Vendors</a>
 								</li>
 								<li class='pure-menu-item'>
 									<a href="/institutions" class="pure-menu-link">Institutions</a>
-								</li>
+								</li> -->
 							{% endif %}
 								<li class='pure-menu-item'>
 									<a class='pure-menu-link pure-button' href='/logout'>Logout</a>

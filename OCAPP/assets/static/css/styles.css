@@ -102,9 +102,9 @@ body {
 	/*color: #757575;*/
 	border: 1px solid #757575;
 }
-.pure-form textarea {
+textarea#summary {
 	width: 90%;
-	height: 100%;
+	height: 350px;
 	resize: none;
 }
 
@@ -144,6 +144,29 @@ a:visited {
 
 .pure-menu-item {
 	height: 30px;
+}
+
+.address {
+	line-height: 85%;
+}
+
+.small {
+	font-size: .7em;
+}
+
+.approve, .decline {
+	height: 50%;
+	width: 30%;
+	padding: 0;
+	margin: 2px;
+}
+.decline {
+	background-color: red!important;
+}
+
+.subtitle {
+	margin-top: 20px;
+	margin-bottom: 3px;
 }
 
 /*SOCALLT Green #39b237*/

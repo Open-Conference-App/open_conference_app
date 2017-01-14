@@ -85,9 +85,9 @@ db.BaseChanges = BaseChanges()
 # 	print 'Shutting down DB connection.'
 # 	db.engine.close()
 # from OCAPP.Models import Address, Vendor, Conference, Institution, Member, Presentation, State, Vendor,PresentationType
-# db.Base.metadata.create_all(db.engine)
+db.Base.metadata.create_all(db.engine)
 from OCAPP import routes
-#from OCAPP.Schema import State, Address, Institution, Conference, Member, Presentation, Vendor, PresentationType
+from OCAPP.Schema import State, Address, Institution, Conference, Member, Presentation, Vendor, PresentationType
 from OCAPP.Schema.State import State
 from OCAPP.Schema.Address import Address
 from OCAPP.Schema.Institution import Institution
