@@ -64,6 +64,7 @@ class Conference(BaseChanges, db.Base):
 	prof_cost = Column(INTEGER(3)) # all costs are stored in cents for stripe purposes
 	stud_cost = Column(INTEGER(3))
 	vend_cost = Column(INTEGER(3))
+	proposal_deadline = Column(DATETIME())
 	start_date = Column(DATETIME())
 	end_date = Column(DATETIME())
 	folder_id = Column(VARCHAR(255))

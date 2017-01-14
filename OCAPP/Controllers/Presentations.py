@@ -20,7 +20,7 @@ def proposal_confirmation(conference_id):
 
 @app.route('/presentations/proposals', methods=['GET'])
 def show_proposals():
-	if not session['admin']:
+	if 'admin' not in session or not session['admin']:
 		return redirect('/')
 	props = Presentation.get_current_proposals()
 	for prop in props:

@@ -76,7 +76,7 @@ $(document).ready(function(){
 			'validation': function(fieldname) {
 				value = $(fieldname+' option:selected').val()
 				console.log(value)
-				if(value == 'Regular' || value == 'Vegan' || value == "Vegeterian" || value == "NoLunch") {
+				if(value == 'Regular' || value == 'Vegan' || value == "Vegetarian" || value == "NoLunch") {
 					return true
 				}
 				return false
@@ -196,7 +196,8 @@ $(document).ready(function(){
 	});
 
 	$(document).on('click', '.previous', function(){
-		var pageId = $(this).parent().parent().attr('id');
+		console.log('Im here')
+		var pageId = $(this).parent().attr('id');
 		var nextPage = pageId == 'page3' ? 'page2' : pageId == 'page2' ? 'page1' : false;
 		if(nextPage){
 			$('#'+pageId).hide();

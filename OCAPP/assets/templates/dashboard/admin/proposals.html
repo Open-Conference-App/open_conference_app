@@ -4,11 +4,10 @@
 
 {% endblock %}
 {% block content %}
-	<div class='pure-u-7-8'>
 		<div class='pure-g'>
 			<h2 class='pure-u-1'>Current Conference Proposals</h2>
 			<div class='pure-u-1-24'></div>
-			<table class='pure-u-22-24 pure-table pure-table-striped'>
+			<table class='pure-u-22-24 pure-table pure-table-striped pure-table-bordered'>
 				<thead>
 					<tr>
 						<th>Title</th>
@@ -26,15 +25,18 @@
 						<td>{{ prop.type.name }}</td>
 						<td>
 							{% for presenter in prop.presenters %}
-							<p><a href='mailto:{{presenter.email}}'>{{ presenter.first_name }}<{{presenter.last_name}}</a></p>
+							<p class='small'><a href='mailto:{{presenter.email}}'>{{ presenter.first_name }} {{ presenter.last_name}}</a></p>
 							{% endfor %}
 
 							{% for presenter in prop.decoded_nonmember_presenters %}
-							<p><a href='mailto:{{presenter.email}}'>{{ presenter.fname }} {{presenter.lname}}</a></p>
+							<p class='small'><a href='mailto:{{presenter.email}}'>{{ presenter.fname }} {{presenter.lname}}</a></p>
 							{% endfor %}
 						</td>
 						<td>
-							<a class='pure-button' href='/presentations/{{prop.id}}/approve'>Approve</a>
+							<button class='pure-button custom-button approve' data-id="{{ prop.id }}"><i class="fa fa-check" aria-hidden="true"></i>
+							<button class='pure-button custom-button decline' data-id="{{ prop.id }}"><i class="fa fa-times" aria-hidden="true"></i>
+</i>
+</a>
 						</td>
 					</tr>
 					{% endfor %}
@@ -42,5 +44,4 @@
 			</table>
 			<div class='pure-u-1-24'></div>
 		</div>
-	</div>
 {% endblock %}

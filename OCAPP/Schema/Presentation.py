@@ -33,11 +33,13 @@ class Presentation(BaseChanges, db.Base):
 	title = Column(VARCHAR(255))
 	summary = Column(TEXT())
 	files_url = Column(TEXT()) ##trying to utilize Google Drive for file upload
+	reviewed = Column(BOOLEAN())
 	approved = Column(BOOLEAN())
 	type_id = Column(INTEGER(11), ForeignKey('presentation_types.id'))
 	type = relationship('PresentationType', back_populates='presentations')
 	preferred_time = Column(VARCHAR(255))
 	scheduled_time = Column(DATETIME())
+	tech_needs = Column(TEXT())
 	nonmember_presenters = Column(TEXT())
 	presenters = relationship('Member', secondary=member_presentations, back_populates='presentations')
 	conference_id = Column(INTEGER(11), ForeignKey('conferences.id'))

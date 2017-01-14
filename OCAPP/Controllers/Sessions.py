@@ -13,6 +13,8 @@ def login():
 		if member.password != hashlib.sha256(member.pw_salt + request.form['password'] ).hexdigest():
 			valid = False
 	if not valid:
+		session.clear()
+		session['email'] = request.form['email']
 		flash('The email address and/or password you supplied do not match our records.', 'loginErr')
 		return redirect('/')
 

@@ -89,6 +89,9 @@ def register_user(conference_id):
 			})
 	else:
 		rollback()
+		session['first_name'] = request.form['first_name']
+		session['last_name'] = request.form['last_name']
+		session['email'] = request.form['email']
 		for field, errors in addy_data['errors'].items():
 			for error in errors:
 				flash(error, field)
@@ -111,6 +114,10 @@ def register_user(conference_id):
 		conf = Conference.register(conference_id, member,conf_data)
 	else:
 		rollback()
+		session['first_name'] = request.form['first_name']
+		session['last_name'] = request.form['last_name']
+		session['email'] = request.form['email']
+		session['regis-errs'] = True
 		for field, errors in data['errors'].items():
 			for error in errors:
 				print error
@@ -131,11 +138,10 @@ def register_user(conference_id):
 	"data": {"data": data}
 	}
 
-		if request.form['pay'] == 'check_PO':
+	if request.form['pay'] == 'check_PO':
 		email_data['plain_message'] = "You have successfully registered for SOCALLT " + conf.year + ". Please send your PO or check to: \nSharon Wilkes - SOCALLT Treasurer\nDepartment of Languages, Linguistics, Literatures, and Cultures\nUniversity of Central Arkansas\n Irby Hall 207\n 201 Donaghey Ave\nConway, AR 72035\n<a href='mailto:sharonw@uca.edu'>sharonw@uca.edu</a>\nWe look forward to seeing you at " + conf.institution.name + ". Thank you!"
 		Mail.send(email_data)
-
-		return render_template('mail/register-email', data=data)
+		return render_template('confirmation.html', data=data)
 	if request.form['pay'] == 'credit_debit':
 		member_data = {
 			'id': member.id,
@@ -260,7 +266,7 @@ def submit_proposal(conference_id):
 		"summary": request.form["summary"],
 		"conference_id": conference_id,
 		"type_id": request.form['type'],
-		"preferred_time": request.form['preferred_time']
+		"preferred_time": request.form['preferred_day'] + request.form['preferred_time']
 	})
 
 	if not pres['all_valid']:
