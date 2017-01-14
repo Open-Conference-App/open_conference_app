@@ -5,6 +5,7 @@ PASS_CAP_REGEX = re.compile(r'[A-Z]')
 PASS_LOW_REGEX = re.compile(r'[a-z]')
 PASS_NUM_REGEX = re.compile(r'\d')
 NAME_REGEX = re.compile(r'\d')
+from OCAPP import sentry
 requirements = {
 	'Address':['street1','city','state_id','zip'],
 	'Conference':['institution_id','year','prof_cost','stud_cost','vend_cost','start_date','end_date','title'],
@@ -53,6 +54,7 @@ class BaseChanges(object):
 					ret_obj['errors'][key].append(key + ' should not be blank.')
 			ret_obj['all_valid'] = all_valid
 		except:
+			sentry.captureException()
 			e = sys.exc_info()[:0]
 			all_valid = False
 			ret_obj['int_errors'].append('Valids Class: There was a problem when searching for blanks. {}'.format(e))

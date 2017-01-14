@@ -1,6 +1,6 @@
 from flask import render_template, session, request, redirect, flash 
 
-from OCAPP import app,savepoint, rollback, csrf #,sentry
+from OCAPP import app,savepoint, rollback, csrf ,sentry
 
 from OCAPP.config.sensitive import Sens
 sens = Sens()
@@ -117,8 +117,25 @@ def register_user(conference_id):
 				print field
 				flash(error, field)
 		return redirect('/')
-	if request.form['pay'] == 'check_PO':
-		return render_template('confirmation.html')
+
+	data = {
+	'conf': Conference.get_next(),
+	'states': State.index(),
+	'institutions': Institution.index(),
+	'member': member
+	}
+	email_data = {
+	"toAddy": member.email,
+	"subject": "SOCALLT " + conf.year + " Registration",
+	"template": "register-mail.html",
+	"data": {"data": data}
+	}
+
+		if request.form['pay'] == 'check_PO':
+		email_data['plain_message'] = "You have successfully registered for SOCALLT " + conf.year + ". Please send your PO or check to: \nSharon Wilkes - SOCALLT Treasurer\nDepartment of Languages, Linguistics, Literatures, and Cultures\nUniversity of Central Arkansas\n Irby Hall 207\n 201 Donaghey Ave\nConway, AR 72035\n<a href='mailto:sharonw@uca.edu'>sharonw@uca.edu</a>\nWe look forward to seeing you at " + conf.institution.name + ". Thank you!"
+		Mail.send(email_data)
+
+		return render_template('mail/register-email', data=data)
 	if request.form['pay'] == 'credit_debit':
 		member_data = {
 			'id': member.id,
@@ -145,24 +162,8 @@ def register_user(conference_id):
 
 		#send success email message
 
-		data = {
-		'conf': Conference.get_next(),
-		'states': State.index(),
-		'institutions': Institution.index(),
-		'member': member
-		}
-		email_data = {
-		"toAddy": member.email,
-		"subject": "SOCALLT " + conf.year + " Registration",
-		"plain_message":  "You have successfully registered and paid for SOCALLT " + conf.year + ".  We look forward to seeing you at " + conf.institution.name + ". Thank you!",
-		"template": "register-mail.html",
-		"data": {"data": data}
-		}
 
-
-		Mail.send(email_data)
-
-		return render_template('credit_card.html', member=member_data, conf_id=conf.id, member_cost = member_cost)
+		return render_template('credit_card.html', data=data, member=member_data, conf_id=conf.id, member_cost = member_cost)
 	#send data by calling functions from imported files and sending it the request.form by using request.form.copy()
 
 
@@ -205,10 +206,9 @@ def pay(conference_id, member_id):
 				err = body['error']
 				for var in err:
 					resp_object['error'].append(var)
-				# sentry.captureException()
+				sentry.captureException()
 			except Exception as e:
-				pass
-				# sentry.captureException()
+				sentry.captureException()
 		return json.dumps(resp_object)
 
 
@@ -252,7 +252,7 @@ def submit_proposal(conference_id):
 
 	if count == 0:
 		flash('You must supply information for at least one presenter.')
-		return redirect('/conferences/' + conference_id + '/proposals')
+		return redirect('/conferences/' + str(conference_id) + '/proposals')
 
 	presenters['num'] = count
 	pres = Presentation.create({

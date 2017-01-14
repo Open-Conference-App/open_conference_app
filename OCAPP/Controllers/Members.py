@@ -6,7 +6,7 @@ from OCAPP.Models import Member, Conference, State, Institution
 
 @app.route('/members', methods=['GET'])
 def show_members():
-	if not session['admin']:
+	if 'admin' not in session or not session['admin']:
 		return redirect('/')
 	members = Member.index()
 
