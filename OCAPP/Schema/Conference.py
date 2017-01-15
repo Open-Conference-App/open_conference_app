@@ -23,6 +23,7 @@ class Registration(BaseChanges, db.Base):
 	food_pref = Column(VARCHAR(255))
 	gluten_free = Column(BOOLEAN())
 	days = Column(VARCHAR(255))
+	type = Column(VARCHAR(255))
 	member_paid = Column(BOOLEAN())
 	transaction_id = Column(VARCHAR(255))
 	member = relationship('Member', back_populates='registrations')
@@ -80,6 +81,7 @@ class Conference(BaseChanges, db.Base):
 		self.stud_cost = conference_data['stud_cost']
 		self.vend_cost = conference_data['vend_cost']
 		self.start_date = conference_data['start_date']
+		self.proposal_deadline = conference_data['proposal_deadline']
 		self.end_date = conference_data['end_date']
 		self.title = conference_data['title']
 		 #need to pass date object, but first I need format of date object coming from client-side

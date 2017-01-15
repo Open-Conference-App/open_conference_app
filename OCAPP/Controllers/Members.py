@@ -9,7 +9,6 @@ def show_members():
 	if 'admin' not in session or not session['admin']:
 		return redirect('/')
 	members = Member.index()
-
 	return render_template('/dashboard/admin/members.html', members=members)
 
 
@@ -31,7 +30,10 @@ def handle_members(member_id):
 		if 'id' not in session or session['id'] != member_id:
 			return redirect('/')
 		member = Member.get_by_id(member_id)
-		return render_template('dashboard/members/membership.html', member=member)
+		data = {
+			'conf': Conference.get_next()
+		}
+		return render_template('dashboard/members/membership.html', member=member, data=data)
 	#delete a conference(to be done through admin dashboard only)
 	if request.method == 'DELETE':
 		return redirect('/')

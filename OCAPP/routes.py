@@ -14,7 +14,7 @@ def dash():
 			'states': State.index(),
 			'institutions': Institution.index()
 			}
-	return render_template('credit_card.html', member=member, data=data)
+	return render_template('credit_card.html', member=member, data=data, member_cost=70)
 
 
 

@@ -11,12 +11,14 @@ def create(fields):
 	valid_obj = db.create(Member,fields)
 	return valid_obj
 
-def activate(id):	
-	member = db.query(Member).filter_by(id=id).first()
+def activate(id):
+	print id	
+	member = db.get(Member, id)
 	if member:
 		active = True
 	else:
 		active = False
+		print member
 	member.active = active
 	db.session.add(member)
 	db.session.commit()

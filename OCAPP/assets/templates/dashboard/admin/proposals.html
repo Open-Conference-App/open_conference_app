@@ -11,7 +11,6 @@
 				<thead>
 					<tr>
 						<th>Title</th>
-						<th>Abstract</th>
 						<th>Type</th>
 						<th>Presenters</th>
 						<th>Actions</th>
@@ -21,7 +20,6 @@
 					{% for prop in data['proposals'] %}
 					<tr>
 						<td>{{ prop.title }}</td>
-						<td>{{ prop.summary }}</td>
 						<td>{{ prop.type.name }}</td>
 						<td>
 							{% for presenter in prop.presenters %}
