@@ -174,11 +174,29 @@ def register_user(conference_id):
 
 
 
-# # TEST ROUTE FOR RENDERING CREDIT CARD INFORMATION CHETAN 12/20/16
-# @app.route('/creditcard')
-# def cctest():
-# 	member = {"id": 1}
-# 	return render_template('credit_card.html', member=member, conf_id = 1, member_cost=30)
+# TEST ROUTE FOR RENDERING CREDIT CARD INFORMATION CHETAN 12/20/16
+@app.route('/conferences/<int:conference_id>/payment', methods=['GET'])
+def cctest():
+
+	member = Member.get_by_id(member_id)
+	for regis in member.registrations:
+		if regis.conference_id == conference_id:
+			if regis.type == 'Professional':
+				member_cost = 70
+			elif regis.type == 'Student':
+				member_cost = 40
+			if regis.days == 'friday' or regis.days == 'saturday':
+				member_cost = member_cost/2
+
+	if not member_cost:
+		return redirect('/')
+
+	data = {
+	'conf': Conference.get_by_id(conference_id),
+	'member':member,
+	'member_cost': member_cost
+	}
+	return render_template('credit_card.html',data=data)
 
 
 #pay for conference attendance/membership fees(which are one and the same, user must already exist)
@@ -193,34 +211,48 @@ def pay(conference_id, member_id):
 		}
 		##validate registration prior to making payment
 		memb = Member.get_by_id(member_id)
+		conf = Conference.get_by_id(conference_id)
+		print memb
+		print conf
 		#FAILS ON MEMB IN CONF.MEMBERS SO PUT IN 1>0 TO ALLOW IT TO PASS
-		if memb in Conference.members(conference_id):
-			try:
-				stripe_charge = stripe.Charge.create(
-					amount= int(request.form['member_cost'])*100,
-					currency='usd',
-					source=request.form['token'],
-					description=memb.first_name + ' ' + memb.last_name + ': ' + conf.year,
-					receipt_email=memb.email
-					)
-				active = Member.activate(memb.id)
-				resp_object['successful'] = active
-				Conference.set_transaction(conf.id, member_id, stripe_charge["id"]) 
-			except stripe.error.CardError as e:
-				resp_object['errors'].append('There was a problem charging the card you submitted.')
-				body = e.json_body
-				err = body['error']
-				for var in err:
-					resp_object['error'].append(var)
-				sentry.captureException()
-			except Exception as e:
-				sentry.captureException()
-		return json.dumps(resp_object)
+		try:
+			stripe_charge = stripe.Charge.create(
+				amount= int(request.form['member_cost'])*100,
+				currency='usd',
+				source=request.form['stripeToken'],
+				description=memb.first_name + ' ' + memb.last_name + ': ' + conf.year,
+				receipt_email=memb.email
+				)
+			print stripe_charge
+			active = Member.activate(memb.id)
+			resp_object['successful'] = active
+			Conference.set_transaction(conf.id, member_id, stripe_charge["id"])
+			return json.dumps(resp_object)
+
+		except stripe.error.CardError as e:
+			resp_object['errors'].append('There was a problem charging the card you submitted.')
+			body = e.json_body
+			err = body['error']
+			for var in err:
+				resp_object['errors'].append(var)
+			sentry.captureException()
+			return json.dumps(resp_object)
+
+		except Exception as e:
+			print 'here I am'
+			sentry.captureException()
+			resp_object['errors'].append('There was a problem paying for your registration, please try back again later.')
+			return json.dumps(resp_object)
 
 
 @app.route('/conferences/<int:conference_id>/confirmation')
 def confirm(conference_id):
-	return render_template('confirmation.html')
+	if 'id' not in session:
+		return redirect('/')
+	data = {
+	'conf': Conference.get_next(),
+	}
+	return render_template('cc_confirmation.html', data=data)
 
 
 @csrf.exempt

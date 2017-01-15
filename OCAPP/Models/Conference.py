@@ -60,7 +60,7 @@ def set_transaction(conf_id, member_id, transaction_id):
 def members(conf_id):
 	conf = get_by_id(conf_id)
 	members = [];
-	for registration in conf.members:
+	for registration in conf.registrations:
 		memb = Member.get_by_id(registration.member_id)
 		if(memb):
 			members.append(memb)

@@ -1,5 +1,11 @@
-#login-form, #show-register, #prices, #page2, #page3, #first_name-err, #last_name-err, #email-err, #password-err, #confirm_password-err, #street1-err, #street2-err, #city-err, #state-err, #zip-err, #institution-err, #lunch-err, #pay-err, #regis_type-err, #regis_len-err {
+#login-form, #show-register, #prices, #page2, #page3, #first_name-err, #last_name-err, #email-err, #password-err, #confirm_password-err, #street1-err, #street2-err, #city-err, #state-err, #zip-err, #institution-err, #lunch-err, #pay-err, #regis_type-err, #regis_len-err, #cc-err {
 	display: none;
+}
+
+p,h1,h2,h3,h4,h5,h6,span,li,a {
+
+    font-family: 'Cabin', sans-serif;
+
 }
 
 .form-content div *{
@@ -16,15 +22,24 @@ ul {
 
 .pure-menu {
 	height: 100vh;
+	background-color: #757575;
 }
 
 .pure-menu-item:hover, .pure-menu-link:hover {
-	background-color: #9fe19d;
+	background-color: white;
 }
 
 .pure-menu-item.pure-menu-has-children .pure-menu-children {
-	border: 1px solid #757575;
+	/*border: 1px solid #757575;*/
 	border-radius: 2px;
+	min-height: 30px;
+	background-color: #757575;
+	margin-bottom: 0;
+}
+
+.pure-menu-heading {
+	color: white;
+	font-family: 'Marcellus SC', serif;
 }
 
 .pure-menu {
@@ -32,7 +47,7 @@ ul {
 }
 
 .pure-button {
-	background-color: #757575;
+	background-color: #9fe19d;
 	color: white;
 }
 
@@ -82,15 +97,21 @@ label.form-label {
 }
 
 .pure-image {
-	height: 25vh;
+	height: 15vh;
+	margin-bottom: 10px;
 }
 
 body {
 	min-height: 200vh;
+	background-color: 
+}
+
+.continue, .previous {
+	color: black;
 }
 
 .continue i , .previous i {
-	color: #9fe19d;
+	color: black;
 }
 
 .vert-space {
@@ -122,7 +143,7 @@ a:hover {
 }
 
 a:visited {
-	color: initial;
+	color: black;
 }
 
 .socallt-green {
@@ -144,6 +165,10 @@ a:visited {
 
 .pure-menu-item {
 	height: 30px;
+}
+
+li.pure-menu-item.admin:hover {
+	background-color: white;
 }
 
 .address {
@@ -169,6 +194,49 @@ a:visited {
 	margin-bottom: 3px;
 }
 
+.payments {
+	display: inline-block;
+	font-size: 1.3em;
+}
+
+.pure-table tr td, .pure-table tr th {
+	width: 10%;
+}
+
+.pure-table {
+	margin: 10px;
+}
+
+.container {
+	box-sizing: border-box;
+	padding-left: 20px;
+}
+
+.pure-menu ul li .pure-button {
+	box-sizing: border-box;
+	margin-left: 10px;
+	margin-right: 10px;
+	background-color: white;
+}
+
+.pure-menu-button:hover {
+	background-color: transparent;
+}
+
+.pure-menu-button .pure-button:hover {
+	background-color: #9fe19d;
+}
+.footer {
+	margin-top: 25px;
+	text-align: center;
+	max-height: 10vh;
+	vertical-align: bottom;
+	background-color: #d2d7dd;
+}
+
+.footer li:hover, .footer li a:hover {
+	background-color: #d2d7dd
+}
 /*SOCALLT Green #39b237*/
 
 

@@ -7,7 +7,7 @@
 	<link rel="stylesheet" href="{{ url_for('static',filename='css/spectre.min.css') }}"/>
 	<!-- <link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css')}}"/> -->
 	<link rel="stylesheet" href="{{ url_for('static',filename='css/font-awesome-4.6.3/css/font-awesome.min.css') }}"/>
-	<link rel='stylesheet' href="{{ url_for('static',filename='css/styles.css') }}"/>
+	<link href="https://fonts.googleapis.com/css?family=Cabin|Marcellus+SC" rel="stylesheet">	<link rel='stylesheet' href="{{ url_for('static',filename='css/styles.css') }}"/>
 	<script src="{{ url_for('static',filename='js/jquery-3.1.1.js') }}"></script>
 	<script src="{{ url_for('static',filename='js/moment.js') }}"></script>
 	<script>
@@ -31,7 +31,7 @@
 				<div class='pure-u-1 header'>
 					<div class='pure-g'>
 						<div class='pure-u-1-2'>
-							<img class='pure-image' src="{{ url_for('static', filename='images/SOCALLT.png') }}">
+							<a href='/'><img class='pure-image' src="{{ url_for('static', filename='images/SOCALLT.png') }}"></a>
 						</div>
 						{% block conference_data %}
 						<div class='pure-u-1-2'>
@@ -43,11 +43,23 @@
 						{% endblock %}
 					</div>
 				</div>
-				
 				{% block body %}{% endblock %}				
 			</div>
 		</div>
 		<div class='pure-u-1-12'></div>
+		<div class='pure-u-1'>
+			<div class="pure-menu pure-menu-horizontal footer">
+				<ul class="pure-menu-list">
+					<li class="pure-menu-item"><a href="#" class="pure-menu-link">Powered by the Open Conference App</a></li>
+					<li class="pure-menu-item">
+						<a href="#" class="pure-menu-link">
+							<i class="fa fa-copyright" aria-hidden="true"></i>
+							SOCALLT 2017
+ 						</a>
+ 					</li>
+				</ul>
+      		</div>
+		</div>
 	</div>
 </body>
 </html>

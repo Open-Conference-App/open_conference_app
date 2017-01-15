@@ -14,42 +14,41 @@ $(function() {
 function stripeResponseHandler(status, response) {
 	// Grab the form:
 	var $form = $('#payment-form');
-
+	var token;
 	if (response.error) { // Problem!
-
+		console.log(response.error)
 		// Show the stripe card validation errors on the form:
-		$form.find('.payment-errors').text(response.error.message);
+		console.log($('#cc-err'))
+		$('#cc-err.error').text(response.error.message);
+		$('#cc-err.error').show();
 		$form.find('.submit').prop('disabled', false); // Re-enable submission
 
 	} else { // Token was created!
 
 		// Get the token ID:
-		var token = response.id;
-		console.log(token)
-		// Insert the token ID into the form so it gets submitted to the server:
-		$form.append($('<input type="hidden" name="stripeToken">').val(token));
-
-	}
-	member_cost = $form.find('.member_cost').val()
+		token = response.id;
 
 	$.ajax({
 		method:"post",
-		data: {"token": token,
+		data: {"stripeToken": token,
 				"member_cost":member_cost,
 				"_csrf_token": csrf_token_js},
-				// CHANGED URL FOR TESTING
 		url:"/conferences/"+conf_id+"/members/"+mem_id,
 		success:function(data){
+			data=JSON.parse(data)
 			if(data.successful){
 				window.location = "conferences/"+conf_id+"/confirmation";
 			} else {
+				console.log(data.errors)
 				//stripe payment errors
-				$(".payment-errors").append(data.errors);
+				$("#cc-err").text(data.errors);
+				$("#cc-err").show();
 			}	
 		},
 		//http request/response errors
-		error: function(data){}
+		error: function(data){console.log(data)}
 	})
+}
 
 };
 
