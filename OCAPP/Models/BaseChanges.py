@@ -92,7 +92,7 @@ class BaseChanges(object):
 		ret_obj = {'all_valid': False, 'errors':{'password': []}, 'int_errors':[]}
 		try:
 			all_valid = True
-			if len(data['password']) < 9:
+			if len(data['password']) < 8:
 				all_valid = False
 				ret_obj['errors']['password'].append('Passwords must be at least 9 characters.')
 			if not PASS_NUM_REGEX.search(data['password']):

@@ -37,7 +37,7 @@ function stripeResponseHandler(status, response) {
 		success:function(data){
 			data=JSON.parse(data)
 			if(data.successful){
-				window.location = "conferences/"+conf_id+"/confirmation";
+				window.location = "/conferences/"+conf_id+"/confirmation";
 			} else {
 				console.log(data.errors)
 				//stripe payment errors

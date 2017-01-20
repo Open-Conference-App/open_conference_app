@@ -4,7 +4,7 @@ from OCAPP import app,savepoint, rollback, csrf ,sentry
 
 from OCAPP.config.sensitive import Sens
 sens = Sens()
-import stripe
+import stripe, datetime
 stripe.api_key = sens.stripe_secret_key
 from OCAPP.Models import Address, Conference, Member, State, Institution, Presentation
 from OCAPP.Controllers import Mail
@@ -25,7 +25,13 @@ def load_member_conferences():
 	if not session['admin']:
 		return redirect('/')
 	confs = Conference.index();
-	return render_template('dashboard/admin/conferences.html', confs=confs)
+	
+	data = {
+	'conf': Conference.get_next(),
+	'states': State.index(),
+	'institutions': Institution.index()
+	}
+	return render_template('dashboard/admin/conferences.html', confs=confs, data=data)
 
 #create a new conference(to be done through admin dashboard only via ajax call)
 @app.route('/conferences', methods=['POST'])
@@ -110,6 +116,7 @@ def register_user(conference_id):
 			"gluten_free": True if "gluten" in request.form else False,
 			"food_pref": request.form['lunch'], 
 			"days": request.form['regis_len'],
+			"type": request.form['regis_type']
 		}
 		conf = Conference.register(conference_id, member,conf_data)
 	else:
@@ -138,7 +145,7 @@ def register_user(conference_id):
 	"data": {"data": data}
 	}
 
-	if request.form['pay'] == 'check_PO':
+	if request.form['pay'] == 'check_PO' or request.form['pay'] == 'later':
 		email_data['plain_message'] = "You have successfully registered for SOCALLT " + conf.year + ". Please send your PO or check to: \nSharon Wilkes - SOCALLT Treasurer\nDepartment of Languages, Linguistics, Literatures, and Cultures\nUniversity of Central Arkansas\n Irby Hall 207\n 201 Donaghey Ave\nConway, AR 72035\n<a href='mailto:sharonw@uca.edu'>sharonw@uca.edu</a>\nWe look forward to seeing you at " + conf.institution.name + ". Thank you!"
 		Mail.send(email_data)
 		return render_template('confirmation.html', data=data)
@@ -164,21 +171,22 @@ def register_user(conference_id):
 		else:
 			member_type_cost = conf.stud_cost
 
-		member_cost = member_type_cost/day_divisor
+		data['member_cost'] = member_type_cost/day_divisor
 
 		#send success email message
 
-
-		return render_template('credit_card.html', data=data, member=member_data, conf_id=conf.id, member_cost = member_cost)
+		data['year'] = datetime.datetime.now().year
+		return render_template('credit_card.html', data=data)
 	#send data by calling functions from imported files and sending it the request.form by using request.form.copy()
 
 
 
 # TEST ROUTE FOR RENDERING CREDIT CARD INFORMATION CHETAN 12/20/16
 @app.route('/conferences/<int:conference_id>/payment', methods=['GET'])
-def cctest():
-
-	member = Member.get_by_id(member_id)
+def cctest(conference_id):
+	if not 'id' in session:
+		return redirect('/')
+	member = Member.get_by_id(session['id'])
 	for regis in member.registrations:
 		if regis.conference_id == conference_id:
 			if regis.type == 'Professional':
@@ -194,7 +202,8 @@ def cctest():
 	data = {
 	'conf': Conference.get_by_id(conference_id),
 	'member':member,
-	'member_cost': member_cost
+	'member_cost': member_cost,
+	'year': datetime.datetime.now().year
 	}
 	return render_template('credit_card.html',data=data)
 
@@ -275,7 +284,7 @@ def submit_proposal(conference_id):
 		lname = 'p' + str(idx) + '_l_name'
 		email = 'p' + str(idx) + '_email'
 		inst = 'p' + str(idx) + '_inst'
-		print request.form
+		
 		mem = Member.get_by_email(request.form[email])
 		is_member = False
 		if mem:
@@ -291,20 +300,22 @@ def submit_proposal(conference_id):
 	if count == 0:
 		flash('You must supply information for at least one presenter.')
 		return redirect('/conferences/' + str(conference_id) + '/proposals')
-
 	presenters['num'] = count
-	pres = Presentation.create({
+	try:
+		pres = Presentation.create({
 		"title": request.form["title"],
-		"summary": request.form["summary"],
+		"summary": request.form["summary"] +'\n\nTech needs: ' + request.form['tech_needs'], 
 		"conference_id": conference_id,
-		"type_id": request.form['type'],
+		"type_id": request.form['type'] if 'type' in request.form else '',
 		"preferred_time": request.form['preferred_day'] + request.form['preferred_time']
-	})
+		})
+	except:
+		sentry.captureException()
 
 	if not pres['all_valid']:
 		for field, errors in pres['errors'].items():
 			for error in errors:
-				flash(error, field)
+				flash(error)
 		return redirect('/conferences/' + str(conference_id) + '/proposals')
 	
 	if not Presentation.add_presenters(pres['validated_data']['id'], presenters):

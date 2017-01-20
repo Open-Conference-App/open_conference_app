@@ -21,7 +21,7 @@ $(document).ready(function(){
 			},
 			{
 				'fieldName': 'password',
-				'validation': (fieldname) => checkLen(fieldname, 8, '>'),
+				'validation': (fieldname) => checkLen(fieldname, 7, '>'),
 				'message': 'Passwords must be at least 8 characters.  Required: lowercase letter, uppercase letter and one number'
 			},
 			{
@@ -92,7 +92,7 @@ $(document).ready(function(){
 			'fieldName': 'pay',
 			'validation': function(fieldname) {
 				value = $(fieldname+' option:selected').val()
-				if(value == 'credit_debit' || value == 'check_PO') {
+				if(value == 'credit_debit' || value == 'check_PO' || value == 'later') {
 					return true
 				}
 				return false

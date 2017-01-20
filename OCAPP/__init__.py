@@ -1,9 +1,14 @@
-from flask import Flask, session
+from flask import Flask, session, request, redirect
 from flask.ext.seasurf import SeaSurf
 from OCAPP.config.sensitive import Sens
 sens = Sens()
 app = Flask('OCAPP', static_folder=sens.root_path + '/assets/static', template_folder=sens.root_path + '/assets/templates')
 app.secret_key = sens.secret_key
+@app.before_request
+def https_only():
+   if request.url.startswith('http://'):
+        url = request.url.replace('http://', 'https://', 1)
+        return redirect(url)
 csrf = SeaSurf(app)
 
 from raven.contrib.flask import Sentry

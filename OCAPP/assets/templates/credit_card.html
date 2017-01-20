@@ -19,7 +19,7 @@
   </script>
   <script type="text/javascript" src="{{ url_for('static',filename='js/credit_card.js') }}"></script>
   <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
-  <script type="text/javascript">Stripe.setPublishableKey("pk_test_xpE6AzgUAUBlHakgoTrS6yz8")</script>
+  <script type="text/javascript">Stripe.setPublishableKey("pk_live_WwOi8S3EB2gXZzChDMt3RmKk")</script>
   
 {% endblock %}
 {% block body %}
@@ -70,10 +70,11 @@
                       <option value='12'>12</option>
                     </select>
                     <select data-stripe="exp_year">
-                      <option value='2017'>2017</option>
-                      <option value='2018'>2018</option>
-                      <option value='2019'>2019</option>
-                      <option value='2020'>2020</option>
+			{% with max_year = data['year'] + 20 %}
+				{% for year in range(data['year'], max_year+1) %}
+				<option value="{{ year }}">{{year}}</option>
+				{% endfor %}
+			{% endwith %}
                     </select>
                   </div>
                   <div class='pure-u-1 pure-control-group'>

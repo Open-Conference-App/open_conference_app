@@ -20,8 +20,12 @@
 				$('#login-form').show()
 			{% endif %}
 
-			{% if not 'admin' in session %}
-				session.clear()
+			{% if 'loginErr' in session %}
+				$('#show-login').hide()
+				$('#show-register').show()
+				$('#register-form').hide()
+				$('#login-form').show()
+
 			{% endif %}
 		})
 			
@@ -100,6 +104,7 @@
 							<div class='pure-u-3-4 input'>
 								<label class='form-label' for='password'>Password:</label>
 								<input class='form-input' type="password" name="password" id='password'>
+								<p>Passwords must be at least 8 characters and contain: 1 lowercase letter, 1 uppercase letter, and 1 number.</p>
 							</div>
 							<div class='pure-u-1-4'>
 								<br>
@@ -316,6 +321,7 @@
 								<select class='form-select' name='pay' id='pay'>
 									<option selected value='credit_debit'>Credit/Debit Card</option>
 									<option value='check_PO'>Check, Purchase Order</option>
+									<option value='later'>Pay Later</option>
 								</select>
 							</div>
 							<div class='pure-u-1-2'>

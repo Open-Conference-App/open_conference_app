@@ -15,6 +15,7 @@ def login():
 	if not valid:
 		session.clear()
 		session['email'] = request.form['email']
+		session['loginErr'] = True
 		flash('The email address and/or password you supplied do not match our records.', 'loginErr')
 		return redirect('/')
 

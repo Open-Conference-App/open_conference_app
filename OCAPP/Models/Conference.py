@@ -42,6 +42,7 @@ def register(id, member,data):
 	registration.conference = conf
 	registration.member = member
 	registration.days = data['days']
+	registration.type = data['type']
 	db.session.add(registration)
 	db.session.commit()
 	return conf
@@ -49,11 +50,12 @@ def register(id, member,data):
 def set_transaction(conf_id, member_id, transaction_id):
 	conf = db.get(Conference, conf_id)
 	memb = Member.get_by_id(member_id)
-	for member_conf in conf.members:
-		if member_conf.member_id == memb.id:
-			member_conf.transaction_id = transaction_id
-			member_conf.member_paid = True
-			db.session.add(member_conf)
+	for registration in conf.registrations:
+		if registration.member_id == memb.id:
+			registration.transaction_id = transaction_id
+			registration.member_paid = True
+			memb.active = True
+			db.session.add(registration)
 			db.session.commit()
 	return member_conf.member_paid 
 

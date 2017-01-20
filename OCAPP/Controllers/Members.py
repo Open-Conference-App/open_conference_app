@@ -9,7 +9,20 @@ def show_members():
 	if 'admin' not in session or not session['admin']:
 		return redirect('/')
 	members = Member.index()
-	return render_template('/dashboard/admin/members.html', members=members)
+	active = 0
+	inactive = 0
+	for mem in members:
+		if mem.active:
+			active += 1
+		else:
+			inactive += 1
+	
+	data = {
+	'conf': Conference.get_next(),
+	'states': State.index(),
+	'institutions': Institution.index()
+	}
+	return render_template('/dashboard/admin/members.html', members=members, active=active, inactive=inactive, data=data)
 
 
 

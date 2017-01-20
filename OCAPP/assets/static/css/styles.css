@@ -29,6 +29,10 @@ ul {
 	background-color: white;
 }
 
+.pure-menu-link {
+	color:black;
+}
+
 .pure-menu-item.pure-menu-has-children .pure-menu-children {
 	/*border: 1px solid #757575;*/
 	border-radius: 2px;
@@ -103,9 +107,8 @@ label.form-label {
 
 body {
 	min-height: 200vh;
-	background-color: 
+	/*background-color: #edeeed;*/ 
 }
-
 .continue, .previous {
 	color: black;
 }
@@ -139,7 +142,7 @@ textarea#summary {
 }
 
 a:hover {
-	color: initial;
+	color: inherit;
 }
 
 a:visited {
@@ -219,7 +222,12 @@ li.pure-menu-item.admin:hover {
 	background-color: white;
 }
 
-.pure-menu-button:hover {
+.pure-menu-button .pure-button {
+	background-color: #9fe19d;
+	color: black;
+}
+
+.pure-menu-button:hover, .pure-menu-button:visited {
 	background-color: transparent;
 }
 
@@ -237,6 +245,7 @@ li.pure-menu-item.admin:hover {
 .footer li:hover, .footer li a:hover {
 	background-color: #d2d7dd
 }
+
 /*SOCALLT Green #39b237*/
 
 
