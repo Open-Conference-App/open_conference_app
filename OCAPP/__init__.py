@@ -6,9 +6,15 @@ app = Flask('OCAPP', static_folder=sens.root_path + '/assets/static', template_f
 app.secret_key = sens.secret_key
 @app.before_request
 def https_only():
-   if request.url.startswith('http://'):
-        url = request.url.replace('http://', 'https://', 1)
-        return redirect(url)
+	if request.url.startswith('http://'):
+        	url = request.url.replace('http://', 'https://', 1)
+        	return redirect(url)
+	
+@app.after_request	
+def close_db_session(response):
+	db.session.close()
+	return response
+
 csrf = SeaSurf(app)
 
 from raven.contrib.flask import Sentry
