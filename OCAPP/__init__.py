@@ -4,16 +4,6 @@ from OCAPP.config.sensitive import Sens
 sens = Sens()
 app = Flask('OCAPP', static_folder=sens.root_path + '/assets/static', template_folder=sens.root_path + '/assets/templates')
 app.secret_key = sens.secret_key
-@app.before_request
-def https_only():
-	if request.url.startswith('http://'):
-        	url = request.url.replace('http://', 'https://', 1)
-        	return redirect(url)
-	
-@app.after_request	
-def close_db_session(response):
-	db.session.close()
-	return response
 
 csrf = SeaSurf(app)
 
@@ -35,7 +25,7 @@ valid_funcs = {
 class SQLEZ:
 	def __init__(self):
 		self.Base = declarative_base()
-		self.engine = create_engine(sens.db_path)
+		self.engine = create_engine(sens.db_path, pool_recycle=3600)
 		Session = sessionmaker(bind=self.engine)
 		self.session = Session()
 		self.BaseChanges = {}
@@ -81,33 +71,51 @@ class SQLEZ:
 	def validate(self, cl, data, funcs):
 		return BaseChanges.validate(cl, data, funcs)
 
-db = SQLEZ()
+
+
+@app.before_request
+def https_only():
+	if request.url.startswith('http://'):
+        	url = request.url.replace('http://', 'https://', 1)
+        	return redirect(url)
+
+from OCAPP.Models.BaseChanges import BaseChanges
+@app.before_request
+def initialize_db_session()
+	db = SQLEZ()
+	db.BaseChanges = BaseChanges()
+	return None
+
+@app.after_request	
+def close_db_session(response):
+	db.session.close()
+	return response
 def savepoint():
 	db.session.begin_nested()
 
 def rollback():
 	db.session.rollback()
 
-from OCAPP.Models.BaseChanges import BaseChanges
-db.BaseChanges = BaseChanges()
+#from OCAPP.Models.BaseChanges import BaseChanges
+#db.BaseChanges = BaseChanges()
 
 # @app.teardown_appcontext
 # def teardown_db(exception):
 # 	print 'Shutting down DB connection.'
 # 	db.engine.close()
 # from OCAPP.Models import Address, Vendor, Conference, Institution, Member, Presentation, State, Vendor,PresentationType
-db.Base.metadata.create_all(db.engine)
-from OCAPP import routes
+#db.Base.metadata.create_all(db.engine)
+#from OCAPP import routes
 from OCAPP.Schema import State, Address, Institution, Conference, Member, Presentation, Vendor, PresentationType
-from OCAPP.Schema.State import State
-from OCAPP.Schema.Address import Address
-from OCAPP.Schema.Institution import Institution
-from OCAPP.Schema.Member import Member
-from OCAPP.Schema.Conference import Conference, Registration
-from OCAPP.Schema.Presentation import Presentation
-from OCAPP.Schema.PresentationType import PresentationType
-from OCAPP.Schema.Vendor import Vendor
-db.Base.metadata.create_all(db.engine)
+#from OCAPP.Schema.State import State
+#from OCAPP.Schema.Address import Address
+#from OCAPP.Schema.Institution import Institution
+#from OCAPP.Schema.Member import Member
+#from OCAPP.Schema.Conference import Conference, Registration
+#from OCAPP.Schema.Presentation import Presentation
+#from OCAPP.Schema.PresentationType import PresentationType
+#from OCAPP.Schema.Vendor import Vendor
+#db.Base.metadata.create_all(db.engine)
 
 
 
