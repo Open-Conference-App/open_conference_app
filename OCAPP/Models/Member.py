@@ -70,6 +70,17 @@ def addInst(mem, inst):
 	db.session.commit()
 	return mem
 
+def generate_reset_hash(mem_id):
+        hash = binascii.hexilify(os.urandom(32))
+        pw_reset = PasswordReset({
+                "member_id": mem_id,
+                "reset_hash": hash
+        })
+        if pw_reset:
+                return hash
+        return False
 
-
+def find_reset_hash(hash):
+	pass
+	return ''
 	

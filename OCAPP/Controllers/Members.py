@@ -3,7 +3,40 @@ from OCAPP.config.sensitive import Sens
 sens = Sens()
 from flask import render_template, request, session, redirect
 from OCAPP.Models import Member, Conference, State, Institution
+from OCAPP.Controllers import Mail
 
+
+@app.route('/members/password_reset', methods=['POST'])
+def generate_reset_password():
+	if 'email' not in request.form:
+		return redirect('/')
+	member = Member.get_by_email(request.form['email'])
+	if not member:
+		flash('The email address you entered does not exist.')
+		return redirect('/')
+	hash = generate_reset_hash(member.id)
+	if hash:
+		Mail.send({
+			"subject": "SOCALLT Password Reset",
+			"toAddy": member.email,
+			"template": "password_reset.html",
+			"plain_message": "Please click the following link to reset your password.",
+			"data": {"hash": hash}
+		})
+		return render_template('password_reset.html')
+	return redirect('/')	
+
+@app.route('/members/password_reset/<hash>', methods=['POST'])
+def reset_password():
+	member = Member.find_reset_hash(hash)
+	if not member:
+		return redirect('/')
+	session['id'] = member.id
+	session['email'] = member.email
+	session['first_name'] = member.first_name
+	session['admin'] = True if member.officer else False
+	return render_template('password_reset_form.html')
+	
 @app.route('/members', methods=['GET'])
 def show_members():
 	if 'admin' not in session or not session['admin']:
