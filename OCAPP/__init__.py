@@ -11,7 +11,7 @@ from raven.contrib.flask import Sentry
 sentry = Sentry(app, dsn='https://b0e8b593f1fd45b89b29bc3675cb3807:ad556a25e6a54c98be03bbcfef090a80@sentry.io/111734')
 
 
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import sessionmaker, scoped_session
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import create_engine
 import sys
@@ -22,13 +22,15 @@ valid_funcs = {
 }
 # class Sentry
 
+Base = declarative_base()
+engine = create_engine(sens.db_path, pool_recycle=3600)
+session_factory = sessionmaker(bind=engine)
+Session = scoped_session(session_factory)
+db = Session()
+
 class SQLEZ:
 	def __init__(self):
-		self.Base = declarative_base()
-		self.engine = create_engine(sens.db_path, pool_recycle=3600)
-		Session = sessionmaker(bind=self.engine)
 		self.session = Session()
-		self.BaseChanges = {}
 
 	def query(self,cls):
 		return self.session.query(cls)
@@ -72,6 +74,9 @@ class SQLEZ:
 		return BaseChanges.validate(cl, data, funcs)
 
 
+from OCAPP.Models.BaseChanges import BaseChanges
+BaseChanges = BaseChanges
+
 
 @app.before_request
 def https_only():
@@ -79,34 +84,27 @@ def https_only():
         	url = request.url.replace('http://', 'https://', 1)
         	return redirect(url)
 
-from OCAPP.Models.BaseChanges import BaseChanges
-@app.before_request
-def initialize_db_session()
-	db = SQLEZ()
-	db.BaseChanges = BaseChanges()
-	return None
-
 @app.after_request	
 def close_db_session(response):
 	db.session.close()
 	return response
+
 def savepoint():
 	db.session.begin_nested()
 
 def rollback():
 	db.session.rollback()
 
-#from OCAPP.Models.BaseChanges import BaseChanges
 #db.BaseChanges = BaseChanges()
 
 # @app.teardown_appcontext
 # def teardown_db(exception):
 # 	print 'Shutting down DB connection.'
 # 	db.engine.close()
-# from OCAPP.Models import Address, Vendor, Conference, Institution, Member, Presentation, State, Vendor,PresentationType
+from OCAPP.Models import Address, Vendor, Conference, Institution, Member, Presentation, State, Vendor
 #db.Base.metadata.create_all(db.engine)
-#from OCAPP import routes
-from OCAPP.Schema import State, Address, Institution, Conference, Member, Presentation, Vendor, PresentationType
+from OCAPP import routes
+from OCAPP.Schema import State, Address, Institution, Conference, Member, Presentation, Vendor, PresentationType, PasswordReset
 #from OCAPP.Schema.State import State
 #from OCAPP.Schema.Address import Address
 #from OCAPP.Schema.Institution import Institution
@@ -115,7 +113,9 @@ from OCAPP.Schema import State, Address, Institution, Conference, Member, Presen
 #from OCAPP.Schema.Presentation import Presentation
 #from OCAPP.Schema.PresentationType import PresentationType
 #from OCAPP.Schema.Vendor import Vendor
-#db.Base.metadata.create_all(db.engine)
+#from OCAPP.Schema.PasswordReset import PasswordReset
+db = SQLEZ()
+Base.metadata.create_all(engine)
 
 
 

@@ -3,19 +3,15 @@ from sqlalchemy import Column, ForeignKey, Table
 from sqlalchemy.orm import relationship, backref, validates
 from sqlalchemy.sql import func
 from sqlalchemy.dialects.mysql import INTEGER, VARCHAR, DATETIME, BOOLEAN
-from OCAPP import app, db
+from OCAPP import app, Base, BaseChanges
 from OCAPP.config import sensitive
 sens = sensitive.Sens()
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import create_engine
-engine = create_engine(sens.db_path)
-from OCAPP.Models.BaseChanges import BaseChanges
 
 
 # from OCAPP.Models.Conference import member_conferences
 from OCAPP.Schema.Presentation import member_presentations
 
-class Member(BaseChanges,db.Base):
+class Member(BaseChanges,Base):
 	__tablename__ = 'members'
 	id = Column(INTEGER(11), primary_key=True)
 	first_name = Column(VARCHAR(255))

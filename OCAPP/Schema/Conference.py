@@ -4,18 +4,13 @@ from sqlalchemy import Column, ForeignKey, Table
 from sqlalchemy.orm import relationship, backref
 from sqlalchemy.sql import func
 from sqlalchemy.dialects.mysql import INTEGER, VARCHAR, DATETIME, BOOLEAN
-from OCAPP import app, db
+from OCAPP import app, Base, BaseChanges
 from apiclient.discovery import build
-
 from OCAPP.config import sensitive
 sens = sensitive.Sens()
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import create_engine
-engine = create_engine(sens.db_path)
-from OCAPP.Models.BaseChanges import BaseChanges
 
 #join table for members<>conferences
-class Registration(BaseChanges, db.Base):
+class Registration(BaseChanges, Base):
 	__tablename__ = 'registrations'
 	id = Column(INTEGER(11), primary_key=True, autoincrement=True)
 	member_id = Column(INTEGER(11), ForeignKey('members.id'), primary_key=True)
@@ -39,18 +34,18 @@ class Registration(BaseChanges, db.Base):
 
 
 #join table for vendors
-vendor_conferences = Table('vendor_conferences', db.Base.metadata,
+vendor_conferences = Table('vendor_conferences', Base.metadata,
 	Column('vendor_id', INTEGER(11), ForeignKey('vendors.id')),
 	Column('conference_id', INTEGER(11), ForeignKey('conferences.id'))
 )
 
 #join table for presenters
-presenter_conferences = Table('presenter_conferences', db.Base.metadata,
+presenter_conferences = Table('presenter_conferences', Base.metadata,
 	Column('presenter_id', INTEGER(11), ForeignKey('members.id')), 
 	Column('conference_id', INTEGER(11), ForeignKey('conferences.id'))
 )
 
-class Conference(BaseChanges, db.Base):
+class Conference(BaseChanges, Base):
 	__tablename__ = 'conferences'
 	id = Column(INTEGER(11), primary_key=True)
 	title = Column(VARCHAR(255))

@@ -2,7 +2,8 @@ import time
 from flask import flash
 from OCAPP.Schema.Conference import Conference, Registration
 from OCAPP.Models import Member 
-from OCAPP import app, db
+from OCAPP import app, SQLEZ
+db = SQLEZ()
 
 
 def index():

@@ -4,14 +4,14 @@ from sqlalchemy import Column, ForeignKey, Table
 from sqlalchemy.orm import relationship, backref, validates
 from sqlalchemy.sql import func
 from sqlalchemy.dialects.mysql import INTEGER, VARCHAR, DATETIME, BOOLEAN
-from OCAPP import app, db
+from OCAPP import app, Base, BaseChanges
 from OCAPP.Models import Member  
 from OCAPP.Models.BaseChanges import BaseChanges
 
-class PasswordReset(BaseChanges, db.Base):
+class PasswordReset(BaseChanges, Base):
 	__tablename__ = 'password_resets'
 	id = Column(INTEGER(11), primary_key=True)
-	member_id = Column(INTEGER(11), ForeignKey('members.id')
+	member_id = Column(INTEGER(11), ForeignKey('members.id'))
 	member = relationship('Member')
 	reset_hash = Column(VARCHAR(255))
 	created_at = Column(DATETIME(), default=func.utc_timestamp())

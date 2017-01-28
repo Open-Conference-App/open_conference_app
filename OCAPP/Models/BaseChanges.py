@@ -1,5 +1,4 @@
 import re, os, binascii, hashlib, sys, inspect
-from sqlalchemy.ext.declarative import declarative_base, declared_attr
 EMAIL_REGEX = re.compile(r'^[a-zA-Z0-9\.\+_-]+@[a-zA-Z0-9\._-]+\.[a-zA-Z]*$')
 PASS_CAP_REGEX = re.compile(r'[A-Z]')
 PASS_LOW_REGEX = re.compile(r'[a-z]')
@@ -119,6 +118,7 @@ class BaseChanges(object):
 		pass
 
 
-from OCAPP import db
+from OCAPP import SQLEZ
+db = SQLEZ()
 # from OCAPP.Models.Member import Member
 

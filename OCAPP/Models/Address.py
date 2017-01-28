@@ -1,5 +1,6 @@
 from OCAPP.Schema.Address import Address
-from OCAPP import db
+from OCAPP import SQLEZ
+db = SQLEZ()
 
 def create(data):
 	return db.create(Address, data)

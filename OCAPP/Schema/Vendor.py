@@ -3,11 +3,10 @@ from sqlalchemy import Column, ForeignKey, Table
 from sqlalchemy.orm import relationship, backref
 from sqlalchemy.dialects.mysql import INTEGER, VARCHAR, DATETIME, BOOLEAN
 from sqlalchemy.sql import func
-from OCAPP import app, db
+from OCAPP import app, Base, BaseChanges
 from OCAPP.Schema.Conference import vendor_conferences
-from OCAPP.Models.BaseChanges import BaseChanges
 
-class Vendor(BaseChanges, db.Base):
+class Vendor(BaseChanges, Base):
 	__tablename__ = 'vendors'
 	id = Column(INTEGER(11), primary_key=True)
 	name = Column(VARCHAR(255), unique=True)
