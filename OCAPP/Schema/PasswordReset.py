@@ -5,7 +5,7 @@ from sqlalchemy.orm import relationship, backref, validates
 from sqlalchemy.sql import func
 from sqlalchemy.dialects.mysql import INTEGER, VARCHAR, DATETIME, BOOLEAN
 from OCAPP import app, Base, BaseChanges
-from OCAPP.Models import Member  
+#from OCAPP.Models import Member  
 from OCAPP.Models.BaseChanges import BaseChanges
 
 class PasswordReset(BaseChanges, Base):

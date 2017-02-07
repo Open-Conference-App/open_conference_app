@@ -243,9 +243,19 @@ li.pure-menu-item.admin:hover {
 }
 
 .footer li:hover, .footer li a:hover {
-	background-color: #d2d7dd
+	background-color: #d2d7dd;
 }
 
+.password-success {
+	background-color: #9fe19d;
+	color: black;
+	border-radius: 3px;
+}
+.password-error {
+	background-color: red;
+	color: black;
+	border-radius: 3px;
+}
 /*SOCALLT Green #39b237*/
 
 

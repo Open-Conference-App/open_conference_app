@@ -146,7 +146,7 @@ def register_user(conference_id):
 	}
 
 	if request.form['pay'] == 'check_PO' or request.form['pay'] == 'later':
-		email_data['plain_message'] = "You have successfully registered for SOCALLT " + conf.year + ". Please send your PO or check to: \nSharon Wilkes - SOCALLT Treasurer\nDepartment of Languages, Linguistics, Literatures, and Cultures\nUniversity of Central Arkansas\n Irby Hall 207\n 201 Donaghey Ave\nConway, AR 72035\n<a href='mailto:sharonw@uca.edu'>sharonw@uca.edu</a>\nWe look forward to seeing you at " + conf.institution.name + ". Thank you!"
+		email_data['plain_message'] = "You have successfully registered for SOCALLT " + conf.year + ". Please send your PO or check to: \nSharon Wilkes - SOCALLT Treasurer\nDepartment of Languages, Linguistics, Literatures, and Cultures\nUniversity of Central Arkansas\n Irby Hall 207\n 201 Donaghey Ave\nConway, AR 72035\nsharonw@uca.edu\nWe look forward to seeing you at SOCALLT" + conf.year+ ". Thank you!"
 		Mail.send(email_data)
 		return render_template('confirmation.html', data=data)
 	if request.form['pay'] == 'credit_debit':

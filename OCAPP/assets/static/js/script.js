@@ -203,11 +203,12 @@ $(document).ready(function(){
 			$('#'+pageId).hide();
 			$('#'+nextPage).fadeToggle();
 		}
-
-
-
 	})
 
+	$(document).on("click", "#forgot", function(){
+		$("#login-form div div form").attr("action", "/members/password_reset")	
+		$("#login-form div div form").submit()
+	})
 });
 
 

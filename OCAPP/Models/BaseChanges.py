@@ -107,6 +107,7 @@ class BaseChanges(object):
 				ret_obj['salt'] = binascii.hexlify(os.urandom(16))
 				ret_obj['hash'] = hashlib.sha256(ret_obj['salt'] + data['password']).hexdigest()
 		except:
+			sentry.captureException()
 			e = sys.exc_info()[:0]
 			all_valid = False
 			ret_obj['int_errors'].append('Valids Class: There was a problem when processing the password.  {}'.format(e))
