@@ -4,16 +4,12 @@ from sqlalchemy import Column, ForeignKey
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 from sqlalchemy.dialects.mysql import INTEGER, VARCHAR, DATETIME
-from OCAPP import app, db
+from OCAPP import app, Base, BaseChanges
 from OCAPP.config import sensitive
 sens = sensitive.Sens()
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import create_engine
-engine = create_engine(sens.db_path)
-from OCAPP.Models.BaseChanges import BaseChanges
 
 
-class Address(BaseChanges, db.Base):
+class Address(BaseChanges, Base):
 	__tablename__ = 'addresses'
 	id = Column(INTEGER(11), primary_key=True)
 	street1 = Column(VARCHAR(255))

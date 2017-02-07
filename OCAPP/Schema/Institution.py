@@ -3,17 +3,13 @@ from sqlalchemy import Column, ForeignKey, Table
 from sqlalchemy.orm import relationship, backref
 from sqlalchemy.sql import func
 from sqlalchemy.dialects.mysql import INTEGER, VARCHAR, DATETIME
-from OCAPP import app, db
+from OCAPP import app, Base, BaseChanges
 import datetime
 from OCAPP.config import sensitive
 sens = sensitive.Sens()
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import create_engine
-engine = create_engine(sens.db_path)
-from OCAPP.Models.BaseChanges import BaseChanges
 
 
-class Institution(BaseChanges, db.Base):
+class Institution(BaseChanges, Base):
 	__tablename__ = 'institutions'
 	id = Column(INTEGER(11), primary_key=True)
 	name = Column(VARCHAR(255), unique=True)

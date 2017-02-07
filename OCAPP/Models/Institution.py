@@ -1,6 +1,7 @@
 from flask_sqlalchemy import SQLAlchemy
 from OCAPP.Schema.Institution import Institution
-from OCAPP import app, db
+from OCAPP import app, SQLEZ
+db=SQLEZ()
 
 def index():
 	return db.query(Institution).order_by(Institution.name).all()

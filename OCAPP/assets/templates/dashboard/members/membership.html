@@ -39,6 +39,33 @@
 						{% endif %}
 					</tr>
 				</table>
+				<h3>Change Password</h3> 
+				 <p class='password-error'>
+				{% with errors = get_flashed_messages(category_filter=["passwordErr"]) %}
+					{% if errors %}
+						{% for message in errors %}
+							{{ message }}
+						{% endfor %}
+                                	{% endif%}
+				{% endwith %}
+                                </p>
+				 <p class='password-success'>
+				{% with errors = get_flashed_messages(category_filter=["passwordSuccess"]) %}
+					{% if errors %}
+						{% for message in errors %}
+							{{ message }}
+						{% endfor %}
+                                	{% endif%}
+				{% endwith %}
+                                </p>
+          			<form class="pure-form pure-form-stacked" action='/members/{{ member.id }}/change_password' method='POST'>
+                			<input type='hidden' name='_csrf_token' value='{{ csrf_token() }}'>
+					<label for='password'>New Password</label>
+					<input type='password'name='password'>
+                			<label for='password'>Confirm Password</label>
+					<input type='password' name='confirm-password'>
+                			<button class='pure-button btn-primary' type='submit'>Submit</button>
+          			</form>
 			</div>
 			<div class='pure-u-1-6'></div>
 			<div class='pure-u-1-6'>

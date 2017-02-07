@@ -3,10 +3,9 @@ from sqlalchemy import Column, ForeignKey, Table
 from sqlalchemy.orm import relationship, backref
 from sqlalchemy.dialects.mysql import INTEGER, VARCHAR, TEXT
 
-from OCAPP import app, db
-from OCAPP.Models.BaseChanges import BaseChanges
+from OCAPP import app, Base, BaseChanges
 
-class PresentationType(BaseChanges, db.Base):
+class PresentationType(BaseChanges, Base):
 	__tablename__ = 'presentation_types'
 	id = Column(INTEGER(11), primary_key=True)
 	name = Column(VARCHAR(255))

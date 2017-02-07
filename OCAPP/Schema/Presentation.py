@@ -3,31 +3,26 @@ from sqlalchemy import Column, ForeignKey, Table
 from sqlalchemy.sql import func
 from sqlalchemy.orm import relationship, backref
 from sqlalchemy.dialects.mysql import INTEGER, VARCHAR, DATETIME, BOOLEAN, TEXT, JSON
-from OCAPP import app, db
+from OCAPP import app, Base, BaseChanges
 import datetime, binascii, os 
 
 from OCAPP.config import sensitive
 sens = sensitive.Sens()
-from sqlalchemy import create_engine
-engine = create_engine(sens.db_path)
-from OCAPP.Models.BaseChanges import BaseChanges
-
-
 from OCAPP.Models.Conference import Conference
-from apiclient.discovery import build
-from apiclient.http import MediaFileUpload
-from oauth2client.service_account import ServiceAccountCredentials
+#from apiclient.discovery import build
+#from apiclient.http import MediaFileUpload
+#from oauth2client.service_account import ServiceAccountCredentials
 
-scopes = ['https://www.googleapis.com/auth/drive']
-credentials = ServiceAccountCredentials.from_json_keyfile_name(sens.google_drive_key, scopes=scopes)
-drive = build('drive', 'v3', credentials=credentials)
+#scopes = ['https://www.googleapis.com/auth/drive']
+#credentials = ServiceAccountCredentials.from_json_keyfile_name(sens.google_drive_key, scopes=scopes)
+#drive = build('drive', 'v3', credentials=credentials)
 
-member_presentations = Table('member_presentations', db.Base.metadata,
+member_presentations = Table('member_presentations', Base.metadata,
 	Column('presenter_id', INTEGER(11), ForeignKey('members.id')), 
 	Column('presentation_id', INTEGER(11), ForeignKey('presentations.id'))
 )
 
-class Presentation(BaseChanges, db.Base):
+class Presentation(BaseChanges, Base):
 	__tablename__ = 'presentations'
 	id = Column(INTEGER(11), primary_key=True)
 	title = Column(VARCHAR(255))

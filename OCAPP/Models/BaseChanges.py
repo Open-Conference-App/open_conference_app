@@ -1,5 +1,4 @@
 import re, os, binascii, hashlib, sys, inspect
-from sqlalchemy.ext.declarative import declarative_base, declared_attr
 EMAIL_REGEX = re.compile(r'^[a-zA-Z0-9\.\+_-]+@[a-zA-Z0-9\._-]+\.[a-zA-Z]*$')
 PASS_CAP_REGEX = re.compile(r'[A-Z]')
 PASS_LOW_REGEX = re.compile(r'[a-z]')
@@ -108,6 +107,7 @@ class BaseChanges(object):
 				ret_obj['salt'] = binascii.hexlify(os.urandom(16))
 				ret_obj['hash'] = hashlib.sha256(ret_obj['salt'] + data['password']).hexdigest()
 		except:
+			sentry.captureException()
 			e = sys.exc_info()[:0]
 			all_valid = False
 			ret_obj['int_errors'].append('Valids Class: There was a problem when processing the password.  {}'.format(e))
@@ -119,6 +119,7 @@ class BaseChanges(object):
 		pass
 
 
-from OCAPP import db
+from OCAPP import SQLEZ
+db = SQLEZ()
 # from OCAPP.Models.Member import Member
 

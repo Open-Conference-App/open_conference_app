@@ -2,8 +2,8 @@ from OCAPP.Schema.Presentation import Presentation
 from OCAPP.Models import Member, Conference
 
 from OCAPP.Schema.PresentationType import PresentationType
-from OCAPP import db, rollback, savepoint
-
+from OCAPP import SQLEZ, rollback, savepoint
+db = SQLEZ()
 from sqlalchemy import inspect
 
 import json, binascii, os
