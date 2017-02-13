@@ -58,7 +58,7 @@ def set_transaction(conf_id, member_id, transaction_id):
 			memb.active = True
 			db.session.add(registration)
 			db.session.commit()
-	return member_conf.member_paid 
+		return registration.member_paid 
 
 def members(conf_id):
 	conf = get_by_id(conf_id)

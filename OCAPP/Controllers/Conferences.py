@@ -248,7 +248,6 @@ def pay(conference_id, member_id):
 			return json.dumps(resp_object)
 
 		except Exception as e:
-			print 'here I am'
 			sentry.captureException()
 			resp_object['errors'].append('There was a problem paying for your registration, please try back again later.')
 			return json.dumps(resp_object)
