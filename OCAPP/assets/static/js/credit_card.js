@@ -27,15 +27,16 @@ function stripeResponseHandler(status, response) {
 
 		// Get the token ID:
 		token = response.id;
-
 	$.ajax({
 		method:"post",
 		data: {"stripeToken": token,
 				"member_cost":member_cost,
 				"_csrf_token": csrf_token_js},
-		url:"/conferences/"+conf_id+"/members/"+mem_id,
+		url:"/conferences/"+conf_id+"/members/"+mem_id, 
 		success:function(data){
+			console.log('1111', data);
 			data=JSON.parse(data)
+			console.log('2222', data);
 			if(data.successful){
 				window.location = "/conferences/"+conf_id+"/confirmation";
 			} else {
