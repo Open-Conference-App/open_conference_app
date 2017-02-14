@@ -267,6 +267,7 @@ def confirm(conference_id):
 @app.route('/conferences/<int:conference_id>/proposals', methods=['POST'])
 def submit_proposal(conference_id):
 	savepoint()
+	print request.form
 	conf = Conference.get_by_id(conference_id)
 	if not conf:
 		flash('The conference indicated does not exist.')
@@ -274,7 +275,7 @@ def submit_proposal(conference_id):
 	# print request.body
 	presenters = {}
 	count = 0
-	for idx in range(1,4):
+	for idx in range(1,int(request.form['presenters'])+1):
 		fname = 'p' + str(idx) + '_f_name'
 		if len(request.form[fname]) > 0:
 			count += 1

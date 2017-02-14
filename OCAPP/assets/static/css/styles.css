@@ -256,6 +256,20 @@ li.pure-menu-item.admin:hover {
 	color: black;
 	border-radius: 3px;
 }
+
+#presenters div h4 {
+	display: inline-block;
+}
+
+#presenters div button {
+	vertical-align: text-bottom;
+	height: 30%;
+	padding: 3px;
+}
+
+#presenters div label {
+	font-weight: bold;
+}
 /*SOCALLT Green #39b237*/
 
 

@@ -35,49 +35,56 @@
 		</div>
 	</div>
 	<form class='pure-form pure-g' method='POST' action="/conferences/{{ data['conf']['id'] }}/proposals">
+		<input type='hidden' name='presenters' id='presenters' value='3'>
 		<div class='pure-u-1'>
-			<h4>Presenters</h4>
-		</div>
-		<div class='pure-u-7-24'>
-			<label for='presenter1'>Presenter 1</label>
-			<input class='pure-input-1' name='p1_f_name' type='text' placeholder='First Name'>
-			<input class='pure-input-1' name='p1_l_name' type='text' placeholder='Last Name'>
-			<input class='pure-input-1' name='p1_email' type='text' placeholder='Email'>
-			<select name='p1_inst'>
-				<option value='-1'>--Choose Institution--</option>
-				{% for inst in data['institutions'] %}
-					<option value='{{ inst.id }}'>{{ inst.name }}</option>
-				{% endfor %}
-				<option value='0'>Other</option>
-			</select>
-		</div>
-		<div class='pure-u-1-24'></div>
-		<div class='pure-u-7-24'>
-			<label for='presenter2'>Presenter 2 (optional)</label>
-			<input class='pure-input-1' name='p2_f_name' type='text' placeholder='First Name'>
-			<input class='pure-input-1' name='p2_l_name' type='text' placeholder='Last Name'>
-			<input class='pure-input-1' name='p2_email' type='text' placeholder='Email'>
-			<select name='p2_inst'>
-				<option value='-1'>--Choose Institution--</option>
-				{% for inst in data['institutions'] %}
-					<option value='{{ inst.id }}'>{{ inst.name }}</option>
-				{% endfor %}
-				<option value='0'>Other</option>
-			</select>
-		</div>
-		<div class='pure-u-1-24'></div>
-		<div class='pure-u-7-24'>
-			<label for='presenter3'>Presenter 3 (optional)</label>
-			<input class='pure-input-1' name='p3_f_name' type='text' placeholder='First Name'>
-			<input class='pure-input-1' name='p3_l_name' type='text' placeholder='Last Name'>
-			<input class='pure-input-1' name='p3_email' type='text' placeholder='Email'>
-			<select name='p3_inst'>
-				<option value='-1'>--Choose Institution--</option>
-				{% for inst in data['institutions'] %}
-					<option value='{{ inst.id }}'>{{ inst.name }}</option>
-				{% endfor %}
-				<option value='0'>Other</option>
-			</select>
+			<div class='pure-g' id='presenters-group'>
+				<div class='pure-u-1'>
+					<h4>Presenters</h4>
+					<button class='pure-button' type='button' id='add-presenter'>+</button>
+				</div>
+				<div class='pure-u-7-24'>
+					<label for='presenter1'>Presenter 1</label>
+					<input class='pure-input-1' name='p1_f_name' type='text' placeholder='First Name'>
+					<input class='pure-input-1' name='p1_l_name' type='text' placeholder='Last Name'>
+					<input class='pure-input-1' name='p1_email' type='text' placeholder='Email'>
+					<select name='p1_inst'>
+						<option value='-1'>--Choose Institution--</option>
+						{% for inst in data['institutions'] %}
+							<option value='{{ inst.id }}'>{{ inst.name }}</option>
+						{% endfor %}
+						<option value='0'>Other</option>
+					</select>
+				</div>
+				<div class='pure-u-1-24'></div>
+				<div class='pure-u-7-24'>
+					<label for='presenter2'>Presenter 2 (optional)</label>
+					<input class='pure-input-1' name='p2_f_name' type='text' placeholder='First Name'>
+					<input class='pure-input-1' name='p2_l_name' type='text' placeholder='Last Name'>
+					<input class='pure-input-1' name='p2_email' type='text' placeholder='Email'>
+					<select name='p2_inst'>
+						<option value='-1'>--Choose Institution--</option>
+						{% for inst in data['institutions'] %}
+							<option value='{{ inst.id }}'>{{ inst.name }}</option>
+						{% endfor %}
+						<option value='0'>Other</option>
+					</select>
+				</div>
+				<div class='pure-u-1-24'></div>
+				<div class='pure-u-7-24'>
+					<label for='presenter3'>Presenter 3 (optional)</label>
+					<input class='pure-input-1' name='p3_f_name' type='text' placeholder='First Name'>
+					<input class='pure-input-1' name='p3_l_name' type='text' placeholder='Last Name'>
+					<input class='pure-input-1' name='p3_email' type='text' placeholder='Email'>
+					<select name='p3_inst'>
+						<option value='-1'>--Choose Institution--</option>
+						{% for inst in data['institutions'] %}
+							<option value='{{ inst.id }}'>{{ inst.name }}</option>
+						{% endfor %}
+						<option value='0'>Other</option>
+					</select>
+				</div>
+				<div class='pure-u-1'> </div>
+			</div>
 		</div>
 		<hr>
 		<div class='pure-u-1'>

@@ -1,4 +1,5 @@
 $(document).ready(function(){
+	var presenters = 3;
 	validations = {
 		'page1_valids': [{
 				'fieldName': 'first_name',
@@ -208,6 +209,16 @@ $(document).ready(function(){
 	$(document).on("click", "#forgot", function(){
 		$("#login-form div div form").attr("action", "/members/password_reset")	
 		$("#login-form div div form").submit()
+	})
+
+	$('#add-presenter').click(function(){
+		presenters ++;
+		var insts = $("select[name='p1_inst']").html();
+		$('#presenters-group').append("<div class='pure-u-7-24'><div class='pure-g'><div class='pure-u-1'><br></div></div><label for='presenter" + presenters + "'>Presenter " + presenters + "</label><input class='pure-input-1' name='p" + presenters + "_f_name' type='text' placeholder='First Name'><input class='pure-input-1' name='p" + presenters + "_l_name' type='text' placeholder='Last Name'><input class='pure-input-1' name='p" + presenters + "_email' type='text' placeholder='Email'><select name='p" + presenters + "_inst'>" + insts +"</select></div><div class='pure-u-1-24'></div>")
+		$('#presenters').val(presenters)
+		// if (presenters % 3 == 0){
+		// 	$('#presenters').append("<div class='pure-u-1'> </div>")
+		// }
 	})
 });
 
