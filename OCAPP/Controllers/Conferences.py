@@ -182,30 +182,30 @@ def register_user(conference_id):
 
 
 # TEST ROUTE FOR RENDERING CREDIT CARD INFORMATION CHETAN 12/20/16
-@app.route('/conferences/<int:conference_id>/payment', methods=['GET'])
-def cctest(conference_id):
-	if not 'id' in session:
-		return redirect('/')
-	member = Member.get_by_id(session['id'])
-	for regis in member.registrations:
-		if regis.conference_id == conference_id:
-			if regis.type == 'Professional':
-				member_cost = 70
-			elif regis.type == 'Student':
-				member_cost = 40
-			if regis.days == 'friday' or regis.days == 'saturday':
-				member_cost = member_cost/2
+# @app.route('/conferences/<int:conference_id>/payment', methods=['GET'])
+# def cctest(conference_id):
+# 	if not 'id' in session:
+# 		return redirect('/')
+# 	member = Member.get_by_id(session['id'])
+# 	for regis in member.registrations:
+# 		if regis.conference_id == conference_id:
+# 			if regis.type == 'Professional':
+# 				member_cost = 70
+# 			elif regis.type == 'Student':
+# 				member_cost = 40
+# 			if regis.days == 'friday' or regis.days == 'saturday':
+# 				member_cost = member_cost/2
 
-	if not member_cost:
-		return redirect('/')
+# 	if not member_cost:
+# 		return redirect('/')
 
-	data = {
-	'conf': Conference.get_by_id(conference_id),
-	'member':member,
-	'member_cost': member_cost,
-	'year': datetime.datetime.now().year
-	}
-	return render_template('credit_card.html',data=data)
+# 	data = {
+# 	'conf': Conference.get_by_id(conference_id),
+# 	'member':member,
+# 	'member_cost': member_cost,
+# 	'year': datetime.datetime.now().year
+# 	}
+# 	return render_template('credit_card.html',data=data)
 
 
 #pay for conference attendance/membership fees(which are one and the same, user must already exist)
@@ -221,8 +221,6 @@ def pay(conference_id, member_id):
 		##validate registration prior to making payment
 		memb = Member.get_by_id(member_id)
 		conf = Conference.get_by_id(conference_id)
-		print memb
-		print conf
 		#FAILS ON MEMB IN CONF.MEMBERS SO PUT IN 1>0 TO ALLOW IT TO PASS
 		try:
 			stripe_charge = stripe.Charge.create(
@@ -232,7 +230,6 @@ def pay(conference_id, member_id):
 				description=memb.first_name + ' ' + memb.last_name + ': ' + conf.year,
 				receipt_email=memb.email
 				)
-			print stripe_charge
 			active = Member.activate(memb.id)
 			resp_object['successful'] = active
 			Conference.set_transaction(conf.id, member_id, stripe_charge["id"])
