@@ -6,7 +6,7 @@
 {% block content %}
 
 <div class='pure-g'>
-  <div class='pure-u-2-5'>
+  <div class='pure-u-1-2'>
     <div class='pure-g'>
       <div class='pure-u-1'>
         <h4>Title</h4>
@@ -22,7 +22,9 @@
       </div>
     </div>
   </div>
-  <div class='pure-u-1-5'>
+  <div class='pure-u-1-8'>
+  </div>
+  <div class='pure-u-1-6'>
     <div class='pure-g'>
       <div class='pure-u-1'>
         <h4>Type</h4>
@@ -36,14 +38,32 @@
       <div class='pure-u-1'>
         <p>{{ data['presentation'].type.duration }} minutes</p>
       </div>
+      <div class='pure-u-1'>
+        <h4>Preferred Time</h4>
+      </div>
+      <div class='pure-u-1'>
+        <p>{{ data['presentation'].preferred_time }}</p>
+      </div>
+      <div class='pure-u-1'>
+        <h4>Reviewed</h4>
+      </div>
+      <div class='pure-u-1'>
+        <p>{{ 'Yes' if data['presentation'].reviewed else 'No'}}</p>
+      </div>
+      <div class='pure-u-1'>
+        <h4>Approved</h4>
+      </div>
+      <div class='pure-u-1'>
+        <p>{{ '--' if not data['presentation'].approved else 'Yes'}}</p>
+      </div>
     </div>
   </div>
-  <div class='pure-u-1-5'>
+  <div class='pure-u-1-6'>
     <div class='pure-g'>
-      <div class='pure-u-1-2'>
-        <p>Presenters</p>
+      <div class='pure-u-1'>
+        <h4>Presenters</h4>
       </div>
-      <div class='pure-u-1-2 presenter'>
+      <div class='pure-u-1 presenter'>
         {% for presenter in data['presentation'].presenters %}
         <p><a href='mailto:{{ presenter.email }}'>{{ presenter.first_name }} {{ presenter.last_name }}</a></p>
         <h6>{{ presenter.institution.name }}</h6>
