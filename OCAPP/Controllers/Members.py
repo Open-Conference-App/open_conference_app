@@ -164,7 +164,7 @@ def load_dashboard():
 			'states': State.index(),
 			'institutions': Institution.index()
 			}
-			return render_template('dashboard/dashboard.html', member=member, data=data)
+			return render_template('dashboard/members/membership.html', member=member, data=data)
 		else:
 			return redirect('/')
 
