@@ -34,3 +34,15 @@ def show_proposals():
 	}
 	return render_template('dashboard/admin/proposals.html', data=data)
 
+@app.route('/presentations/<int:presentation_id>', methods=['GET'])
+def show_presentation(presentation_id):
+	data = {
+	'conf': Conference.get_next(),
+	'states': State.index(),
+	'institutions': Institution.index(),
+	'presentation': Presentation.get_by_id(presentation_id)
+	}
+	if data['presentation'].nonmember_presenters:
+			data['presentation'].decoded_nonmember_presenters = json.loads(data['presentation'].nonmember_presenters)
+	return render_template('dashboard/admin/show_presentation.html', data=data)
+

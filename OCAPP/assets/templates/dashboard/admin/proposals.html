@@ -7,7 +7,7 @@
 		<div class='pure-g'>
 			<h2 class='pure-u-1'>Current Conference Proposals</h2>
 			<div class='pure-u-1-24'></div>
-			<table class='pure-u-22-24 pure-table pure-table-striped pure-table-bordered'>
+			<table class='pure-u-22-24 pure-table pure-table-striped pure-table-bordered content-table' data-type='presentations'>
 				<thead>
 					<tr>
 						<th>Title</th>
@@ -30,7 +30,7 @@
 							<p class='small'><a href='mailto:{{presenter.email}}'>{{ presenter.fname }} {{presenter.lname}}</a></p>
 							{% endfor %}
 						</td>
-						<td>
+						<td class='data' data-id='{{ prop.id }}'>
 							<button class='pure-button custom-button approve' data-id="{{ prop.id }}"><i class="fa fa-check" aria-hidden="true"></i>
 							<button class='pure-button custom-button decline' data-id="{{ prop.id }}"><i class="fa fa-times" aria-hidden="true"></i>
 </i>

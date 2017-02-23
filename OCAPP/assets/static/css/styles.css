@@ -83,7 +83,10 @@ input.form-input.invalid {
 .header {
 	border-bottom: 1px solid black;
 	margin-left: 15px;
+	position: fixed;
+	height: 12vh;
 }
+
 
 .header h5 {
 	margin: 7px;
@@ -102,7 +105,8 @@ label.form-label {
 }
 
 .pure-image {
-	height: 15vh;
+	width: 100%;
+	margin-left: 10px;
 	margin-bottom: 10px;
 }
 
@@ -204,7 +208,7 @@ li.pure-menu-item.admin:hover {
 }
 
 .pure-table tr td, .pure-table tr th {
-	width: 10%;
+	/*width: 10%;*/
 }
 
 .pure-table {
@@ -214,6 +218,7 @@ li.pure-menu-item.admin:hover {
 .container {
 	box-sizing: border-box;
 	padding-left: 20px;
+	margin-left: 12.5%;
 }
 
 .pure-menu ul li .pure-button {
@@ -270,6 +275,24 @@ li.pure-menu-item.admin:hover {
 
 #presenters div label {
 	font-weight: bold;
+}
+
+.pure-table tbody tr:hover {
+	background-color: #bfbfbf;
+}
+
+.pure-table tbody tr:hover td{
+	background-color: #bfbfbf;
+}
+
+.nav-menu {
+	position:fixed;
+	border-right: 1px inset black;
+}
+
+.presenter h6, p {
+	margin-top: 5px;
+	margin-bottom: 0;
 }
 /*SOCALLT Green #39b237*/
 
