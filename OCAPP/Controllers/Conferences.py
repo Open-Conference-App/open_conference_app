@@ -308,6 +308,7 @@ def submit_proposal(conference_id):
 		})
 	except:
 		sentry.captureException()
+		return redirect('/conferences/' + str(conference_id) + '/proposals')
 
 	if not pres['all_valid']:
 		for field, errors in pres['errors'].items():
