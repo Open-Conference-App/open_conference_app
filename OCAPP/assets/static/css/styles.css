@@ -82,6 +82,7 @@ input.form-input.invalid {
 
 .header {
 	border-bottom: 1px solid black;
+	margin-left: 15px;
 }
 
 .header h5 {
